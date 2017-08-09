@@ -30,7 +30,23 @@ Random.self_init ();
 
 let rec prompt state =>
   Readline.question
-    rl "> " (fun s => Interpret.cmd state s cb::(fun state => prompt state));
+    rl
+    "> "
+    (
+      fun s =>
+        Interpret.cmd
+          state
+          s
+          cb::(
+            fun resp =>
+              switch resp {
+              | Ok state => prompt state
+              | Error e =>
+                print_endline ("Error: " ^ e);
+                prompt state
+              }
+          )
+    );
 
 let state = Interpret.load_builtins Interpret.empty;
 

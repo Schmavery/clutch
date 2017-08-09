@@ -43,7 +43,7 @@ type argT =
   | Var string
   | Val valueT;
 
-type functionT = list argT => stateT => cb::(stateT => unit) => unit
+type functionT = list argT => stateT => cb::(result stateT string => unit) => unit
 and stateT = {
   variables: StringMap.t valueT,
   functions: StringMap.t functionT

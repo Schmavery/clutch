@@ -37,7 +37,7 @@ let rec parse_args stream acc =>
 
 let load_builtins = Builtins.load_builtins;
 
-let cmd state input ::cb => {
+let cmd (state: stateT) (input: string) cb::(cb: result stateT string => unit) => {
   let s = Stream.of_string input;
   switch (Parse.parse_ident s "") {
   | Ok i =>
@@ -45,16 +45,10 @@ let cmd state input ::cb => {
     | Some fn =>
       switch (parse_args s []) {
       | Ok args => fn args state cb::(fun state => cb state)
-      | Error e =>
-        print_endline e;
-        cb state
+      | Error e => cb (Error e)
       }
-    | None =>
-      print_endline i;
-      cb state
+    | None => cb (Error ("Unknown function " ^ i ^ "."))
     }
-  | Error e =>
-    print_endline e;
-    cb state
+  | Error e => cb (Error e)
   }
 };
