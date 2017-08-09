@@ -1,0 +1,29 @@
+{
+  "name": "relisp-bot",
+  "version": "0.0.1",
+  "description": "Reason port of lisp-bot",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Schmavery/relisp-bot.git"
+  },
+  "author": "schmavery",
+  "license": "MIT",
+  "homepage": "https://github.com/Schmavery/relisp-bot",
+  "keywords": [
+    "reason",
+    "lisp"
+  ],
+  "scripts": {
+    "server": "browserify lib/js/examples/web/index.js > assets/lisp.js && rsync stdlib/* assets/stdlib/ && python -m SimpleHTTPServer assets",
+    "cli": "node lib/js/src/index.js",
+    "deploy": "bsb -make-world && npm run test && browserify lib/js/src/index.js > assets/lisp.js && node scripts/deploy-ghpages.js",
+    "test": "node lib/js/test/test.js",
+    "bot": "node ./lib/js/examples/bot/index.js",
+    "test": "exit 0"
+  },
+  "devDependencies": {
+    "browserify": "^13.1.1",
+    "bs-platform": "https://github.com/bloomberg/bucklescript.git",
+    "gh-pages": "^0.12.0"
+  }
+}
