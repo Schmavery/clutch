@@ -2,6 +2,8 @@
 {
     "name" : "easymbly",
     "sources": [
-      { "dir": "src" }
+      { "dir": "src" },
+      { "dir": "frontends/web", "type": "dev"},
+      { "dir": "frontends/cli", "type": "dev"}
     ]
 }

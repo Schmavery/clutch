@@ -35,8 +35,6 @@ let rec parse_args stream acc =>
     }
   };
 
-let load_builtins = Builtins.load_builtins;
-
 let cmd (state: stateT) (input: string) cb::(cb: result stateT string => unit) => {
   let s = Stream.of_string input;
   switch (Parse.parse_ident s "") {

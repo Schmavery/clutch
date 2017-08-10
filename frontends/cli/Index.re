@@ -48,6 +48,9 @@ let rec prompt state =>
           )
     );
 
-let state = Interpret.load_builtins Interpret.empty;
+let builtins_list =
+  Builtins.[add, sub, mul, div, print (fun s => print_string s)];
+
+let state = Builtins.load_builtins_list builtins_list Interpret.empty;
 
 prompt state;
