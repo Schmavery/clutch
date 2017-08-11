@@ -27,10 +27,15 @@ module RunButton = {
       <button
         style=(
           makeStyle
-            minHeight::"30px" width::"100px" backgroundColor::"#21e024" ()
+            minHeight::"30px"
+            width::"100px"
+            backgroundColor::"#21e024"
+            fontSize::"13px"
+            fontWeight::"bold"
+            ()
         )
         onClick=(self.handle (fun _ _ => runFunc ()))>
-        (ReasonReact.stringToElement "Run")
+        (ReasonReact.stringToElement ("Restart " ^ getUnicode "restart"))
       </button>
   };
 };
@@ -47,7 +52,7 @@ module Editor = {
     ...component,
     initialState: fun () => "add 1 2",
     render: fun self =>
-      <div style=(makeStyle flex::"1 1 0" ())>
+      <div style=(makeStyle flex::"2 0 0" ())>
         <div
           style=(
             makeStyle
@@ -82,6 +87,8 @@ module Console = {
         style=(
           makeStyle
             border::"1px solid grey"
+            backgroundColor::"#3a3a3a"
+            color::"#e5e5e5"
             padding::"5px"
             margin::"5px"
             flex::"1 1 0"
@@ -211,27 +218,40 @@ module Page = {
     render: fun ({state: {interpretState, errors}} as self) =>
       <div
         style=(
-          makeStyle
-            display::"flex"
-            flexDirection::"row"
-            /* flexGrow::"1" */
-            width::"100vw"
-            height::"70vh"
-            /* overflow::"auto" */
-            /* justifyContent::"space-between" */
-            /* flex::"1 1 auto" */
-            /* alignItems::"stretch" */
-            /* position::"relative" */
-            ()
+          makeStyle backgroundColor::"#dee1e8" width::"100%" height::"100%" ()
         )>
-        <Variables variables=interpretState.Common.variables />
-        <Editor eval=(runProgram self) />
         <div
           style=(
-            makeStyle display::"flex" flex::"1 1 0" flexDirection::"column" ()
+            makeStyle
+              margin::"auto"
+              display::"flex"
+              backgroundColor::"white"
+              padding::"5px"
+              border::"1px solid grey"
+              flexDirection::"row"
+              width::"700px"
+              height::"70vh"
+              position::"absolute"
+              left::"0"
+              right::"0"
+              top::"0"
+              bottom::"0"
+              /* overflow::"auto" */
+              justifyContent::"center"
+              /* flex::"1 1 auto" */
+              /* position::"relative" */
+              ()
           )>
-          <Console />
-          <ErrorList errors global=self />
+          <Variables variables=interpretState.Common.variables />
+          <Editor eval=(runProgram self) />
+          <div
+            style=(
+              makeStyle
+                display::"flex" flex::"2 1 0" flexDirection::"column" ()
+            )>
+            <Console />
+            <ErrorList errors global=self />
+          </div>
         </div>
       </div>
   };
