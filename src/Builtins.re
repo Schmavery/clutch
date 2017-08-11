@@ -35,7 +35,7 @@ let print (stdout: string => unit) state =>
             Ok {
               stdout (
                 switch (resolve v state) {
-                | Num f => Printf.sprintf "%g\n" f
+                | Num f => Printf.sprintf "%g" f
                 | Str s => s
                 }
               );
@@ -47,5 +47,5 @@ let print (stdout: string => unit) state =>
     )
     state;
 
-let load_builtins_list lst state =>
+let load_builtins_list (lst: list (stateT => stateT)) (state: stateT) :stateT =>
   List.fold_left (fun acc v => v acc) state lst;

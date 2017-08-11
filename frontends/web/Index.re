@@ -105,59 +105,61 @@ let state = ref (Builtins.load_builtins_list builtins_list Interpret.empty);
 
 let evaluating = ref false;
 
-let history: ref (list string) = ref [];
 
-let position = ref 0;
 
-let moveHistory (by: int) :option string => {
-  let new_pos = !position + by;
-  if (new_pos < 1 || new_pos > List.length !history) {
-    None
-  } else {
-    position := new_pos;
-    Some (List.nth !history (new_pos - 1))
-  }
-};
+/* let history: ref (list string) = ref []; */
 
-setOnKeyDown
-  input_element
-  (
-    fun e =>
-      switch (getKeyCode e) {
-      | 13 when not !evaluating =>
-        evaluating := true;
-        let in_str = getValue input_element;
-        add_console_element ("> " ^ in_str);
-        setValue input_element "";
-        history := [in_str, ...!history];
-        position := 0;
-        Interpret.cmd
-          !state
-          cb::(
-            fun resp => {
-              evaluating := false;
-              switch resp {
-              | Ok new_state => state := new_state
-              | Error e => add_console_element ("Error: " ^ e)
-              };
-            }
-          )
-          in_str;
-        Js.false_
-      | 38 /* UpArrow */ =>
-        switch (moveHistory 1) {
-        | Some line =>
-          setValue input_element line;
-          Js.false_
-        | None => Js.false_
-        }
-      | 40 /* DownArrow */ =>
-        switch (moveHistory (-1)) {
-        | Some line =>
-          setValue input_element line;
-          Js.false_
-        | None => Js.false_
-        }
-      | _ => Js.true_
-      }
-  );
+/* let position = ref 0; */
+
+/* let moveHistory (by: int) :option string => { */
+/*   let new_pos = !position + by; */
+/*   if (new_pos < 1 || new_pos > List.length !history) { */
+/*     None */
+/*   } else { */
+/*     position := new_pos; */
+/*     Some (List.nth !history (new_pos - 1)) */
+/*   } */
+/* }; */
+
+/* setOnKeyDown */
+/*   input_element */
+/*   ( */
+/*     fun e => */
+/*       switch (getKeyCode e) { */
+/*       | 13 when not !evaluating => */
+/*         evaluating := true; */
+/*         let in_str = getValue input_element; */
+/*         add_console_element ("> " ^ in_str); */
+/*         setValue input_element ""; */
+/*         history := [in_str, ...!history]; */
+/*         position := 0; */
+/*         Interpret.cmd */
+/*           !state */
+/*           cb::( */
+/*             fun resp => { */
+/*               evaluating := false; */
+/*               switch resp { */
+/*               | Ok new_state => state := new_state */
+/*               | Error e => add_console_element ("Error: " ^ e) */
+/*               }; */
+/*             } */
+/*           ) */
+/*           in_str; */
+/*         Js.false_ */
+/*       | 38 /1* UpArrow *1/ => */
+/*         switch (moveHistory 1) { */
+/*         | Some line => */
+/*           setValue input_element line; */
+/*           Js.false_ */
+/*         | None => Js.false_ */
+/*         } */
+/*       | 40 /1* DownArrow *1/ => */
+/*         switch (moveHistory (-1)) { */
+/*         | Some line => */
+/*           setValue input_element line; */
+/*           Js.false_ */
+/*         | None => Js.false_ */
+/*         } */
+/*       | _ => Js.true_ */
+/*       } */
+/*   ); */

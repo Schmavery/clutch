@@ -1,9 +1,11 @@
 
 {
     "name" : "easymbly",
+    "reason" : {"react-jsx" : 2},
     "sources": [
       { "dir": "src" },
       { "dir": "frontends/web", "type": "dev"},
       { "dir": "frontends/cli", "type": "dev"}
-    ]
+    ],
+    "bs-dependencies": ["reason-react"]
 }

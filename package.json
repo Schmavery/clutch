@@ -14,7 +14,7 @@
     "lisp"
   ],
   "scripts": {
-    "server": "browserify lib/js/frontends/web/index.js > assets/lang.js && python -m SimpleHTTPServer 8000 assets",
+    "server": "browserify lib/js/frontends/web/simpleRoot.js > assets/lang.js && python -m SimpleHTTPServer 8000 assets",
     "cli": "node lib/js/frontends/cli/index.js",
     "deploy": "bsb -make-world && npm run test && browserify lib/js/src/index.js > assets/lisp.js && node scripts/deploy-ghpages.js",
     "bot": "node ./lib/js/examples/bot/index.js",
@@ -23,6 +23,10 @@
   "devDependencies": {
     "browserify": "^13.1.1",
     "bs-platform": "https://github.com/bloomberg/bucklescript.git",
-    "gh-pages": "^0.12.0"
+    "gh-pages": "^0.12.0",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "reason-react": "^0.2.3",
+    "watchify": "^3.9.0"
   }
 }
