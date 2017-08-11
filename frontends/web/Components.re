@@ -1,10 +1,19 @@
 let makeStyle = ReactDOMRe.Style.make;
 
+type pageStateT = {
+  interpretState: Common.stateT,
+  errors: array string
+};
+
 type charsT;
 
 external getField : charsT => string => string = "" [@@bs.get_index];
 
 external chars : charsT = "window.chars" [@@bs.val];
+
+/* external array_remove : array 'a => int => int => array 'a = "splice" [@@bs.send]; */
+external array_filteri : array 'a => ('a => int => bool) => array 'a =
+  "filter" [@@bs.send];
 
 let getUnicode name => getField chars name;
 
@@ -68,8 +77,7 @@ module Console = {
   let component = ReasonReact.statelessComponent "Console";
   let make _children => {
     ...component,
-    render: fun _ => {
-      print_endline !stdout_text;
+    render: fun _ =>
       <div
         style=(
           makeStyle
@@ -81,13 +89,12 @@ module Console = {
         )>
         <pre> (ReasonReact.stringToElement !stdout_text) </pre>
       </div>
-    }
   };
 };
 
 module Variables = {
   let component = ReasonReact.statelessComponent "Variables";
-  let make ::variables _children => {
+  let make variables::_variables _children => {
     ...component,
     render: fun _ =>
       <div
@@ -105,8 +112,13 @@ module Variables = {
 };
 
 module ErrorList = {
+  let removeError errid _ self => {
+    let errors =
+      array_filteri self.ReasonReact.state.errors (fun _ i => i != errid);
+    ReasonReact.Update {...self.ReasonReact.state, errors}
+  };
   let component = ReasonReact.statelessComponent "ErrorList";
-  let make ::errors _children => {
+  let make ::global ::errors _children => {
     ...component,
     render: fun _ =>
       <div
@@ -126,18 +138,26 @@ module ErrorList = {
             ReasonReact.arrayToElement (
               Array.mapi
                 (
-                  fun i s =>
+                  fun errid s =>
                     <div
-                      key=(string_of_int i)
+                      key=(string_of_int errid)
                       style=(
                         makeStyle
                           backgroundColor::"#c41515"
                           border::"1px solid white"
                           padding::"5px"
                           color::"white"
+                          display::"flex"
+                          justifyContent::"space-between"
+                          /* flowDirection::"row" */
                           ()
                       )>
-                      (ReasonReact.stringToElement s)
+                      <div> (ReasonReact.stringToElement s) </div>
+                      <div
+                        onClick=(global.ReasonReact.update (removeError errid))
+                        style=(makeStyle padding::"3px" ())>
+                        (ReasonReact.stringToElement (getUnicode "cancel"))
+                      </div>
                     </div>
                 )
                 errors
@@ -149,10 +169,6 @@ module ErrorList = {
 };
 
 module Page = {
-  type pageStateT = {
-    interpretState: Common.stateT,
-    errors: array string
-  };
   let component = ReasonReact.statefulComponent "Page";
   let runProgram self (content: string) () =>
     Interpret.cmd
@@ -199,7 +215,7 @@ module Page = {
             display::"flex"
             flexDirection::"row"
             /* flexGrow::"1" */
-            width::"70vw"
+            width::"100vw"
             height::"70vh"
             /* overflow::"auto" */
             /* justifyContent::"space-between" */
@@ -215,7 +231,7 @@ module Page = {
             makeStyle display::"flex" flex::"1 1 0" flexDirection::"column" ()
           )>
           <Console />
-          <ErrorList errors />
+          <ErrorList errors global=self />
         </div>
       </div>
   };
