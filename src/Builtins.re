@@ -1,7 +1,7 @@
 open Common;
 
-let arith name op state =>
-  add_function
+let arith name op funcs =>
+  StringMap.add
     name
     (
       fun l state cb::return =>
@@ -14,36 +14,35 @@ let arith name op state =>
         | _ => return (Error "Expected 3 args in call to add")
         }
     )
-    state;
+    funcs;
 
-let add state => arith "add" (+.) state;
+let add funcs => arith "add" (+.) funcs;
 
-let sub state => arith "sub" (-.) state;
+let sub funcs => arith "sub" (-.) funcs;
 
-let mul state => arith "mul" ( *. ) state;
+let mul funcs => arith "mul" ( *. ) funcs;
 
-let div state => arith "div" (/.) state;
+let div funcs => arith "div" (/.) funcs;
 
-let print (stdout: string => unit) state =>
-  add_function
-    "print"
-    (
-      fun l state cb::return =>
-        switch l {
-        | [v] =>
-          return (
-            Ok {
-              stdout (to_string (resolve v state));
-              state
-            }
-          )
-        | _ => return (Error "Expected one argument in call to print")
-        }
-    )
-    state;
-
-let line (stdout: string => unit) state =>
-  add_function
+let print (stdout: string => unit) funcs => {
+  let funcs =
+    StringMap.add
+      "print"
+      (
+        fun l state cb::return =>
+          switch l {
+          | [v] =>
+            return (
+              Ok {
+                stdout (to_string (resolve v state));
+                state
+              }
+            )
+          | _ => return (Error "Expected one argument in call to print")
+          }
+      )
+      funcs;
+  StringMap.add
     "line"
     (
       fun l state cb::return =>
@@ -58,10 +57,11 @@ let line (stdout: string => unit) state =>
         | _ => return (Error "Expected arguments in call to line")
         }
     )
-    state;
+    funcs
+};
 
-let move state =>
-  add_function
+let move funcs =>
+  StringMap.add
     "move"
     (
       fun l state cb::return =>
@@ -74,7 +74,10 @@ let move state =>
         | _ => return (Error "Expected 2 args in call to move")
         }
     )
-    state;
+    funcs;
 
-let load_builtins_list (lst: list (stateT => stateT)) (state: stateT) :stateT =>
+let load_builtins_list
+    (lst: list (StringMap.t functionT => StringMap.t functionT))
+    (state: StringMap.t functionT)
+    :StringMap.t functionT =>
   List.fold_left (fun acc v => v acc) state lst;

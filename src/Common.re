@@ -66,13 +66,13 @@ type functionT =
   list argT => stateT => cb::(result stateT string => unit) => unit
 and stateT = {
   variables: StringMap.t valueT,
-  functions: StringMap.t functionT
+  currLine: int
 };
 
-let add_function (name: string) (fn: functionT) (s: stateT) :stateT => {
-  ...s,
-  functions: StringMap.add name fn s.functions
-};
+/* let add_function (name: string) (fn: functionT) (s: stateT) :stateT => { */
+/*   ...s, */
+/*   functions: StringMap.add name fn s.functions */
+/* }; */
 
 let add_variable (name: string) (value: valueT) (s: stateT) :stateT => {
   ...s,

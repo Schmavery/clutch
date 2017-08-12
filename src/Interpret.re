@@ -1,6 +1,6 @@
 open Common;
 
-let empty = {variables: StringMap.empty, functions: StringMap.empty};
+let empty = {variables: StringMap.empty, currLine: 0};
 
 let parse_arg stream =>
   switch (Stream.peek stream) {
@@ -41,36 +41,49 @@ let rec parse_args stream acc =>
     }
   };
 
-let cmd (state: stateT) (input: string) cb::(cb: result stateT string => unit) => {
+let cmd
+    (state: stateT)
+    (funcs: StringMap.t functionT)
+    (input: string)
+    cb::(cb: stateT => err::option string => unit) => {
   let s = Stream.of_string input;
   print_endline input;
   switch (Parse.parse_ident s "") {
   | Ok i =>
-    switch (StringMap.get i state.functions) {
+    switch (StringMap.get i funcs) {
     | Some fn =>
       switch (parse_args s []) {
-      | Ok args => fn args state cb::(fun state => cb state)
-      | Error e => cb (Error e)
+      | Ok args =>
+        fn
+          args
+          state
+          cb::(
+            fun
+            | Ok state => cb {...state, currLine: state.currLine + 1} err::None
+            | Error e => cb state err::(Some e)
+          )
+      | Error e => cb state err::(Some e)
       }
-    | None => cb (Error ("Unknown function " ^ i ^ "."))
+    | None => cb state err::(Some ("Unknown function " ^ i ^ "."))
     }
-  | Error e => cb (Error e)
+  | Error e => cb state err::(Some e)
   }
 };
 
 let rec run_until_error
         (state: stateT)
+        (funcs: StringMap.t functionT)
         (input: list string)
-        cb::(cb: result stateT string => unit) =>
+        cb::(cb: stateT => err::option string => unit) =>
   switch input {
-  | [] => cb (Ok state)
-  | ["", ...tl] => run_until_error state tl ::cb
+  | [] => cb state err::None
+  | ["", ...tl] => run_until_error state funcs tl ::cb
   | [input, ...tl] =>
     let s = Stream.of_string input;
     print_endline input;
     switch (Parse.parse_ident s "") {
     | Ok i =>
-      switch (StringMap.get i state.functions) {
+      switch (StringMap.get i funcs) {
       | Some fn =>
         switch (parse_args s []) {
         | Ok args =>
@@ -79,13 +92,15 @@ let rec run_until_error
             state
             cb::(
               fun
-              | Ok state => run_until_error state tl ::cb
-              | Error e => cb (Error e)
+              | Ok state =>
+                run_until_error
+                  {...state, currLine: state.currLine + 1} funcs tl ::cb
+              | Error e => cb state err::(Some e)
             )
-        | Error e => cb (Error e)
+        | Error e => cb state err::(Some e)
         }
-      | None => cb (Error ("Unknown function " ^ i ^ "."))
+      | None => cb state err::(Some ("Unknown function " ^ i ^ "."))
       }
-    | Error e => cb (Error e)
+    | Error e => cb state err::(Some e)
     }
   };

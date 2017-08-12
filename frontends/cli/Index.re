@@ -28,6 +28,11 @@ let rl = Readline.createInterface rlDef;
 
 Random.self_init ();
 
+let builtins_list =
+  Builtins.[add, sub, mul, div, move, print (fun s => print_string s)];
+
+let funcs = Builtins.load_builtins_list builtins_list Common.StringMap.empty;
+
 let rec prompt state =>
   Readline.question
     rl
@@ -36,21 +41,17 @@ let rec prompt state =>
       fun s =>
         Interpret.cmd
           state
+          funcs
           s
           cb::(
-            fun resp =>
-              switch resp {
-              | Ok state => prompt state
-              | Error e =>
+            fun state ::err =>
+              switch err {
+              | None => prompt state
+              | Some e =>
                 print_endline ("Error: " ^ e);
                 prompt state
               }
           )
     );
 
-let builtins_list =
-  Builtins.[add, sub, mul, div, print (fun s => print_string s)];
-
-let state = Builtins.load_builtins_list builtins_list Interpret.empty;
-
-prompt state;
+prompt Interpret.empty;

@@ -1,9 +1,8 @@
 let makeStyle = ReactDOMRe.Style.make;
 
 type pageStateT = {
-  interpretState: Common.stateT,
-  errors: array string,
-  currline: int
+  iState: Common.stateT,
+  errors: array string
 };
 
 type charsT;
@@ -49,10 +48,18 @@ module Editor = {
                            ReactEventRe.Form.target event
                          )
                        )##value;
-  let make ::line ::step ::run ::reset _children => {
+  let make ::errors ::line ::step ::run ::reset _children => {
     ...component,
     initialState: fun () => "add 1 2 c\nprint c",
-    render: fun self =>
+    render: fun self => {
+      let lineColor =
+        switch errors {
+        | [||] => "#dee1e8"
+        | _ => "#ff9393"
+        };
+      let lineGradient =
+        "linear-gradient(to bottom, #fff 0px, " ^
+        lineColor ^ " 0px, " ^ lineColor ^ " 22px, #fff 22px)";
       <div style=(makeStyle flex::"2 0 0" ())>
         <div
           style=(
@@ -68,6 +75,8 @@ module Editor = {
             <EditorButton func=(step self.state) name="Step" />
           </div>
           <textarea
+            spellCheck=Js.false_
+            autoComplete="off"
             style=(
               makeStyle
                 flex::"1"
@@ -78,7 +87,7 @@ module Editor = {
                 lineHeight::"20px"
                 fontSize::"13px"
                 fontWeight::"bold"
-                background::"linear-gradient(to bottom, #fff 0px, #dee1e8 0px, #dee1e8 22px, #fff 22px)"
+                background::lineGradient
                 backgroundAttachment::"local"
                 backgroundPosition::(
                   "0px " ^ string_of_int (20 * line + 5) ^ "px"
@@ -90,6 +99,7 @@ module Editor = {
           />
         </div>
       </div>
+    }
   };
 };
 
@@ -170,7 +180,7 @@ module ErrorList = {
     ReasonReact.Update {...self.ReasonReact.state, errors}
   };
   let component = ReasonReact.statelessComponent "ErrorList";
-  let make ::global ::errors _children => {
+  let make ::errors _children => {
     ...component,
     render: fun _ =>
       <div
@@ -200,16 +210,10 @@ module ErrorList = {
                           padding::"5px"
                           color::"white"
                           display::"flex"
-                          justifyContent::"space-between"
-                          /* flowDirection::"row" */
+                          /* justifyContent::"space-between" */
                           ()
                       )>
-                      <div> (ReasonReact.stringToElement s) </div>
-                      <div
-                        onClick=(global.ReasonReact.update (removeError errid))
-                        style=(makeStyle padding::"3px" cursor::"pointer" ())>
-                        (ReasonReact.stringToElement (getUnicode "cancel"))
-                      </div>
+                      (ReasonReact.stringToElement s)
                     </div>
                 )
                 errors
@@ -227,11 +231,10 @@ let builtins_list =
     mul,
     div,
     move,
-    print (fun s => stdout_text := !stdout_text ^ s),
-    line (fun s => stdout_text := !stdout_text ^ s)
+    print (fun s => stdout_text := !stdout_text ^ s)
   ];
 
-let initial_state = Builtins.load_builtins_list builtins_list Interpret.empty;
+let funcs = Builtins.load_builtins_list builtins_list Common.StringMap.empty;
 
 let rec drop_some l n =>
   switch (l, n) {
@@ -241,26 +244,23 @@ let rec drop_some l n =>
   };
 
 let runCompleteProgram self (content: string) () => {
+  /* TODO: Move this into the interpreter */
   let lines = Common.split_char content on::'\n';
-  let num_lines = List.length lines;
-  let lines = drop_some lines self.ReasonReact.state.currline;
+  let lines = drop_some lines self.ReasonReact.state.iState.currLine;
   Interpret.run_until_error
-    self.ReasonReact.state.interpretState
+    self.ReasonReact.state.iState
+    funcs
     lines
     cb::(
-      fun res =>
+      fun state ::err =>
         self.update
           (
             fun () self =>
               ReasonReact.Update (
-                switch res {
-                | Ok new_istate => {
-                    ...self.state,
-                    interpretState: new_istate,
-                    currline: num_lines
-                  }
-                | Error e => {
-                    ...self.state,
+                switch err {
+                | None => {...self.state, iState: state}
+                | Some e => {
+                    iState: state,
                     errors: Array.append [|e|] self.state.errors
                   }
                 }
@@ -271,26 +271,24 @@ let runCompleteProgram self (content: string) () => {
 };
 
 let stepProgram self (content: string) () => {
+  /* TODO: here too */
   let lines = Common.split_char content on::'\n';
-  let lines = drop_some lines self.ReasonReact.state.currline;
+  let lines = drop_some lines self.ReasonReact.state.iState.currLine;
   switch lines {
   | [line, ..._] =>
     Interpret.cmd
-      self.ReasonReact.state.interpretState
+      self.ReasonReact.state.iState
+      funcs
       line
       cb::(
-        fun res =>
+        fun iState ::err =>
           self.update
             (
               fun () self =>
                 ReasonReact.Update (
-                  switch res {
-                  | Ok new_istate => {
-                      ...self.state,
-                      interpretState: new_istate,
-                      currline: self.state.currline + 1
-                    }
-                  | Error e => {
+                  switch err {
+                  | None => {iState, errors: [||]}
+                  | Some e => {
                       ...self.state,
                       errors: Array.append [|e|] self.state.errors
                     }
@@ -307,12 +305,7 @@ let resetProgram self () => {
   stdout_text := "";
   self.ReasonReact.update
     (
-      fun () _self =>
-        ReasonReact.Update {
-          interpretState: initial_state,
-          errors: [||],
-          currline: 0
-        }
+      fun () _self => ReasonReact.Update {iState: Interpret.empty, errors: [||]}
     )
     ()
 };
@@ -321,12 +314,8 @@ module Page = {
   let component = ReasonReact.statefulComponent "Page";
   let make _children => {
     ...component,
-    initialState: fun () => {
-      interpretState: initial_state,
-      errors: [||],
-      currline: 0
-    },
-    render: fun ({state: {interpretState, errors}} as self) =>
+    initialState: fun () => {iState: Interpret.empty, errors: [||]},
+    render: fun ({state: {iState, errors}} as self) =>
       <div
         style=(
           makeStyle backgroundColor::"#dee1e8" width::"100%" height::"100%" ()
@@ -347,15 +336,13 @@ module Page = {
               right::"0"
               top::"0"
               bottom::"0"
-              /* overflow::"auto" */
               justifyContent::"center"
-              /* flex::"1 1 auto" */
-              /* position::"relative" */
               ()
           )>
-          <Variables variables=interpretState.Common.variables />
+          <Variables variables=iState.Common.variables />
           <Editor
-            line=self.state.currline
+            errors
+            line=self.state.iState.currLine
             step=(stepProgram self)
             run=(runCompleteProgram self)
             reset=(resetProgram self)
@@ -366,7 +353,7 @@ module Page = {
                 display::"flex" flex::"2 1 0" flexDirection::"column" ()
             )>
             <Console />
-            <ErrorList errors global=self />
+            <ErrorList errors />
           </div>
         </div>
       </div>
