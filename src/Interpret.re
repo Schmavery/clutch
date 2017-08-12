@@ -10,13 +10,19 @@ let parse_arg stream =>
     | Ok n => Ok (Val (Num n))
     | Error e => Error e
     }
+  | Some '"' =>
+    Stream.junk stream;
+    switch (Parse.parse_string stream "") {
+    | Ok n => Ok (Val (Str n))
+    | Error e => Error e
+    }
   | Some 'a'..'z'
   | Some 'A'..'Z' =>
     switch (Parse.parse_ident stream "") {
     | Ok n => Ok (Var n)
     | Error e => Error e
     }
-  | Some _ => Error "Unrecognized character"
+  | Some c => Error (Parse.append_char "Unrecognized character: " c)
   | None => Error "No arg"
   };
 
@@ -37,6 +43,7 @@ let rec parse_args stream acc =>
 
 let cmd (state: stateT) (input: string) cb::(cb: result stateT string => unit) => {
   let s = Stream.of_string input;
+  print_endline input;
   switch (Parse.parse_ident s "") {
   | Ok i =>
     switch (StringMap.get i state.functions) {

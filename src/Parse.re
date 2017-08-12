@@ -23,7 +23,9 @@ let rec parse_string
     | Some c => Error ("Invalid escape sequence \\" ^ append_char "" c ^ ".")
     | None => Error "Unterminated string."
     }
-  | Some '"' => Ok acc
+  | Some '"' =>
+    Stream.junk stream;
+    Ok acc
   | Some c => parse_string (pop_stream stream) (append_char acc c)
   | None => Error "Unterminated string."
   };
@@ -58,4 +60,3 @@ let rec pop_until_newline (stream: Stream.t char) =>
   | Some _ => pop_until_newline (pop_stream stream)
   | None => ()
   };
-
