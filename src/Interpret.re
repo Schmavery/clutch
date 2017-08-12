@@ -57,3 +57,35 @@ let cmd (state: stateT) (input: string) cb::(cb: result stateT string => unit) =
   | Error e => cb (Error e)
   }
 };
+
+let rec run_until_error
+        (state: stateT)
+        (input: list string)
+        cb::(cb: result stateT string => unit) =>
+  switch input {
+  | [] => cb (Ok state)
+  | ["", ...tl] => run_until_error state tl ::cb
+  | [input, ...tl] =>
+    let s = Stream.of_string input;
+    print_endline input;
+    switch (Parse.parse_ident s "") {
+    | Ok i =>
+      switch (StringMap.get i state.functions) {
+      | Some fn =>
+        switch (parse_args s []) {
+        | Ok args =>
+          fn
+            args
+            state
+            cb::(
+              fun
+              | Ok state => run_until_error state tl ::cb
+              | Error e => cb (Error e)
+            )
+        | Error e => cb (Error e)
+        }
+      | None => cb (Error ("Unknown function " ^ i ^ "."))
+      }
+    | Error e => cb (Error e)
+    }
+  };

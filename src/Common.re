@@ -31,6 +31,25 @@ module StringMap = {
     fold (fun k v a => a ^ k ^ ":\t" ^ v ^ "\n") table "";
 };
 
+let split_char str ::on =>
+  if (str == "") {
+    []
+  } else {
+    let rec loop acc offset =>
+      try {
+        let index = String.rindex_from str offset on;
+        if (index == offset) {
+          loop ["", ...acc] (index - 1)
+        } else {
+          let token = String.sub str (index + 1) (offset - index);
+          loop [token, ...acc] (index - 1)
+        }
+      } {
+      | Not_found => [String.sub str 0 (offset + 1), ...acc]
+      };
+    loop [] (String.length str - 1)
+  };
+
 type result 'a 'b =
   | Ok 'a
   | Error 'b;

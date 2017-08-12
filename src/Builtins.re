@@ -42,6 +42,24 @@ let print (stdout: string => unit) state =>
     )
     state;
 
+let line (stdout: string => unit) state =>
+  add_function
+    "line"
+    (
+      fun l state cb::return =>
+        switch l {
+        | [] =>
+          return (
+            Ok {
+              stdout "\n";
+              state
+            }
+          )
+        | _ => return (Error "Expected arguments in call to line")
+        }
+    )
+    state;
+
 let move state =>
   add_function
     "move"

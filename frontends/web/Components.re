@@ -2,7 +2,8 @@ let makeStyle = ReactDOMRe.Style.make;
 
 type pageStateT = {
   interpretState: Common.stateT,
-  errors: array string
+  errors: array string,
+  currline: int
 };
 
 type charsT;
@@ -18,23 +19,24 @@ let getUnicode name => getField chars name;
 
 let stdout_text = ref "";
 
-module RunButton = {
-  let component = ReasonReact.statelessComponent "RunButton";
-  let make ::runFunc _children => {
+module EditorButton = {
+  let component = ReasonReact.statelessComponent "EditorButton";
+  let make ::func ::name _children => {
     ...component,
     render: fun self =>
       <button
         style=(
           makeStyle
-            minHeight::"30px"
-            width::"100px"
             backgroundColor::"#21e024"
             fontSize::"13px"
             fontWeight::"bold"
+            boxShadow::"none"
+            outline::"none"
+            cursor::"pointer"
             ()
         )
-        onClick=(self.handle (fun _ _ => runFunc ()))>
-        (ReasonReact.stringToElement ("Restart " ^ getUnicode "restart"))
+        onClick=(self.handle (fun _ _ => func ()))>
+        (ReasonReact.stringToElement name)
       </button>
   };
 };
@@ -47,26 +49,42 @@ module Editor = {
                            ReactEventRe.Form.target event
                          )
                        )##value;
-  let make ::eval _children => {
+  let make ::line ::step ::run ::reset _children => {
     ...component,
-    initialState: fun () => "add 1 2",
+    initialState: fun () => "add 1 2 c\nprint c",
     render: fun self =>
       <div style=(makeStyle flex::"2 0 0" ())>
         <div
           style=(
-            makeStyle
-              display::"flex"
-              flexDirection::"column"
-              height::"100%"
-              /* flex::"1 1 0" */
-              ()
+            makeStyle display::"flex" flexDirection::"column" height::"100%" ()
           )>
           <div
             style=(makeStyle display::"flex" justifyContent::"space-around" ())>
-            <RunButton runFunc=(eval self.state) />
+            <EditorButton func=reset name=("Reset " ^ getUnicode "restart") />
+            <EditorButton
+              func=(run self.state)
+              name=("Run " ^ getUnicode "play")
+            />
+            <EditorButton func=(step self.state) name="Step" />
           </div>
           <textarea
-            style=(makeStyle flex::"1" padding::"5px" margin::"5px" ())
+            style=(
+              makeStyle
+                flex::"1"
+                padding::"5px"
+                margin::"5px"
+                boxShadow::"none"
+                outline::"none"
+                lineHeight::"20px"
+                fontSize::"13px"
+                fontWeight::"bold"
+                background::"linear-gradient(to bottom, #fff 0px, #dee1e8 0px, #dee1e8 22px, #fff 22px)"
+                backgroundAttachment::"local"
+                backgroundPosition::(
+                  "0px " ^ string_of_int (20 * line + 5) ^ "px"
+                )
+                ()
+            )
             onChange=(self.update textChange)
             value=self.state
           />
@@ -89,6 +107,7 @@ module Console = {
             padding::"5px"
             margin::"5px"
             flex::"1 1 0"
+            overflow::"hidden"
             ()
         )>
         <pre> (ReasonReact.stringToElement !stdout_text) </pre>
@@ -129,7 +148,11 @@ module Variables = {
                     )>
                     <div> (ReasonReact.stringToElement k) </div>
                     <div>
-                      (ReasonReact.stringToElement (Common.to_visualize_string v))
+                      (
+                        ReasonReact.stringToElement (
+                          Common.to_visualize_string v
+                        )
+                      )
                     </div>
                   </div>
               )
@@ -184,7 +207,7 @@ module ErrorList = {
                       <div> (ReasonReact.stringToElement s) </div>
                       <div
                         onClick=(global.ReasonReact.update (removeError errid))
-                        style=(makeStyle padding::"3px" ())>
+                        style=(makeStyle padding::"3px" cursor::"pointer" ())>
                         (ReasonReact.stringToElement (getUnicode "cancel"))
                       </div>
                     </div>
@@ -197,12 +220,64 @@ module ErrorList = {
   };
 };
 
-module Page = {
-  let component = ReasonReact.statefulComponent "Page";
-  let runProgram self (content: string) () =>
+let builtins_list =
+  Builtins.[
+    add,
+    sub,
+    mul,
+    div,
+    move,
+    print (fun s => stdout_text := !stdout_text ^ s),
+    line (fun s => stdout_text := !stdout_text ^ s)
+  ];
+
+let initial_state = Builtins.load_builtins_list builtins_list Interpret.empty;
+
+let rec drop_some l n =>
+  switch (l, n) {
+  | (l, 0) => l
+  | ([_, ...tl], n) => drop_some tl (n - 1)
+  | ([], _) => []
+  };
+
+let runCompleteProgram self (content: string) () => {
+  let lines = Common.split_char content on::'\n';
+  let num_lines = List.length lines;
+  let lines = drop_some lines self.ReasonReact.state.currline;
+  Interpret.run_until_error
+    self.ReasonReact.state.interpretState
+    lines
+    cb::(
+      fun res =>
+        self.update
+          (
+            fun () self =>
+              ReasonReact.Update (
+                switch res {
+                | Ok new_istate => {
+                    ...self.state,
+                    interpretState: new_istate,
+                    currline: num_lines
+                  }
+                | Error e => {
+                    ...self.state,
+                    errors: Array.append [|e|] self.state.errors
+                  }
+                }
+              )
+          )
+          ()
+    )
+};
+
+let stepProgram self (content: string) () => {
+  let lines = Common.split_char content on::'\n';
+  let lines = drop_some lines self.ReasonReact.state.currline;
+  switch lines {
+  | [line, ..._] =>
     Interpret.cmd
       self.ReasonReact.state.interpretState
-      content
+      line
       cb::(
         fun res =>
           self.update
@@ -212,7 +287,8 @@ module Page = {
                   switch res {
                   | Ok new_istate => {
                       ...self.state,
-                      interpretState: new_istate
+                      interpretState: new_istate,
+                      currline: self.state.currline + 1
                     }
                   | Error e => {
                       ...self.state,
@@ -222,21 +298,33 @@ module Page = {
                 )
             )
             ()
-      );
-  let builtins_list =
-    Builtins.[
-      add,
-      sub,
-      mul,
-      div,
-      move,
-      print (fun s => stdout_text := !stdout_text ^ s)
-    ];
+      )
+  | [] => ()
+  }
+};
+
+let resetProgram self () => {
+  stdout_text := "";
+  self.ReasonReact.update
+    (
+      fun () _self =>
+        ReasonReact.Update {
+          interpretState: initial_state,
+          errors: [||],
+          currline: 0
+        }
+    )
+    ()
+};
+
+module Page = {
+  let component = ReasonReact.statefulComponent "Page";
   let make _children => {
     ...component,
     initialState: fun () => {
-      interpretState: Builtins.load_builtins_list builtins_list Interpret.empty,
-      errors: [||]
+      interpretState: initial_state,
+      errors: [||],
+      currline: 0
     },
     render: fun ({state: {interpretState, errors}} as self) =>
       <div
@@ -266,7 +354,12 @@ module Page = {
               ()
           )>
           <Variables variables=interpretState.Common.variables />
-          <Editor eval=(runProgram self) />
+          <Editor
+            line=self.state.currline
+            step=(stepProgram self)
+            run=(runCompleteProgram self)
+            reset=(resetProgram self)
+          />
           <div
             style=(
               makeStyle
