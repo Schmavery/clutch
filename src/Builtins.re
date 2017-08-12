@@ -33,16 +33,27 @@ let print (stdout: string => unit) state =>
         | [v] =>
           return (
             Ok {
-              stdout (
-                switch (resolve v state) {
-                | Num f => Printf.sprintf "%g" f
-                | Str s => s
-                }
-              );
+              stdout (to_string (resolve v state));
               state
             }
           )
         | _ => return (Error "Expected one argument in call to print")
+        }
+    )
+    state;
+
+let move state =>
+  add_function
+    "move"
+    (
+      fun l state cb::return =>
+        switch l {
+        | [src, Var dest] =>
+          switch (resolve src state) {
+          | srcVal => return (Ok (add_variable dest srcVal state))
+          }
+        | [_, _] => return (Error "Second argument must be a variable name")
+        | _ => return (Error "Expected 2 args in call to move")
         }
     )
     state;

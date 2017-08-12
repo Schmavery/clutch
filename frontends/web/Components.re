@@ -11,7 +11,6 @@ external getField : charsT => string => string = "" [@@bs.get_index];
 
 external chars : charsT = "window.chars" [@@bs.val];
 
-/* external array_remove : array 'a => int => int => array 'a = "splice" [@@bs.send]; */
 external array_filteri : array 'a => ('a => int => bool) => array 'a =
   "filter" [@@bs.send];
 
@@ -66,8 +65,6 @@ module Editor = {
             style=(makeStyle display::"flex" justifyContent::"space-around" ())>
             <RunButton runFunc=(eval self.state) />
           </div>
-          /* <button> Step <button /> */
-          /* <button> Step <button /> */
           <textarea
             style=(makeStyle flex::"1" padding::"5px" margin::"5px" ())
             onChange=(self.update textChange)
@@ -101,7 +98,7 @@ module Console = {
 
 module Variables = {
   let component = ReasonReact.statelessComponent "Variables";
-  let make variables::_variables _children => {
+  let make ::variables _children => {
     ...component,
     render: fun _ =>
       <div
@@ -113,7 +110,32 @@ module Variables = {
             flex::"1 1 0"
             ()
         )>
-        (ReasonReact.stringToElement "Variables:")
+        (
+          ReasonReact.arrayToElement (
+            Array.mapi
+              (
+                fun varid (k, v) =>
+                  <div
+                    key=(string_of_int varid)
+                    style=(
+                      makeStyle
+                        backgroundColor::"#cff5f9"
+                        border::"1px solid grey"
+                        padding::"5px"
+                        marginBottom::"2px"
+                        display::"flex"
+                        justifyContent::"space-between"
+                        ()
+                    )>
+                    <div> (ReasonReact.stringToElement k) </div>
+                    <div>
+                      (ReasonReact.stringToElement (Common.to_visualize_string v))
+                    </div>
+                  </div>
+              )
+              (Array.of_list (Common.StringMap.bindings variables))
+          )
+        )
       </div>
   };
 };
@@ -207,6 +229,7 @@ module Page = {
       sub,
       mul,
       div,
+      move,
       print (fun s => stdout_text := !stdout_text ^ s)
     ];
   let make _children => {

@@ -43,7 +43,8 @@ type argT =
   | Var string
   | Val valueT;
 
-type functionT = list argT => stateT => cb::(result stateT string => unit) => unit
+type functionT =
+  list argT => stateT => cb::(result stateT string => unit) => unit
 and stateT = {
   variables: StringMap.t valueT,
   functions: StringMap.t functionT
@@ -63,4 +64,16 @@ let resolve v state =>
   switch v {
   | Var v => StringMap.get_default v state.variables (Num 0.)
   | Val v => v
+  };
+
+let to_string v =>
+  switch v {
+  | Num f => Printf.sprintf "%g" f
+  | Str s => s
+  };
+
+let to_visualize_string v =>
+  switch v {
+  | Num f => Printf.sprintf "%g" f
+  | Str s => "\"" ^ s ^ "\""
   };
