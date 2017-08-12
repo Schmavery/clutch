@@ -17,7 +17,7 @@
     "server": "SimpleHTTPServer 8000 assets",
     "watchify": "watchify lib/js/frontends/web/simpleRoot.js -o assets/lang.js",
     "cli": "node lib/js/frontends/cli/index.js",
-    "deploy": "bsb -make-world && npm run test && browserify lib/js/src/index.js > assets/lang.js && node scripts/deploy-ghpages.js",
+    "deploy": "bsb -make-world && npm run test && browserify lib/js/frontends/web/simpleRoot.js > assets/lang.js && node scripts/deploy-ghpages.js",
     "test": "exit 0"
   },
   "devDependencies": {
