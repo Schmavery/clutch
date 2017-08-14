@@ -1,5 +1,3 @@
-let makeStyle = ReactDOMRe.Style.make;
-
 type pageStateT = {
   iState: Common.stateT,
   errors: array string
@@ -25,7 +23,7 @@ module EditorButton = {
     render: fun self =>
       <button
         style=(
-          makeStyle
+          ReactDOMRe.Style.make
             backgroundColor::"#21e024"
             fontSize::"13px"
             fontWeight::"bold"
@@ -57,16 +55,21 @@ module Editor = {
         | [||] => "#dee1e8"
         | _ => "#ff9393"
         };
+      let backgroundPosition = "0px " ^ string_of_int (20 * line + 5) ^ "px";
       let lineGradient =
         "linear-gradient(to bottom, #fff 0px, " ^
-        lineColor ^ " 0px, " ^ lineColor ^ " 22px, #fff 22px)";
-      <div style=(makeStyle flex::"2 0 0" ())>
+        lineColor ^ " 0px, " ^ lineColor ^ " 22px, #fff 22px)" ^ backgroundPosition;
+      <div style=(ReactDOMRe.Style.make flex::"2 0 0" ())>
         <div
           style=(
-            makeStyle display::"flex" flexDirection::"column" height::"100%" ()
+            ReactDOMRe.Style.make
+              display::"flex" flexDirection::"column" height::"100%" ()
           )>
           <div
-            style=(makeStyle display::"flex" justifyContent::"space-around" ())>
+            style=(
+              ReactDOMRe.Style.make
+                display::"flex" justifyContent::"space-around" ()
+            )>
             <EditorButton func=reset name=("Reset " ^ getUnicode "restart") />
             <EditorButton
               func=(run self.state)
@@ -78,7 +81,7 @@ module Editor = {
             spellCheck=Js.false_
             autoComplete="off"
             style=(
-              makeStyle
+              ReactDOMRe.Style.make
                 flex::"1"
                 padding::"5px"
                 margin::"5px"
@@ -89,9 +92,7 @@ module Editor = {
                 fontWeight::"bold"
                 background::lineGradient
                 backgroundAttachment::"local"
-                backgroundPosition::(
-                  "0px " ^ string_of_int (20 * line + 5) ^ "px"
-                )
+                /* ::backgroundPosition */
                 ()
             )
             onChange=(self.update textChange)
@@ -110,7 +111,7 @@ module Console = {
     render: fun _ =>
       <div
         style=(
-          makeStyle
+          ReactDOMRe.Style.make
             border::"1px solid grey"
             backgroundColor::"#3a3a3a"
             color::"#e5e5e5"
@@ -132,7 +133,7 @@ module Variables = {
     render: fun _ =>
       <div
         style=(
-          makeStyle
+          ReactDOMRe.Style.make
             border::"1px solid grey"
             padding::"5px"
             margin::"5px"
@@ -147,7 +148,7 @@ module Variables = {
                   <div
                     key=(string_of_int varid)
                     style=(
-                      makeStyle
+                      ReactDOMRe.Style.make
                         backgroundColor::"#cff5f9"
                         border::"1px solid grey"
                         padding::"5px"
@@ -185,7 +186,7 @@ module ErrorList = {
     render: fun _ =>
       <div
         style=(
-          makeStyle
+          ReactDOMRe.Style.make
             padding::"5px"
             margin::"5px"
             flex::"1 1 0"
@@ -195,7 +196,7 @@ module ErrorList = {
             overflow::"scroll"
             ()
         )>
-        <div style=(makeStyle overflow::"scroll" ())>
+        <div style=(ReactDOMRe.Style.make overflow::"scroll" ())>
           (
             ReasonReact.arrayToElement (
               Array.mapi
@@ -204,7 +205,7 @@ module ErrorList = {
                     <div
                       key=(string_of_int errid)
                       style=(
-                        makeStyle
+                        ReactDOMRe.Style.make
                           backgroundColor::"#c41515"
                           border::"1px solid white"
                           padding::"5px"
@@ -318,11 +319,12 @@ module Page = {
     render: fun ({state: {iState, errors}} as self) =>
       <div
         style=(
-          makeStyle backgroundColor::"#dee1e8" width::"100%" height::"100%" ()
+          ReactDOMRe.Style.make
+            backgroundColor::"#dee1e8" width::"100%" height::"100%" ()
         )>
         <div
           style=(
-            makeStyle
+            ReactDOMRe.Style.make
               margin::"auto"
               display::"flex"
               backgroundColor::"white"
@@ -349,7 +351,7 @@ module Page = {
           />
           <div
             style=(
-              makeStyle
+              ReactDOMRe.Style.make
                 display::"flex" flex::"2 1 0" flexDirection::"column" ()
             )>
             <Console />

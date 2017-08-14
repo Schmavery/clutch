@@ -41,6 +41,8 @@ let rec parse_args stream acc =>
     }
   };
 
+let inc_line state => {...state, currLine: state.currLine + 1};
+
 let cmd
     (state: stateT)
     (funcs: StringMap.t functionT)
@@ -59,7 +61,7 @@ let cmd
           state
           cb::(
             fun
-            | Ok state => cb {...state, currLine: state.currLine + 1} err::None
+            | Ok state => cb (inc_line state) err::None
             | Error e => cb state err::(Some e)
           )
       | Error e => cb state err::(Some e)
@@ -77,7 +79,7 @@ let rec run_until_error
         cb::(cb: stateT => err::option string => unit) =>
   switch input {
   | [] => cb state err::None
-  | ["", ...tl] => run_until_error state funcs tl ::cb
+  | ["", ...tl] => run_until_error (inc_line state) funcs tl ::cb
   | [input, ...tl] =>
     let s = Stream.of_string input;
     print_endline input;
@@ -92,9 +94,7 @@ let rec run_until_error
             state
             cb::(
               fun
-              | Ok state =>
-                run_until_error
-                  {...state, currLine: state.currLine + 1} funcs tl ::cb
+              | Ok state => run_until_error (inc_line state) funcs tl ::cb
               | Error e => cb state err::(Some e)
             )
         | Error e => cb state err::(Some e)
