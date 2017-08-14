@@ -245,13 +245,10 @@ let rec drop_some l n =>
   };
 
 let runCompleteProgram self (content: string) () => {
-  /* TODO: Move this into the interpreter */
-  let lines = Common.split_char content on::'\n';
-  let lines = drop_some lines self.ReasonReact.state.iState.currLine;
   Interpret.run_until_error
     self.ReasonReact.state.iState
     funcs
-    lines
+    content
     cb::(
       fun state ::err =>
         self.update
@@ -272,7 +269,6 @@ let runCompleteProgram self (content: string) () => {
 };
 
 let stepProgram self (content: string) () => {
-  /* TODO: here too */
   let lines = Common.split_char content on::'\n';
   let lines = drop_some lines self.ReasonReact.state.iState.currLine;
   switch lines {

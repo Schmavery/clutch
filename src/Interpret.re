@@ -49,7 +49,6 @@ let cmd
     (input: string)
     cb::(cb: stateT => err::option string => unit) => {
   let s = Stream.of_string input;
-  print_endline input;
   switch (Parse.parse_ident s "") {
   | Ok i =>
     switch (StringMap.get i funcs) {
@@ -75,14 +74,11 @@ let cmd
 let rec run_until_error
         (state: stateT)
         (funcs: StringMap.t functionT)
-        (input: list string)
+        (inputs: array string)
         cb::(cb: stateT => err::option string => unit) =>
-  switch input {
-  | [] => cb state err::None
-  | ["", ...tl] => run_until_error (inc_line state) funcs tl ::cb
-  | [input, ...tl] =>
+  switch inputs.(state.currLine) {
+  | input =>
     let s = Stream.of_string input;
-    print_endline input;
     switch (Parse.parse_ident s "") {
     | Ok i =>
       switch (StringMap.get i funcs) {
@@ -94,7 +90,7 @@ let rec run_until_error
             state
             cb::(
               fun
-              | Ok state => run_until_error (inc_line state) funcs tl ::cb
+              | Ok state => run_until_error (inc_line state) funcs inputs ::cb
               | Error e => cb state err::(Some e)
             )
         | Error e => cb state err::(Some e)
@@ -103,4 +99,9 @@ let rec run_until_error
       }
     | Error e => cb state err::(Some e)
     }
+  | exception _ =>
+    /*TODO make more specific */ cb state err::None
   };
+
+let run_until_error state funcs (input: string) ::cb =>
+  run_until_error state funcs (Array.of_list (split_char input on::'\n')) ::cb;
