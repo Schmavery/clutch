@@ -1,9 +1,9 @@
 open Common;
 
-let empty = {variables: StringMap.empty, currLine: 0};
+let empty = {variables: StringMap.empty, currLine: 0, content: [||]};
 
 let parse_arg stream =>
-  switch (Stream.peek stream) {
+  switch (CharStream.peek stream) {
   | Some '0'..'9'
   | Some '.' =>
     switch (Parse.parse_num stream "") {
@@ -11,7 +11,7 @@ let parse_arg stream =>
     | Error e => Error e
     }
   | Some '"' =>
-    Stream.junk stream;
+    CharStream.junk stream;
     switch (Parse.parse_string stream "") {
     | Ok n => Ok (Val (Str n))
     | Error e => Error e
@@ -27,10 +27,9 @@ let parse_arg stream =>
   };
 
 let rec parse_args stream acc =>
-  switch (Stream.peek stream) {
-  | Some ' '
-  | Some '\t' =>
-    Stream.junk stream;
+  switch (CharStream.peek stream) {
+  | Some ' ' =>
+    CharStream.eat_spaces stream;
     parse_args stream acc
   | None
   | Some '\n' => Ok (List.rev acc)
@@ -43,65 +42,71 @@ let rec parse_args stream acc =>
 
 let inc_line state => {...state, currLine: state.currLine + 1};
 
+let rec parse_program
+        (program: CharStream.t)
+        funcs
+        (acc: list cmdT)
+        :result (array cmdT) string =>
+  switch (CharStream.peek program) {
+  | Some 'a'..'z'
+  | Some 'A'..'Z' =>
+    switch (Parse.parse_ident program "") {
+    | Ok fname =>
+      switch (StringMap.get fname funcs) {
+      | Some func =>
+        switch (parse_args program []) {
+        | Ok args =>
+          let cmd = {func, args, line: CharStream.line program};
+          parse_program program funcs [cmd, ...acc]
+        | Error e => Error e
+        }
+      | None => Error ("Couldn't find command named " ^ fname)
+      }
+    | Error e => Error e
+    }
+  | Some '\n' =>
+    CharStream.junk program;
+    parse_program program funcs acc
+  | Some '#' =>
+    Parse.pop_until_newline program;
+    parse_program program funcs acc
+  | Some c => Error (Parse.append_char "Unexpected character " c)
+  | None => Ok (Array.of_list (List.rev acc))
+  };
+
 let cmd
     (state: stateT)
-    (funcs: StringMap.t functionT)
-    (input: string)
-    cb::(cb: stateT => err::option string => unit) => {
-  let s = Stream.of_string input;
-  switch (Parse.parse_ident s "") {
-  | Ok i =>
-    switch (StringMap.get i funcs) {
-    | Some fn =>
-      switch (parse_args s []) {
-      | Ok args =>
-        fn
-          args
-          state
-          cb::(
-            fun
-            | Ok state => cb (inc_line state) err::None
-            | Error e => cb state err::(Some e)
-          )
+    (cmd: cmdT)
+    cb::(cb: stateT => err::option string => unit) =>
+  cmd.func
+    cmd.args
+    state
+    cb::(
+      fun
+      | Ok state => cb (inc_line state) err::None
       | Error e => cb state err::(Some e)
-      }
-    | None => cb state err::(Some ("Unknown function " ^ i ^ "."))
-    }
-  | Error e => cb state err::(Some e)
-  }
-};
+    );
 
 let rec run_until_error
         (state: stateT)
-        (funcs: StringMap.t functionT)
-        (inputs: array string)
+        ::step=false
         cb::(cb: stateT => err::option string => unit) =>
-  switch inputs.(state.currLine) {
+  switch state.content.(state.currLine) {
   | input =>
-    let s = Stream.of_string input;
-    switch (Parse.parse_ident s "") {
-    | Ok i =>
-      switch (StringMap.get i funcs) {
-      | Some fn =>
-        switch (parse_args s []) {
-        | Ok args =>
-          fn
-            args
-            state
-            cb::(
-              fun
-              | Ok state => run_until_error (inc_line state) funcs inputs ::cb
-              | Error e => cb state err::(Some e)
-            )
-        | Error e => cb state err::(Some e)
-        }
-      | None => cb state err::(Some ("Unknown function " ^ i ^ "."))
-      }
-    | Error e => cb state err::(Some e)
-    }
-  | exception _ =>
-    /*TODO make more specific */ cb state err::None
+    cmd
+      state
+      input
+      cb::(
+        fun state ::err =>
+          switch err {
+          | None =>
+            if step {
+              cb state err::None
+            } else {
+              run_until_error state step::false ::cb
+            }
+          | Some e => cb state err::(Some e)
+          }
+      )
+  | exception (Invalid_argument "index out of bounds") => cb state err::None
   };
-
-let run_until_error state funcs (input: string) ::cb =>
-  run_until_error state funcs (Array.of_list (split_char input on::'\n')) ::cb;

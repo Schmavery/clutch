@@ -3,6 +3,8 @@ type pageStateT = {
   errors: array string
 };
 
+let default_program = "add 1 2 c\nprint c";
+
 type charsT;
 
 external getField : charsT => string => string = "" [@@bs.get_index];
@@ -18,13 +20,14 @@ let stdout_text = ref "";
 
 module EditorButton = {
   let component = ReasonReact.statelessComponent "EditorButton";
-  let make ::func ::name _children => {
+  let make ::func ::name ::color _children => {
     ...component,
     render: fun self =>
       <button
         style=(
           ReactDOMRe.Style.make
-            backgroundColor::"#21e024"
+            /* backgroundColor::"#21e024" */
+            backgroundColor::color
             fontSize::"13px"
             fontWeight::"bold"
             boxShadow::"none"
@@ -39,26 +42,41 @@ module EditorButton = {
 };
 
 module Editor = {
-  let component = ReasonReact.statefulComponent "FileComponent";
-  let textChange event _state =>
-    ReasonReact.Update (
-                         ReactDOMRe.domElementToObj (
-                           ReactEventRe.Form.target event
-                         )
-                       )##value;
-  let make ::errors ::line ::step ::run ::reset _children => {
+  let textChange parse line event _self =>
+    switch line {
+    | 0 =>
+      let content: string = (
+                              ReactDOMRe.domElementToObj (
+                                ReactEventRe.Form.target event
+                              )
+                            )##value;
+      parse content;
+      ReasonReact.Update content
+    | _ => ReasonReact.NoUpdate
+    };
+  let component = ReasonReact.statefulComponent "Editor";
+  let make ::errors ::line ::parse ::step ::run ::reset _children => {
     ...component,
-    initialState: fun () => "add 1 2 c\nprint c",
+    initialState: fun () => default_program,
     render: fun self => {
       let lineColor =
         switch errors {
         | [||] => "#dee1e8"
         | _ => "#ff9393"
         };
+      let (bgColor, resetColor) =
+        switch line {
+        | 0 => ("#fff", "#dee1e8")
+        | _ => ("#f4f4f4", "#21e024")
+        };
       let backgroundPosition = "0px " ^ string_of_int (20 * line + 5) ^ "px";
       let lineGradient =
-        "linear-gradient(to bottom, #fff 0px, " ^
-        lineColor ^ " 0px, " ^ lineColor ^ " 22px, #fff 22px)" ^ backgroundPosition;
+        "linear-gradient(to bottom, " ^
+        bgColor ^
+        " 0px, " ^
+        lineColor ^
+        " 0px, " ^
+        lineColor ^ " 22px, " ^ bgColor ^ " 22px)" ^ backgroundPosition;
       <div style=(ReactDOMRe.Style.make flex::"2 0 0" ())>
         <div
           style=(
@@ -70,12 +88,17 @@ module Editor = {
               ReactDOMRe.Style.make
                 display::"flex" justifyContent::"space-around" ()
             )>
-            <EditorButton func=reset name=("Reset " ^ getUnicode "restart") />
             <EditorButton
-              func=(run self.state)
-              name=("Run " ^ getUnicode "play")
+              func=reset
+              name=("Reset " ^ getUnicode "restart")
+              color=resetColor
             />
-            <EditorButton func=(step self.state) name="Step" />
+            <EditorButton
+              func=run
+              name=("Run " ^ getUnicode "play")
+              color="#21e024"
+            />
+            <EditorButton func=step name="Step" color="#21e024" />
           </div>
           <textarea
             spellCheck=Js.false_
@@ -92,10 +115,9 @@ module Editor = {
                 fontWeight::"bold"
                 background::lineGradient
                 backgroundAttachment::"local"
-                /* ::backgroundPosition */
                 ()
             )
-            onChange=(self.update textChange)
+            onChange=(self.update (textChange parse line))
             value=self.state
           />
         </div>
@@ -244,11 +266,26 @@ let rec drop_some l n =>
   | ([], _) => []
   };
 
-let runCompleteProgram self (content: string) () => {
+let parse_helper state content => {
+  let s = CharStream.create content;
+  let res = Interpret.parse_program s funcs [];
+  switch res {
+  | Ok cmds => {
+      errors: [||],
+      iState: {variables: Common.StringMap.empty, content: cmds, currLine: 0}
+    }
+  | Error e => {...state, errors: [|e|]}
+  }
+};
+
+let parseProgram self (content: string) =>
+  self.ReasonReact.update
+    (fun () self => ReasonReact.Update (parse_helper self.state content)) ();
+
+let runCompleteProgram self () =>
   Interpret.run_until_error
     self.ReasonReact.state.iState
-    funcs
-    content
+    step::false
     cb::(
       fun state ::err =>
         self.update
@@ -265,44 +302,43 @@ let runCompleteProgram self (content: string) () => {
               )
           )
           ()
-    )
-};
+    );
 
-let stepProgram self (content: string) () => {
-  let lines = Common.split_char content on::'\n';
-  let lines = drop_some lines self.ReasonReact.state.iState.currLine;
-  switch lines {
-  | [line, ..._] =>
-    Interpret.cmd
-      self.ReasonReact.state.iState
-      funcs
-      line
-      cb::(
-        fun iState ::err =>
-          self.update
-            (
-              fun () self =>
-                ReasonReact.Update (
-                  switch err {
-                  | None => {iState, errors: [||]}
-                  | Some e => {
-                      ...self.state,
-                      errors: Array.append [|e|] self.state.errors
-                    }
+let stepProgram self () =>
+  Interpret.run_until_error
+    self.ReasonReact.state.iState
+    step::true
+    cb::(
+      fun iState ::err =>
+        self.update
+          (
+            fun () self =>
+              ReasonReact.Update (
+                switch err {
+                | None => {iState, errors: [||]}
+                | Some e => {
+                    ...self.state,
+                    errors: Array.append [|e|] self.state.errors
                   }
-                )
-            )
-            ()
-      )
-  | [] => ()
-  }
-};
+                }
+              )
+          )
+          ()
+    );
 
 let resetProgram self () => {
   stdout_text := "";
   self.ReasonReact.update
     (
-      fun () _self => ReasonReact.Update {iState: Interpret.empty, errors: [||]}
+      fun () _self =>
+        ReasonReact.Update {
+          iState: {
+            ...self.state.iState,
+            currLine: 0,
+            variables: Common.StringMap.empty
+          },
+          errors: [||]
+        }
     )
     ()
 };
@@ -311,7 +347,8 @@ module Page = {
   let component = ReasonReact.statefulComponent "Page";
   let make _children => {
     ...component,
-    initialState: fun () => {iState: Interpret.empty, errors: [||]},
+    initialState: fun () =>
+      parse_helper {iState: Interpret.empty, errors: [||]} default_program,
     render: fun ({state: {iState, errors}} as self) =>
       <div
         style=(
@@ -341,6 +378,7 @@ module Page = {
           <Editor
             errors
             line=self.state.iState.currLine
+            parse=(parseProgram self)
             step=(stepProgram self)
             run=(runCompleteProgram self)
             reset=(resetProgram self)
