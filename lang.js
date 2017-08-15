@@ -10,1048 +10,11 @@ var Common      = require("../../src/common.js");
 var Builtins    = require("../../src/builtins.js");
 var Interpret   = require("../../src/interpret.js");
 var Caml_int32  = require("bs-platform/lib/js/caml_int32.js");
+var CharStream  = require("../../src/charStream.js");
 var Pervasives  = require("bs-platform/lib/js/pervasives.js");
 var ReasonReact = require("reason-react/lib/js/src/reasonReact.js");
 
-function makeStyle(prim, prim$1, prim$2, prim$3, prim$4, prim$5, prim$6, prim$7, prim$8, prim$9, prim$10, prim$11, prim$12, prim$13, prim$14, prim$15, prim$16, prim$17, prim$18, prim$19, prim$20, prim$21, prim$22, prim$23, prim$24, prim$25, prim$26, prim$27, prim$28, prim$29, prim$30, prim$31, prim$32, prim$33, prim$34, prim$35, prim$36, prim$37, prim$38, prim$39, prim$40, prim$41, prim$42, prim$43, prim$44, prim$45, prim$46, prim$47, prim$48, prim$49, prim$50, prim$51, prim$52, prim$53, prim$54, prim$55, prim$56, prim$57, prim$58, prim$59, prim$60, prim$61, prim$62, prim$63, prim$64, prim$65, prim$66, prim$67, prim$68, prim$69, prim$70, prim$71, prim$72, prim$73, prim$74, prim$75, prim$76, prim$77, prim$78, prim$79, prim$80, prim$81, prim$82, prim$83, prim$84, prim$85, prim$86, prim$87, prim$88, prim$89, prim$90, prim$91, prim$92, prim$93, prim$94, prim$95, prim$96, prim$97, prim$98, prim$99, prim$100, prim$101, prim$102, prim$103, prim$104, prim$105, prim$106, prim$107, prim$108, prim$109, prim$110, prim$111, prim$112, prim$113, prim$114, prim$115, prim$116, prim$117, prim$118, prim$119, prim$120, prim$121, prim$122, prim$123, prim$124, prim$125, prim$126, prim$127, prim$128, prim$129, prim$130, prim$131, prim$132, prim$133, prim$134, prim$135, prim$136, prim$137, prim$138, prim$139, prim$140, prim$141, prim$142, prim$143, prim$144, prim$145, prim$146, prim$147, prim$148, prim$149, prim$150, prim$151, prim$152, prim$153, prim$154, prim$155, prim$156, prim$157, prim$158, prim$159, prim$160, prim$161, prim$162, prim$163, prim$164, prim$165, prim$166, prim$167, prim$168, prim$169, prim$170, prim$171, prim$172, prim$173, prim$174, prim$175, prim$176, prim$177, prim$178, prim$179, prim$180, prim$181, prim$182, prim$183, prim$184, prim$185, prim$186, prim$187, prim$188, prim$189, prim$190, prim$191, prim$192, prim$193, prim$194, prim$195, prim$196, prim$197, prim$198, prim$199, prim$200, prim$201, prim$202, prim$203, prim$204, prim$205, prim$206, prim$207, prim$208, prim$209, prim$210, prim$211, prim$212, prim$213, prim$214, prim$215, prim$216, prim$217, prim$218, prim$219, prim$220, prim$221, prim$222, prim$223, prim$224, prim$225, prim$226, prim$227, prim$228, prim$229, prim$230, prim$231, prim$232, prim$233, prim$234, prim$235, prim$236, prim$237, prim$238, prim$239, prim$240, prim$241, prim$242, prim$243, prim$244, prim$245, prim$246, prim$247, prim$248, prim$249, prim$250, prim$251, prim$252, prim$253, prim$254, prim$255, prim$256, prim$257, prim$258, prim$259, prim$260, prim$261, prim$262, prim$263, prim$264, prim$265, prim$266, prim$267, prim$268, prim$269, prim$270, prim$271, prim$272, prim$273, prim$274, prim$275, prim$276, prim$277, prim$278, prim$279, prim$280, prim$281, prim$282, prim$283, prim$284, prim$285, prim$286, prim$287, prim$288, prim$289, prim$290, prim$291, prim$292, prim$293, prim$294, prim$295, prim$296, prim$297, prim$298, prim$299, prim$300, prim$301, prim$302, prim$303, prim$304, prim$305, prim$306, prim$307, prim$308, prim$309, prim$310, prim$311, prim$312, prim$313, prim$314, prim$315, prim$316, prim$317, prim$318, prim$319, prim$320, prim$321, prim$322, prim$323, prim$324, prim$325, prim$326, prim$327, prim$328, prim$329, prim$330, prim$331, prim$332, prim$333, prim$334, prim$335, prim$336, prim$337, prim$338, prim$339, prim$340, prim$341, prim$342, prim$343, prim$344, _) {
-  var $js = { };
-  if (prim) {
-    $js.azimuth = prim[0];
-  }
-  if (prim$1) {
-    $js.background = prim$1[0];
-  }
-  if (prim$2) {
-    $js.backgroundAttachment = prim$2[0];
-  }
-  if (prim$3) {
-    $js.backgroundColor = prim$3[0];
-  }
-  if (prim$4) {
-    $js.backgroundImage = prim$4[0];
-  }
-  if (prim$5) {
-    $js.backgroundPosition = prim$5[0];
-  }
-  if (prim$6) {
-    $js.backgroundRepeat = prim$6[0];
-  }
-  if (prim$7) {
-    $js.border = prim$7[0];
-  }
-  if (prim$8) {
-    $js.borderCollapse = prim$8[0];
-  }
-  if (prim$9) {
-    $js.borderColor = prim$9[0];
-  }
-  if (prim$10) {
-    $js.borderSpacing = prim$10[0];
-  }
-  if (prim$11) {
-    $js.borderStyle = prim$11[0];
-  }
-  if (prim$12) {
-    $js.borderTop = prim$12[0];
-  }
-  if (prim$13) {
-    $js.borderRight = prim$13[0];
-  }
-  if (prim$14) {
-    $js.borderBottom = prim$14[0];
-  }
-  if (prim$15) {
-    $js.borderLeft = prim$15[0];
-  }
-  if (prim$16) {
-    $js.borderTopColor = prim$16[0];
-  }
-  if (prim$17) {
-    $js.borderRightColor = prim$17[0];
-  }
-  if (prim$18) {
-    $js.borderBottomColor = prim$18[0];
-  }
-  if (prim$19) {
-    $js.borderLeftColor = prim$19[0];
-  }
-  if (prim$20) {
-    $js.borderTopStyle = prim$20[0];
-  }
-  if (prim$21) {
-    $js.borderRightStyle = prim$21[0];
-  }
-  if (prim$22) {
-    $js.borderBottomStyle = prim$22[0];
-  }
-  if (prim$23) {
-    $js.borderLeftStyle = prim$23[0];
-  }
-  if (prim$24) {
-    $js.borderTopWidth = prim$24[0];
-  }
-  if (prim$25) {
-    $js.borderRightWidth = prim$25[0];
-  }
-  if (prim$26) {
-    $js.borderBottomWidth = prim$26[0];
-  }
-  if (prim$27) {
-    $js.borderLeftWidth = prim$27[0];
-  }
-  if (prim$28) {
-    $js.borderWidth = prim$28[0];
-  }
-  if (prim$29) {
-    $js.bottom = prim$29[0];
-  }
-  if (prim$30) {
-    $js.captionSide = prim$30[0];
-  }
-  if (prim$31) {
-    $js.clear = prim$31[0];
-  }
-  if (prim$32) {
-    $js.clip = prim$32[0];
-  }
-  if (prim$33) {
-    $js.color = prim$33[0];
-  }
-  if (prim$34) {
-    $js.content = prim$34[0];
-  }
-  if (prim$35) {
-    $js.counterIncrement = prim$35[0];
-  }
-  if (prim$36) {
-    $js.counterReset = prim$36[0];
-  }
-  if (prim$37) {
-    $js.cue = prim$37[0];
-  }
-  if (prim$38) {
-    $js.cueAfter = prim$38[0];
-  }
-  if (prim$39) {
-    $js.cueBefore = prim$39[0];
-  }
-  if (prim$40) {
-    $js.cursor = prim$40[0];
-  }
-  if (prim$41) {
-    $js.direction = prim$41[0];
-  }
-  if (prim$42) {
-    $js.display = prim$42[0];
-  }
-  if (prim$43) {
-    $js.elevation = prim$43[0];
-  }
-  if (prim$44) {
-    $js.emptyCells = prim$44[0];
-  }
-  if (prim$45) {
-    $js.float = prim$45[0];
-  }
-  if (prim$46) {
-    $js.font = prim$46[0];
-  }
-  if (prim$47) {
-    $js.fontFamily = prim$47[0];
-  }
-  if (prim$48) {
-    $js.fontSize = prim$48[0];
-  }
-  if (prim$49) {
-    $js.fontSizeAdjust = prim$49[0];
-  }
-  if (prim$50) {
-    $js.fontStretch = prim$50[0];
-  }
-  if (prim$51) {
-    $js.fontStyle = prim$51[0];
-  }
-  if (prim$52) {
-    $js.fontVariant = prim$52[0];
-  }
-  if (prim$53) {
-    $js.fontWeight = prim$53[0];
-  }
-  if (prim$54) {
-    $js.height = prim$54[0];
-  }
-  if (prim$55) {
-    $js.left = prim$55[0];
-  }
-  if (prim$56) {
-    $js.letterSpacing = prim$56[0];
-  }
-  if (prim$57) {
-    $js.lineHeight = prim$57[0];
-  }
-  if (prim$58) {
-    $js.listStyle = prim$58[0];
-  }
-  if (prim$59) {
-    $js.listStyleImage = prim$59[0];
-  }
-  if (prim$60) {
-    $js.listStylePosition = prim$60[0];
-  }
-  if (prim$61) {
-    $js.listStyleType = prim$61[0];
-  }
-  if (prim$62) {
-    $js.margin = prim$62[0];
-  }
-  if (prim$63) {
-    $js.marginTop = prim$63[0];
-  }
-  if (prim$64) {
-    $js.marginRight = prim$64[0];
-  }
-  if (prim$65) {
-    $js.marginBottom = prim$65[0];
-  }
-  if (prim$66) {
-    $js.marginLeft = prim$66[0];
-  }
-  if (prim$67) {
-    $js.markerOffset = prim$67[0];
-  }
-  if (prim$68) {
-    $js.marks = prim$68[0];
-  }
-  if (prim$69) {
-    $js.maxHeight = prim$69[0];
-  }
-  if (prim$70) {
-    $js.maxWidth = prim$70[0];
-  }
-  if (prim$71) {
-    $js.minHeight = prim$71[0];
-  }
-  if (prim$72) {
-    $js.minWidth = prim$72[0];
-  }
-  if (prim$73) {
-    $js.orphans = prim$73[0];
-  }
-  if (prim$74) {
-    $js.outline = prim$74[0];
-  }
-  if (prim$75) {
-    $js.outlineColor = prim$75[0];
-  }
-  if (prim$76) {
-    $js.outlineStyle = prim$76[0];
-  }
-  if (prim$77) {
-    $js.outlineWidth = prim$77[0];
-  }
-  if (prim$78) {
-    $js.overflow = prim$78[0];
-  }
-  if (prim$79) {
-    $js.padding = prim$79[0];
-  }
-  if (prim$80) {
-    $js.paddingTop = prim$80[0];
-  }
-  if (prim$81) {
-    $js.paddingRight = prim$81[0];
-  }
-  if (prim$82) {
-    $js.paddingBottom = prim$82[0];
-  }
-  if (prim$83) {
-    $js.paddingLeft = prim$83[0];
-  }
-  if (prim$84) {
-    $js.page = prim$84[0];
-  }
-  if (prim$85) {
-    $js.pageBreakAfter = prim$85[0];
-  }
-  if (prim$86) {
-    $js.pageBreakBefore = prim$86[0];
-  }
-  if (prim$87) {
-    $js.pageBreakInside = prim$87[0];
-  }
-  if (prim$88) {
-    $js.pause = prim$88[0];
-  }
-  if (prim$89) {
-    $js.pauseAfter = prim$89[0];
-  }
-  if (prim$90) {
-    $js.pauseBefore = prim$90[0];
-  }
-  if (prim$91) {
-    $js.pitch = prim$91[0];
-  }
-  if (prim$92) {
-    $js.pitchRange = prim$92[0];
-  }
-  if (prim$93) {
-    $js.playDuring = prim$93[0];
-  }
-  if (prim$94) {
-    $js.position = prim$94[0];
-  }
-  if (prim$95) {
-    $js.quotes = prim$95[0];
-  }
-  if (prim$96) {
-    $js.richness = prim$96[0];
-  }
-  if (prim$97) {
-    $js.right = prim$97[0];
-  }
-  if (prim$98) {
-    $js.size = prim$98[0];
-  }
-  if (prim$99) {
-    $js.speak = prim$99[0];
-  }
-  if (prim$100) {
-    $js.speakHeader = prim$100[0];
-  }
-  if (prim$101) {
-    $js.speakNumeral = prim$101[0];
-  }
-  if (prim$102) {
-    $js.speakPunctuation = prim$102[0];
-  }
-  if (prim$103) {
-    $js.speechRate = prim$103[0];
-  }
-  if (prim$104) {
-    $js.stress = prim$104[0];
-  }
-  if (prim$105) {
-    $js.tableLayout = prim$105[0];
-  }
-  if (prim$106) {
-    $js.textAlign = prim$106[0];
-  }
-  if (prim$107) {
-    $js.textDecoration = prim$107[0];
-  }
-  if (prim$108) {
-    $js.textIndent = prim$108[0];
-  }
-  if (prim$109) {
-    $js.textShadow = prim$109[0];
-  }
-  if (prim$110) {
-    $js.textTransform = prim$110[0];
-  }
-  if (prim$111) {
-    $js.top = prim$111[0];
-  }
-  if (prim$112) {
-    $js.unicodeBidi = prim$112[0];
-  }
-  if (prim$113) {
-    $js.verticalAlign = prim$113[0];
-  }
-  if (prim$114) {
-    $js.visibility = prim$114[0];
-  }
-  if (prim$115) {
-    $js.voiceFamily = prim$115[0];
-  }
-  if (prim$116) {
-    $js.volume = prim$116[0];
-  }
-  if (prim$117) {
-    $js.whiteSpace = prim$117[0];
-  }
-  if (prim$118) {
-    $js.widows = prim$118[0];
-  }
-  if (prim$119) {
-    $js.width = prim$119[0];
-  }
-  if (prim$120) {
-    $js.wordSpacing = prim$120[0];
-  }
-  if (prim$121) {
-    $js.zIndex = prim$121[0];
-  }
-  if (prim$122) {
-    $js.opacity = prim$122[0];
-  }
-  if (prim$123) {
-    $js.backgroundOrigin = prim$123[0];
-  }
-  if (prim$124) {
-    $js.backgroundSize = prim$124[0];
-  }
-  if (prim$125) {
-    $js.backgroundClip = prim$125[0];
-  }
-  if (prim$126) {
-    $js.borderRadius = prim$126[0];
-  }
-  if (prim$127) {
-    $js.borderTopLeftRadius = prim$127[0];
-  }
-  if (prim$128) {
-    $js.borderTopRightRadius = prim$128[0];
-  }
-  if (prim$129) {
-    $js.borderBottomLeftRadius = prim$129[0];
-  }
-  if (prim$130) {
-    $js.borderBottomRightRadius = prim$130[0];
-  }
-  if (prim$131) {
-    $js.borderImage = prim$131[0];
-  }
-  if (prim$132) {
-    $js.borderImageSource = prim$132[0];
-  }
-  if (prim$133) {
-    $js.borderImageSlice = prim$133[0];
-  }
-  if (prim$134) {
-    $js.borderImageWidth = prim$134[0];
-  }
-  if (prim$135) {
-    $js.borderImageOutset = prim$135[0];
-  }
-  if (prim$136) {
-    $js.borderImageRepeat = prim$136[0];
-  }
-  if (prim$137) {
-    $js.boxShadow = prim$137[0];
-  }
-  if (prim$138) {
-    $js.columns = prim$138[0];
-  }
-  if (prim$139) {
-    $js.columnCount = prim$139[0];
-  }
-  if (prim$140) {
-    $js.columnFill = prim$140[0];
-  }
-  if (prim$141) {
-    $js.columnGap = prim$141[0];
-  }
-  if (prim$142) {
-    $js.columnRule = prim$142[0];
-  }
-  if (prim$143) {
-    $js.columnRuleColor = prim$143[0];
-  }
-  if (prim$144) {
-    $js.columnRuleStyle = prim$144[0];
-  }
-  if (prim$145) {
-    $js.columnRuleWidth = prim$145[0];
-  }
-  if (prim$146) {
-    $js.columnSpan = prim$146[0];
-  }
-  if (prim$147) {
-    $js.columnWidth = prim$147[0];
-  }
-  if (prim$148) {
-    $js.breakAfter = prim$148[0];
-  }
-  if (prim$149) {
-    $js.breakBefore = prim$149[0];
-  }
-  if (prim$150) {
-    $js.breakInside = prim$150[0];
-  }
-  if (prim$151) {
-    $js.rest = prim$151[0];
-  }
-  if (prim$152) {
-    $js.restAfter = prim$152[0];
-  }
-  if (prim$153) {
-    $js.restBefore = prim$153[0];
-  }
-  if (prim$154) {
-    $js.speakAs = prim$154[0];
-  }
-  if (prim$155) {
-    $js.voiceBalance = prim$155[0];
-  }
-  if (prim$156) {
-    $js.voiceDuration = prim$156[0];
-  }
-  if (prim$157) {
-    $js.voicePitch = prim$157[0];
-  }
-  if (prim$158) {
-    $js.voiceRange = prim$158[0];
-  }
-  if (prim$159) {
-    $js.voiceRate = prim$159[0];
-  }
-  if (prim$160) {
-    $js.voiceStress = prim$160[0];
-  }
-  if (prim$161) {
-    $js.voiceVolume = prim$161[0];
-  }
-  if (prim$162) {
-    $js.objectFit = prim$162[0];
-  }
-  if (prim$163) {
-    $js.objectPosition = prim$163[0];
-  }
-  if (prim$164) {
-    $js.imageResolution = prim$164[0];
-  }
-  if (prim$165) {
-    $js.imageOrientation = prim$165[0];
-  }
-  if (prim$166) {
-    $js.alignContent = prim$166[0];
-  }
-  if (prim$167) {
-    $js.alignItems = prim$167[0];
-  }
-  if (prim$168) {
-    $js.alignSelf = prim$168[0];
-  }
-  if (prim$169) {
-    $js.flex = prim$169[0];
-  }
-  if (prim$170) {
-    $js.flexBasis = prim$170[0];
-  }
-  if (prim$171) {
-    $js.flexDirection = prim$171[0];
-  }
-  if (prim$172) {
-    $js.flexFlow = prim$172[0];
-  }
-  if (prim$173) {
-    $js.flexGrow = prim$173[0];
-  }
-  if (prim$174) {
-    $js.flexShrink = prim$174[0];
-  }
-  if (prim$175) {
-    $js.flexWrap = prim$175[0];
-  }
-  if (prim$176) {
-    $js.justifyContent = prim$176[0];
-  }
-  if (prim$177) {
-    $js.order = prim$177[0];
-  }
-  if (prim$178) {
-    $js.textDecorationColor = prim$178[0];
-  }
-  if (prim$179) {
-    $js.textDecorationLine = prim$179[0];
-  }
-  if (prim$180) {
-    $js.textDecorationSkip = prim$180[0];
-  }
-  if (prim$181) {
-    $js.textDecorationStyle = prim$181[0];
-  }
-  if (prim$182) {
-    $js.textEmphasis = prim$182[0];
-  }
-  if (prim$183) {
-    $js.textEmphasisColor = prim$183[0];
-  }
-  if (prim$184) {
-    $js.textEmphasisPosition = prim$184[0];
-  }
-  if (prim$185) {
-    $js.textEmphasisStyle = prim$185[0];
-  }
-  if (prim$186) {
-    $js.textUnderlinePosition = prim$186[0];
-  }
-  if (prim$187) {
-    $js.fontFeatureSettings = prim$187[0];
-  }
-  if (prim$188) {
-    $js.fontKerning = prim$188[0];
-  }
-  if (prim$189) {
-    $js.fontLanguageOverride = prim$189[0];
-  }
-  if (prim$190) {
-    $js.fontSynthesis = prim$190[0];
-  }
-  if (prim$191) {
-    $js.forntVariantAlternates = prim$191[0];
-  }
-  if (prim$192) {
-    $js.fontVariantCaps = prim$192[0];
-  }
-  if (prim$193) {
-    $js.fontVariantEastAsian = prim$193[0];
-  }
-  if (prim$194) {
-    $js.fontVariantLigatures = prim$194[0];
-  }
-  if (prim$195) {
-    $js.fontVariantNumeric = prim$195[0];
-  }
-  if (prim$196) {
-    $js.fontVariantPosition = prim$196[0];
-  }
-  if (prim$197) {
-    $js.all = prim$197[0];
-  }
-  if (prim$198) {
-    $js.glyphOrientationVertical = prim$198[0];
-  }
-  if (prim$199) {
-    $js.textCombineUpright = prim$199[0];
-  }
-  if (prim$200) {
-    $js.textOrientation = prim$200[0];
-  }
-  if (prim$201) {
-    $js.writingMode = prim$201[0];
-  }
-  if (prim$202) {
-    $js.shapeImageThreshold = prim$202[0];
-  }
-  if (prim$203) {
-    $js.shapeMargin = prim$203[0];
-  }
-  if (prim$204) {
-    $js.shapeOutside = prim$204[0];
-  }
-  if (prim$205) {
-    $js.clipPath = prim$205[0];
-  }
-  if (prim$206) {
-    $js.clipRule = prim$206[0];
-  }
-  if (prim$207) {
-    $js.mask = prim$207[0];
-  }
-  if (prim$208) {
-    $js.maskBorder = prim$208[0];
-  }
-  if (prim$209) {
-    $js.maskBorderMode = prim$209[0];
-  }
-  if (prim$210) {
-    $js.maskBorderOutset = prim$210[0];
-  }
-  if (prim$211) {
-    $js.maskBorderRepeat = prim$211[0];
-  }
-  if (prim$212) {
-    $js.maskBorderSlice = prim$212[0];
-  }
-  if (prim$213) {
-    $js.maskBorderSource = prim$213[0];
-  }
-  if (prim$214) {
-    $js.maskBorderWidth = prim$214[0];
-  }
-  if (prim$215) {
-    $js.maskClip = prim$215[0];
-  }
-  if (prim$216) {
-    $js.maskComposite = prim$216[0];
-  }
-  if (prim$217) {
-    $js.maskImage = prim$217[0];
-  }
-  if (prim$218) {
-    $js.maskMode = prim$218[0];
-  }
-  if (prim$219) {
-    $js.maskOrigin = prim$219[0];
-  }
-  if (prim$220) {
-    $js.maskPosition = prim$220[0];
-  }
-  if (prim$221) {
-    $js.maskRepeat = prim$221[0];
-  }
-  if (prim$222) {
-    $js.maskSize = prim$222[0];
-  }
-  if (prim$223) {
-    $js.maskType = prim$223[0];
-  }
-  if (prim$224) {
-    $js.backgroundBlendMode = prim$224[0];
-  }
-  if (prim$225) {
-    $js.isolation = prim$225[0];
-  }
-  if (prim$226) {
-    $js.mixBlendMode = prim$226[0];
-  }
-  if (prim$227) {
-    $js.boxDecorationBreak = prim$227[0];
-  }
-  if (prim$228) {
-    $js.boxSizing = prim$228[0];
-  }
-  if (prim$229) {
-    $js.caretColor = prim$229[0];
-  }
-  if (prim$230) {
-    $js.navDown = prim$230[0];
-  }
-  if (prim$231) {
-    $js.navLeft = prim$231[0];
-  }
-  if (prim$232) {
-    $js.navRight = prim$232[0];
-  }
-  if (prim$233) {
-    $js.navUp = prim$233[0];
-  }
-  if (prim$234) {
-    $js.outlineOffset = prim$234[0];
-  }
-  if (prim$235) {
-    $js.resize = prim$235[0];
-  }
-  if (prim$236) {
-    $js.textOverflow = prim$236[0];
-  }
-  if (prim$237) {
-    $js.grid = prim$237[0];
-  }
-  if (prim$238) {
-    $js.gridArea = prim$238[0];
-  }
-  if (prim$239) {
-    $js.gridAutoColumns = prim$239[0];
-  }
-  if (prim$240) {
-    $js.gridAutoFlow = prim$240[0];
-  }
-  if (prim$241) {
-    $js.gridAutoRows = prim$241[0];
-  }
-  if (prim$242) {
-    $js.gridColumn = prim$242[0];
-  }
-  if (prim$243) {
-    $js.gridColumnEnd = prim$243[0];
-  }
-  if (prim$244) {
-    $js.gridColumnGap = prim$244[0];
-  }
-  if (prim$245) {
-    $js.gridColumnStart = prim$245[0];
-  }
-  if (prim$246) {
-    $js.gridGap = prim$246[0];
-  }
-  if (prim$247) {
-    $js.gridRow = prim$247[0];
-  }
-  if (prim$248) {
-    $js.gridRowEnd = prim$248[0];
-  }
-  if (prim$249) {
-    $js.gridRowGap = prim$249[0];
-  }
-  if (prim$250) {
-    $js.gridRowStart = prim$250[0];
-  }
-  if (prim$251) {
-    $js.gridTemplate = prim$251[0];
-  }
-  if (prim$252) {
-    $js.gridTempalteAreas = prim$252[0];
-  }
-  if (prim$253) {
-    $js.gridTemplateColumns = prim$253[0];
-  }
-  if (prim$254) {
-    $js.gridTemplateRows = prim$254[0];
-  }
-  if (prim$255) {
-    $js.willChange = prim$255[0];
-  }
-  if (prim$256) {
-    $js.hangingPunctuation = prim$256[0];
-  }
-  if (prim$257) {
-    $js.hyphens = prim$257[0];
-  }
-  if (prim$258) {
-    $js.lineBreak = prim$258[0];
-  }
-  if (prim$259) {
-    $js.overflowWrap = prim$259[0];
-  }
-  if (prim$260) {
-    $js.tabSize = prim$260[0];
-  }
-  if (prim$261) {
-    $js.textAlignLast = prim$261[0];
-  }
-  if (prim$262) {
-    $js.textJustify = prim$262[0];
-  }
-  if (prim$263) {
-    $js.wordBreak = prim$263[0];
-  }
-  if (prim$264) {
-    $js.wordWrap = prim$264[0];
-  }
-  if (prim$265) {
-    $js.animation = prim$265[0];
-  }
-  if (prim$266) {
-    $js.animationDelay = prim$266[0];
-  }
-  if (prim$267) {
-    $js.animationDirection = prim$267[0];
-  }
-  if (prim$268) {
-    $js.animationDuration = prim$268[0];
-  }
-  if (prim$269) {
-    $js.animationFillMode = prim$269[0];
-  }
-  if (prim$270) {
-    $js.animationIterationCount = prim$270[0];
-  }
-  if (prim$271) {
-    $js.animationName = prim$271[0];
-  }
-  if (prim$272) {
-    $js.animationPlayState = prim$272[0];
-  }
-  if (prim$273) {
-    $js.animationTimingFunction = prim$273[0];
-  }
-  if (prim$274) {
-    $js.transition = prim$274[0];
-  }
-  if (prim$275) {
-    $js.transitionDelay = prim$275[0];
-  }
-  if (prim$276) {
-    $js.transitionDuration = prim$276[0];
-  }
-  if (prim$277) {
-    $js.transitionProperty = prim$277[0];
-  }
-  if (prim$278) {
-    $js.transitionTimingFunction = prim$278[0];
-  }
-  if (prim$279) {
-    $js.backfaceVisibility = prim$279[0];
-  }
-  if (prim$280) {
-    $js.perspective = prim$280[0];
-  }
-  if (prim$281) {
-    $js.perspectiveOrigin = prim$281[0];
-  }
-  if (prim$282) {
-    $js.transform = prim$282[0];
-  }
-  if (prim$283) {
-    $js.transformOrigin = prim$283[0];
-  }
-  if (prim$284) {
-    $js.transformStyle = prim$284[0];
-  }
-  if (prim$285) {
-    $js.justifyItems = prim$285[0];
-  }
-  if (prim$286) {
-    $js.justifySelf = prim$286[0];
-  }
-  if (prim$287) {
-    $js.placeContent = prim$287[0];
-  }
-  if (prim$288) {
-    $js.placeItems = prim$288[0];
-  }
-  if (prim$289) {
-    $js.placeSelf = prim$289[0];
-  }
-  if (prim$290) {
-    $js.appearance = prim$290[0];
-  }
-  if (prim$291) {
-    $js.caret = prim$291[0];
-  }
-  if (prim$292) {
-    $js.caretAnimation = prim$292[0];
-  }
-  if (prim$293) {
-    $js.caretShape = prim$293[0];
-  }
-  if (prim$294) {
-    $js.userSelect = prim$294[0];
-  }
-  if (prim$295) {
-    $js.maxLines = prim$295[0];
-  }
-  if (prim$296) {
-    $js.marqueeDirection = prim$296[0];
-  }
-  if (prim$297) {
-    $js.marqueeLoop = prim$297[0];
-  }
-  if (prim$298) {
-    $js.marqueeSpeed = prim$298[0];
-  }
-  if (prim$299) {
-    $js.marqueeStyle = prim$299[0];
-  }
-  if (prim$300) {
-    $js.overflowStyle = prim$300[0];
-  }
-  if (prim$301) {
-    $js.rotation = prim$301[0];
-  }
-  if (prim$302) {
-    $js.rotationPoint = prim$302[0];
-  }
-  if (prim$303) {
-    $js.alignmentBaseline = prim$303[0];
-  }
-  if (prim$304) {
-    $js.baselineShift = prim$304[0];
-  }
-  if (prim$305) {
-    $js.clip = prim$305[0];
-  }
-  if (prim$306) {
-    $js.clipPath = prim$306[0];
-  }
-  if (prim$307) {
-    $js.clipRule = prim$307[0];
-  }
-  if (prim$308) {
-    $js.colorInterpolation = prim$308[0];
-  }
-  if (prim$309) {
-    $js.colorInterpolationFilters = prim$309[0];
-  }
-  if (prim$310) {
-    $js.colorProfile = prim$310[0];
-  }
-  if (prim$311) {
-    $js.colorRendering = prim$311[0];
-  }
-  if (prim$312) {
-    $js.cursor = prim$312[0];
-  }
-  if (prim$313) {
-    $js.dominantBaseline = prim$313[0];
-  }
-  if (prim$314) {
-    $js.fill = prim$314[0];
-  }
-  if (prim$315) {
-    $js.fillOpacity = prim$315[0];
-  }
-  if (prim$316) {
-    $js.fillRule = prim$316[0];
-  }
-  if (prim$317) {
-    $js.filter = prim$317[0];
-  }
-  if (prim$318) {
-    $js.floodColor = prim$318[0];
-  }
-  if (prim$319) {
-    $js.floodOpacity = prim$319[0];
-  }
-  if (prim$320) {
-    $js.glyphOrientationHorizontal = prim$320[0];
-  }
-  if (prim$321) {
-    $js.glyphOrientationVertical = prim$321[0];
-  }
-  if (prim$322) {
-    $js.imageRendering = prim$322[0];
-  }
-  if (prim$323) {
-    $js.kerning = prim$323[0];
-  }
-  if (prim$324) {
-    $js.lightingColor = prim$324[0];
-  }
-  if (prim$325) {
-    $js.markerEnd = prim$325[0];
-  }
-  if (prim$326) {
-    $js.markerMid = prim$326[0];
-  }
-  if (prim$327) {
-    $js.markerStart = prim$327[0];
-  }
-  if (prim$328) {
-    $js.pointerEvents = prim$328[0];
-  }
-  if (prim$329) {
-    $js.shapeRendering = prim$329[0];
-  }
-  if (prim$330) {
-    $js.stopColor = prim$330[0];
-  }
-  if (prim$331) {
-    $js.stopOpacity = prim$331[0];
-  }
-  if (prim$332) {
-    $js.stroke = prim$332[0];
-  }
-  if (prim$333) {
-    $js.strokeDasharray = prim$333[0];
-  }
-  if (prim$334) {
-    $js.strokeDashoffset = prim$334[0];
-  }
-  if (prim$335) {
-    $js.strokeLinecap = prim$335[0];
-  }
-  if (prim$336) {
-    $js.strokeLinejoin = prim$336[0];
-  }
-  if (prim$337) {
-    $js.strokeMiterlimit = prim$337[0];
-  }
-  if (prim$338) {
-    $js.strokeOpacity = prim$338[0];
-  }
-  if (prim$339) {
-    $js.strokeWidth = prim$339[0];
-  }
-  if (prim$340) {
-    $js.textAnchor = prim$340[0];
-  }
-  if (prim$341) {
-    $js.textRendering = prim$341[0];
-  }
-  if (prim$342) {
-    $js.rubyAlign = prim$342[0];
-  }
-  if (prim$343) {
-    $js.rubyMerge = prim$343[0];
-  }
-  if (prim$344) {
-    $js.rubyPosition = prim$344[0];
-  }
-  return $js;
-}
+var default_program = "add 1 2 c\nprint c";
 
 function getUnicode(name) {
   return window.chars[name];
@@ -1061,11 +24,18 @@ var stdout_text = [""];
 
 var component = ReasonReact.statelessComponent("EditorButton");
 
-function make(func, name, _) {
+function make(func, name, color, _) {
   var newrecord = component.slice();
   newrecord[/* render */9] = (function (self) {
       return React.createElement("button", {
-                  style: makeStyle(/* None */0, /* None */0, /* None */0, /* Some */["#21e024"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["pointer"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["13px"], /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["bold"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["none"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["none"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* () */0),
+                  style: {
+                    backgroundColor: color,
+                    cursor: "pointer",
+                    fontSize: "13px",
+                    fontWeight: "bold",
+                    outline: "none",
+                    boxShadow: "none"
+                  },
                   onClick: Curry._1(self[/* handle */1], (function (_, _$1) {
                           return Curry._1(func, /* () */0);
                         }))
@@ -1079,40 +49,84 @@ var EditorButton = /* module */[
   /* make */make
 ];
 
-var component$1 = ReasonReact.statefulComponent("FileComponent");
-
-function textChange($$event, _) {
-  return /* Update */Block.__(0, [$$event.target.value]);
+function textChange(parse, line, $$event, _) {
+  if (line !== 0) {
+    return /* NoUpdate */0;
+  } else {
+    var content = $$event.target.value;
+    Curry._1(parse, content);
+    return /* Update */Block.__(0, [content]);
+  }
 }
 
-function make$1(errors, line, step, run, reset, _) {
+var component$1 = ReasonReact.statefulComponent("Editor");
+
+function make$1(errors, line, parse, step, run, reset, _) {
   var newrecord = component$1.slice();
   newrecord[/* render */9] = (function (self) {
-      var lineColor = errors.length !== 0 ? "#ff9393" : "#dee1e8";
-      var lineGradient = "linear-gradient(to bottom, #fff 0px, " + (lineColor + (" 0px, " + (lineColor + " 22px, #fff 22px)")));
+      var match = errors ? /* tuple */[
+          "#ff9393",
+          errors[0][/* line */1]
+        ] : /* tuple */[
+          "#dee1e8",
+          line
+        ];
+      var lineColor = match[0];
+      var match$1 = line !== 0 ? /* tuple */[
+          "#f4f4f4",
+          "#21e024"
+        ] : /* tuple */[
+          "#fff",
+          "#dee1e8"
+        ];
+      var bgColor = match$1[0];
+      var backgroundPosition = "0px " + (Pervasives.string_of_int(Caml_int32.imul(20, match[1]) + 5 | 0) + "px");
+      var lineGradient = "linear-gradient(to bottom, " + (bgColor + (" 0px, " + (lineColor + (" 0px, " + (lineColor + (" 22px, " + (bgColor + (" 22px)" + backgroundPosition))))))));
       return React.createElement("div", {
-                  style: makeStyle(/* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["2 0 0"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* () */0)
+                  style: {
+                    flex: "2 0 0"
+                  }
                 }, React.createElement("div", {
-                      style: makeStyle(/* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["flex"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["100%"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["column"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* () */0)
+                      style: {
+                        display: "flex",
+                        height: "100%",
+                        flexDirection: "column"
+                      }
                     }, React.createElement("div", {
-                          style: makeStyle(/* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["flex"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["space-around"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* () */0)
-                        }, ReasonReact.element(/* None */0, /* None */0, make(reset, "Reset " + window.chars["restart"], /* array */[])), ReasonReact.element(/* None */0, /* None */0, make(Curry._1(run, self[/* state */3]), "Run " + window.chars["play"], /* array */[])), ReasonReact.element(/* None */0, /* None */0, make(Curry._1(step, self[/* state */3]), "Step", /* array */[]))), React.createElement("textarea", {
-                          style: makeStyle(/* None */0, /* Some */[lineGradient], /* Some */["local"], /* None */0, /* None */0, /* Some */["0px " + (Pervasives.string_of_int(Caml_int32.imul(20, line) + 5 | 0) + "px")], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["13px"], /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["bold"], /* None */0, /* None */0, /* None */0, /* Some */["20px"], /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["5px"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["none"], /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["5px"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["none"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["1"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* () */0),
+                          style: {
+                            display: "flex",
+                            justifyContent: "space-around"
+                          }
+                        }, ReasonReact.element(/* None */0, /* None */0, make(reset, "Reset " + window.chars["restart"], match$1[1], /* array */[])), ReasonReact.element(/* None */0, /* None */0, make(run, "Run " + window.chars["play"], "#21e024", /* array */[])), ReasonReact.element(/* None */0, /* None */0, make(step, "Step", "#21e024", /* array */[]))), React.createElement("textarea", {
+                          style: {
+                            background: lineGradient,
+                            backgroundAttachment: "local",
+                            fontSize: "13px",
+                            fontWeight: "bold",
+                            lineHeight: "20px",
+                            margin: "5px",
+                            outline: "none",
+                            padding: "5px",
+                            boxShadow: "none",
+                            flex: "1"
+                          },
                           spellCheck: false,
                           autoComplete: "off",
                           value: self[/* state */3],
-                          onChange: Curry._1(self[/* update */2], textChange)
+                          onChange: Curry._1(self[/* update */2], (function (param, param$1) {
+                                  return textChange(parse, line, param, param$1);
+                                }))
                         })));
     });
   newrecord[/* initialState */10] = (function () {
-      return "add 1 2 c\nprint c";
+      return default_program;
     });
   return newrecord;
 }
 
 var Editor = /* module */[
-  /* component */component$1,
   /* textChange */textChange,
+  /* component */component$1,
   /* make */make$1
 ];
 
@@ -1122,7 +136,15 @@ function make$2() {
   var newrecord = component$2.slice();
   newrecord[/* render */9] = (function () {
       return React.createElement("div", {
-                  style: makeStyle(/* None */0, /* None */0, /* None */0, /* Some */["#3a3a3a"], /* None */0, /* None */0, /* None */0, /* Some */["1px solid grey"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["#e5e5e5"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["5px"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["hidden"], /* Some */["5px"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["1 1 0"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* () */0)
+                  style: {
+                    backgroundColor: "#3a3a3a",
+                    border: "1px solid grey",
+                    color: "#e5e5e5",
+                    margin: "5px",
+                    overflow: "hidden",
+                    padding: "5px",
+                    flex: "1 1 0"
+                  }
                 }, React.createElement("pre", undefined, stdout_text[0]));
     });
   return newrecord;
@@ -1139,11 +161,23 @@ function make$3(variables, _) {
   var newrecord = component$3.slice();
   newrecord[/* render */9] = (function () {
       return React.createElement("div", {
-                  style: makeStyle(/* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["1px solid grey"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["5px"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["5px"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["1 1 0"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* () */0)
+                  style: {
+                    border: "1px solid grey",
+                    margin: "5px",
+                    padding: "5px",
+                    flex: "1 1 0"
+                  }
                 }, $$Array.mapi((function (varid, param) {
                         return React.createElement("div", {
                                     key: Pervasives.string_of_int(varid),
-                                    style: makeStyle(/* None */0, /* None */0, /* None */0, /* Some */["#cff5f9"], /* None */0, /* None */0, /* None */0, /* Some */["1px solid grey"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["flex"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["2px"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["5px"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["space-between"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* () */0)
+                                    style: {
+                                      backgroundColor: "#cff5f9",
+                                      border: "1px solid grey",
+                                      display: "flex",
+                                      marginBottom: "2px",
+                                      padding: "5px",
+                                      justifyContent: "space-between"
+                                    }
                                   }, React.createElement("div", undefined, param[0]), React.createElement("div", undefined, Common.to_visualize_string(param[1])));
                       }), $$Array.of_list(Curry._1(Common.StringMap[/* bindings */16], variables))));
     });
@@ -1155,38 +189,42 @@ var Variables = /* module */[
   /* make */make$3
 ];
 
-function removeError(errid, _, self) {
-  var errors = self[/* state */3][/* errors */1].filter((function (_, i) {
-          return +(i !== errid);
-        }));
-  var init = self[/* state */3];
-  return /* Update */Block.__(0, [/* record */[
-              /* iState */init[/* iState */0],
-              /* errors */errors
-            ]]);
-}
-
 var component$4 = ReasonReact.statelessComponent("ErrorList");
 
 function make$4(errors, _) {
   var newrecord = component$4.slice();
   newrecord[/* render */9] = (function () {
       return React.createElement("div", {
-                  style: makeStyle(/* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["flex"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["5px"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["scroll"], /* Some */["5px"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["1 1 0"], /* None */0, /* Some */["column"], /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["flex-end"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* () */0)
+                  style: {
+                    display: "flex",
+                    margin: "5px",
+                    overflow: "scroll",
+                    padding: "5px",
+                    flex: "1 1 0",
+                    flexDirection: "column",
+                    justifyContent: "flex-end"
+                  }
                 }, React.createElement("div", {
-                      style: makeStyle(/* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["scroll"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* () */0)
-                    }, $$Array.mapi((function (errid, s) {
+                      style: {
+                        overflow: "scroll"
+                      }
+                    }, $$Array.mapi((function (errid, param) {
                             return React.createElement("div", {
                                         key: Pervasives.string_of_int(errid),
-                                        style: makeStyle(/* None */0, /* None */0, /* None */0, /* Some */["#c41515"], /* None */0, /* None */0, /* None */0, /* Some */["1px solid white"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["white"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["flex"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["5px"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* () */0)
-                                      }, s);
-                          }), errors)));
+                                        style: {
+                                          backgroundColor: "#c41515",
+                                          border: "1px solid white",
+                                          color: "white",
+                                          display: "flex",
+                                          padding: "5px"
+                                        }
+                                      }, param[/* err */0]);
+                          }), $$Array.of_list(errors))));
     });
   return newrecord;
 }
 
 var ErrorList = /* module */[
-  /* removeError */removeError,
   /* component */component$4,
   /* make */make$4
 ];
@@ -1239,16 +277,46 @@ function drop_some(_l, _n) {
   };
 }
 
-function runCompleteProgram(self, content, _) {
-  var lines = Common.split_char(content, /* "\n" */10);
-  var lines$1 = drop_some(lines, self[/* state */3][/* iState */0][/* currLine */1]);
-  return Interpret.run_until_error(self[/* state */3][/* iState */0], funcs, lines$1, (function (state, err) {
+function parse_helper(state, content) {
+  var s = CharStream.create(content);
+  var res = Interpret.parse_program(s, funcs, /* [] */0);
+  if (res.tag) {
+    return /* record */[
+            /* iState */state[/* iState */0],
+            /* errors : :: */[
+              res[0],
+              /* [] */0
+            ]
+          ];
+  } else {
+    return /* record */[
+            /* iState : record */[
+              /* variables */Common.StringMap[/* empty */0],
+              /* content */res[0],
+              /* currLine */0
+            ],
+            /* errors : [] */0
+          ];
+  }
+}
+
+function parseProgram(self, content) {
+  return Curry._2(self[/* update */2], (function (_, self) {
+                return /* Update */Block.__(0, [parse_helper(self[/* state */3], content)]);
+              }), /* () */0);
+}
+
+function runCompleteProgram(self, _) {
+  return Interpret.run_until_error(self[/* state */3][/* iState */0], /* Some */[/* false */0], (function (state, err) {
                 return Curry._2(self[/* update */2], (function (_, self) {
                               var $js;
                               if (err) {
                                 $js = /* record */[
                                   /* iState */state,
-                                  /* errors */$$Array.append(/* array */[err[0]], self[/* state */3][/* errors */1])
+                                  /* errors : :: */[
+                                    err[0],
+                                    /* [] */0
+                                  ]
                                 ];
                               } else {
                                 var init = self[/* state */3];
@@ -1262,39 +330,41 @@ function runCompleteProgram(self, content, _) {
               }));
 }
 
-function stepProgram(self, content, _) {
-  var lines = Common.split_char(content, /* "\n" */10);
-  var lines$1 = drop_some(lines, self[/* state */3][/* iState */0][/* currLine */1]);
-  if (lines$1) {
-    return Interpret.cmd(self[/* state */3][/* iState */0], funcs, lines$1[0], (function (iState, err) {
-                  return Curry._2(self[/* update */2], (function (_, self) {
-                                var $js;
-                                if (err) {
-                                  var init = self[/* state */3];
-                                  $js = /* record */[
-                                    /* iState */init[/* iState */0],
-                                    /* errors */$$Array.append(/* array */[err[0]], self[/* state */3][/* errors */1])
-                                  ];
-                                } else {
-                                  $js = /* record */[
-                                    /* iState */iState,
-                                    /* errors : array */[]
-                                  ];
-                                }
-                                return /* Update */Block.__(0, [$js]);
-                              }), /* () */0);
-                }));
-  } else {
-    return /* () */0;
-  }
+function stepProgram(self, _) {
+  return Interpret.run_until_error(self[/* state */3][/* iState */0], /* Some */[/* true */1], (function (iState, err) {
+                return Curry._2(self[/* update */2], (function (_, self) {
+                              var $js;
+                              if (err) {
+                                var init = self[/* state */3];
+                                $js = /* record */[
+                                  /* iState */init[/* iState */0],
+                                  /* errors : :: */[
+                                    err[0],
+                                    /* [] */0
+                                  ]
+                                ];
+                              } else {
+                                $js = /* record */[
+                                  /* iState */iState,
+                                  /* errors : [] */0
+                                ];
+                              }
+                              return /* Update */Block.__(0, [$js]);
+                            }), /* () */0);
+              }));
 }
 
 function resetProgram(self, _) {
   stdout_text[0] = "";
   return Curry._2(self[/* update */2], (function (_, _$1) {
+                var init = self[/* state */3][/* iState */0];
                 return /* Update */Block.__(0, [/* record */[
-                            /* iState */Interpret.empty,
-                            /* errors : array */[]
+                            /* iState : record */[
+                              /* variables */Common.StringMap[/* empty */0],
+                              /* content */init[/* content */1],
+                              /* currLine */0
+                            ],
+                            /* errors : [] */0
                           ]]);
               }), /* () */0);
 }
@@ -1307,24 +377,49 @@ function make$5() {
       var match = self[/* state */3];
       var errors = match[/* errors */1];
       return React.createElement("div", {
-                  style: makeStyle(/* None */0, /* None */0, /* None */0, /* Some */["#dee1e8"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["100%"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["100%"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* () */0)
+                  style: {
+                    backgroundColor: "#dee1e8",
+                    height: "100%",
+                    width: "100%"
+                  }
                 }, React.createElement("div", {
-                      style: makeStyle(/* None */0, /* None */0, /* None */0, /* Some */["white"], /* None */0, /* None */0, /* None */0, /* Some */["1px solid grey"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["0"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["flex"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["70vh"], /* Some */["0"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["auto"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["5px"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["absolute"], /* None */0, /* None */0, /* Some */["0"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["0"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["700px"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["row"], /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["center"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* () */0)
-                    }, ReasonReact.element(/* None */0, /* None */0, make$3(match[/* iState */0][/* variables */0], /* array */[])), ReasonReact.element(/* None */0, /* None */0, make$1(errors, self[/* state */3][/* iState */0][/* currLine */1], (function (param, param$1) {
-                                return stepProgram(self, param, param$1);
-                              }), (function (param, param$1) {
-                                return runCompleteProgram(self, param, param$1);
+                      style: {
+                        backgroundColor: "white",
+                        border: "1px solid grey",
+                        bottom: "0",
+                        display: "flex",
+                        height: "70vh",
+                        left: "0",
+                        margin: "auto",
+                        padding: "5px",
+                        position: "absolute",
+                        right: "0",
+                        top: "0",
+                        width: "700px",
+                        flexDirection: "row",
+                        justifyContent: "center"
+                      }
+                    }, ReasonReact.element(/* None */0, /* None */0, make$3(match[/* iState */0][/* variables */0], /* array */[])), ReasonReact.element(/* None */0, /* None */0, make$1(errors, self[/* state */3][/* iState */0][/* currLine */2], (function (param) {
+                                return parseProgram(self, param);
+                              }), (function (param) {
+                                return stepProgram(self, param);
+                              }), (function (param) {
+                                return runCompleteProgram(self, param);
                               }), (function (param) {
                                 return resetProgram(self, param);
                               }), /* array */[])), React.createElement("div", {
-                          style: makeStyle(/* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["flex"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* Some */["2 1 0"], /* None */0, /* Some */["column"], /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* None */0, /* () */0)
+                          style: {
+                            display: "flex",
+                            flex: "2 1 0",
+                            flexDirection: "column"
+                          }
                         }, ReasonReact.element(/* None */0, /* None */0, make$2(/* array */[])), ReasonReact.element(/* None */0, /* None */0, make$4(errors, /* array */[])))));
     });
   newrecord[/* initialState */10] = (function () {
-      return /* record */[
-              /* iState */Interpret.empty,
-              /* errors : array */[]
-            ];
+      return parse_helper(/* record */[
+                  /* iState */Interpret.empty,
+                  /* errors : [] */0
+                ], default_program);
     });
   return newrecord;
 }
@@ -1334,7 +429,7 @@ var Page = /* module */[
   /* make */make$5
 ];
 
-exports.makeStyle          = makeStyle;
+exports.default_program    = default_program;
 exports.getUnicode         = getUnicode;
 exports.stdout_text        = stdout_text;
 exports.EditorButton       = EditorButton;
@@ -1345,13 +440,15 @@ exports.ErrorList          = ErrorList;
 exports.builtins_list      = builtins_list;
 exports.funcs              = funcs;
 exports.drop_some          = drop_some;
+exports.parse_helper       = parse_helper;
+exports.parseProgram       = parseProgram;
 exports.runCompleteProgram = runCompleteProgram;
 exports.stepProgram        = stepProgram;
 exports.resetProgram       = resetProgram;
 exports.Page               = Page;
 /* component Not a pure module */
 
-},{"../../src/builtins.js":3,"../../src/common.js":4,"../../src/interpret.js":5,"bs-platform/lib/js/array.js":7,"bs-platform/lib/js/block.js":8,"bs-platform/lib/js/caml_int32.js":17,"bs-platform/lib/js/curry.js":29,"bs-platform/lib/js/pervasives.js":35,"react":223,"reason-react/lib/js/src/reasonReact.js":225}],2:[function(require,module,exports){
+},{"../../src/builtins.js":3,"../../src/charStream.js":4,"../../src/common.js":5,"../../src/interpret.js":6,"bs-platform/lib/js/array.js":8,"bs-platform/lib/js/block.js":9,"bs-platform/lib/js/caml_int32.js":18,"bs-platform/lib/js/curry.js":29,"bs-platform/lib/js/pervasives.js":33,"react":220,"reason-react/lib/js/src/reasonReact.js":222}],2:[function(require,module,exports){
 // Generated by BUCKLESCRIPT VERSION 1.8.3, PLEASE EDIT WITH CARE
 'use strict';
 
@@ -1363,7 +460,7 @@ ReactDOMRe.renderToElementWithId(ReasonReact.element(/* None */0, /* None */0, C
 
 /*  Not a pure module */
 
-},{"./components.js":1,"reason-react/lib/js/src/reactDOMRe.js":224,"reason-react/lib/js/src/reasonReact.js":225}],3:[function(require,module,exports){
+},{"./components.js":1,"reason-react/lib/js/src/reactDOMRe.js":221,"reason-react/lib/js/src/reasonReact.js":222}],3:[function(require,module,exports){
 // Generated by BUCKLESCRIPT VERSION 1.8.3, PLEASE EDIT WITH CARE
 'use strict';
 
@@ -1495,7 +592,128 @@ exports.move               = move;
 exports.load_builtins_list = load_builtins_list;
 /* Common Not a pure module */
 
-},{"./common.js":4,"bs-platform/lib/js/block.js":8,"bs-platform/lib/js/curry.js":29,"bs-platform/lib/js/list.js":31}],4:[function(require,module,exports){
+},{"./common.js":5,"bs-platform/lib/js/block.js":9,"bs-platform/lib/js/curry.js":29,"bs-platform/lib/js/list.js":31}],4:[function(require,module,exports){
+// Generated by BUCKLESCRIPT VERSION 1.8.3, PLEASE EDIT WITH CARE
+'use strict';
+
+var Caml_string             = require("bs-platform/lib/js/caml_string.js");
+var Caml_builtin_exceptions = require("bs-platform/lib/js/caml_builtin_exceptions.js");
+
+function peek(stream) {
+  var match = stream[0];
+  var match$1 = match[/* chars */0];
+  if (match$1) {
+    return /* Some */[match$1[0]];
+  } else {
+    return /* None */0;
+  }
+}
+
+function second(stream) {
+  var match = stream[0];
+  var match$1 = match[/* chars */0];
+  if (match$1) {
+    var match$2 = match$1[1];
+    if (match$2) {
+      return /* Some */[match$2[0]];
+    } else {
+      return /* None */0;
+    }
+  } else {
+    return /* None */0;
+  }
+}
+
+function junk(stream) {
+  var match = stream[0];
+  var match$1 = match[/* chars */0];
+  if (match$1) {
+    if (match$1[0] !== 10) {
+      var init = stream[0];
+      stream[0] = /* record */[
+        /* chars */match$1[1],
+        /* lineNum */init[/* lineNum */1]
+      ];
+      return /* () */0;
+    } else {
+      stream[0] = /* record */[
+        /* chars */match$1[1],
+        /* lineNum */match[/* lineNum */1] + 1 | 0
+      ];
+      return /* () */0;
+    }
+  } else {
+    throw [
+          Caml_builtin_exceptions.failure,
+          "Empty CharStream"
+        ];
+  }
+}
+
+function line(stream) {
+  return stream[0][/* lineNum */1];
+}
+
+function eat_spaces(stream) {
+  while(true) {
+    var match = stream[0];
+    var match$1 = match[/* chars */0];
+    if (match$1) {
+      if (match$1[0] !== 32) {
+        return /* () */0;
+      } else {
+        var init = stream[0];
+        stream[0] = /* record */[
+          /* chars */match$1[1],
+          /* lineNum */init[/* lineNum */1]
+        ];
+        continue ;
+        
+      }
+    } else {
+      return /* () */0;
+    }
+  };
+}
+
+function clone(stream) {
+  return [stream[0]];
+}
+
+function create(s) {
+  var explode = function (_i, _acc) {
+    while(true) {
+      var acc = _acc;
+      var i = _i;
+      if (i < 0) {
+        return acc;
+      } else {
+        _acc = /* :: */[
+          Caml_string.get(s, i),
+          acc
+        ];
+        _i = i - 1 | 0;
+        continue ;
+        
+      }
+    };
+  };
+  return [/* record */[
+            /* chars */explode(s.length - 1 | 0, /* [] */0),
+            /* lineNum */0
+          ]];
+}
+
+exports.peek       = peek;
+exports.second     = second;
+exports.junk       = junk;
+exports.line       = line;
+exports.eat_spaces = eat_spaces;
+exports.clone      = clone;
+exports.create     = create;
+/* No side effect */
+
+},{"bs-platform/lib/js/caml_builtin_exceptions.js":13,"bs-platform/lib/js/caml_string.js":23}],5:[function(require,module,exports){
 // Generated by BUCKLESCRIPT VERSION 1.8.3, PLEASE EDIT WITH CARE
 'use strict';
 
@@ -1673,7 +891,8 @@ function split_char(str, on) {
 function add_variable(name, value, s) {
   return /* record */[
           /* variables */Curry._3(add, name, value, s[/* variables */0]),
-          /* currLine */s[/* currLine */1]
+          /* content */s[/* content */1],
+          /* currLine */s[/* currLine */2]
         ];
 }
 
@@ -1725,26 +944,40 @@ exports.to_string           = to_string$1;
 exports.to_visualize_string = to_visualize_string;
 /* include Not a pure module */
 
-},{"bs-platform/lib/js/block.js":8,"bs-platform/lib/js/caml_builtin_exceptions.js":12,"bs-platform/lib/js/curry.js":29,"bs-platform/lib/js/map.js":32,"bs-platform/lib/js/printf.js":36,"bs-platform/lib/js/string.js":38}],5:[function(require,module,exports){
+},{"bs-platform/lib/js/block.js":9,"bs-platform/lib/js/caml_builtin_exceptions.js":13,"bs-platform/lib/js/curry.js":29,"bs-platform/lib/js/map.js":32,"bs-platform/lib/js/printf.js":34,"bs-platform/lib/js/string.js":35}],6:[function(require,module,exports){
 // Generated by BUCKLESCRIPT VERSION 1.8.3, PLEASE EDIT WITH CARE
 'use strict';
 
-var List   = require("bs-platform/lib/js/list.js");
-var Block  = require("bs-platform/lib/js/block.js");
-var Curry  = require("bs-platform/lib/js/curry.js");
-var Parse  = require("./parse.js");
-var Common = require("./common.js");
-var Stream = require("bs-platform/lib/js/stream.js");
+var List                    = require("bs-platform/lib/js/list.js");
+var $$Array                 = require("bs-platform/lib/js/array.js");
+var Block                   = require("bs-platform/lib/js/block.js");
+var Curry                   = require("bs-platform/lib/js/curry.js");
+var Parse                   = require("./parse.js");
+var Common                  = require("./common.js");
+var Js_exn                  = require("bs-platform/lib/js/js_exn.js");
+var Caml_array              = require("bs-platform/lib/js/caml_array.js");
+var CharStream              = require("./charStream.js");
+var Caml_builtin_exceptions = require("bs-platform/lib/js/caml_builtin_exceptions.js");
+
+function error(program, err) {
+  return /* Error */Block.__(1, [/* record */[
+              /* err */err,
+              /* line */CharStream.line(program)
+            ]]);
+}
 
 var empty_000 = /* variables */Common.StringMap[/* empty */0];
 
+var empty_001 = /* content : array */[];
+
 var empty = /* record */[
   empty_000,
+  empty_001,
   /* currLine */0
 ];
 
 function parse_arg(stream) {
-  var match = Stream.peek(stream);
+  var match = CharStream.peek(stream);
   var exit = 0;
   if (match) {
     var c = match[0];
@@ -1771,7 +1004,7 @@ function parse_arg(stream) {
         exit = 1;
       }
     } else {
-      Stream.junk(stream);
+      CharStream.junk(stream);
       var match$1 = Parse.parse_string(stream, "");
       if (match$1.tag) {
         return /* Error */Block.__(1, [match$1[0]]);
@@ -1806,33 +1039,29 @@ function parse_arg(stream) {
 function parse_args(stream, _acc) {
   while(true) {
     var acc = _acc;
-    var match = Stream.peek(stream);
+    var match = CharStream.peek(stream);
     if (match) {
-      var switcher = match[0] - 9 | 0;
-      if (switcher === 0 || switcher === 1) {
-        if (switcher !== 0) {
-          return /* Ok */Block.__(0, [List.rev(acc)]);
+      var match$1 = match[0];
+      if (match$1 !== 10) {
+        if (match$1 !== 32) {
+          var match$2 = parse_arg(stream);
+          if (match$2.tag) {
+            return /* Error */Block.__(1, [match$2[0]]);
+          } else {
+            _acc = /* :: */[
+              match$2[0],
+              acc
+            ];
+            continue ;
+            
+          }
         } else {
-          Stream.junk(stream);
-          continue ;
-          
-        }
-      } else if (switcher !== 23) {
-        var match$1 = parse_arg(stream);
-        if (match$1.tag) {
-          return /* Error */Block.__(1, [match$1[0]]);
-        } else {
-          _acc = /* :: */[
-            match$1[0],
-            acc
-          ];
+          CharStream.eat_spaces(stream);
           continue ;
           
         }
       } else {
-        Stream.junk(stream);
-        continue ;
-        
+        return /* Ok */Block.__(0, [List.rev(acc)]);
       }
     } else {
       return /* Ok */Block.__(0, [List.rev(acc)]);
@@ -1840,101 +1069,157 @@ function parse_args(stream, _acc) {
   };
 }
 
-function cmd(state, funcs, input, cb) {
-  var s = Stream.of_string(input);
-  console.log(input);
-  var match = Parse.parse_ident(s, "");
-  if (match.tag) {
-    return Curry._2(cb, state, /* Some */[match[0]]);
-  } else {
-    var i = match[0];
-    var match$1 = Common.StringMap[/* get */24](i, funcs);
-    if (match$1) {
-      var match$2 = parse_args(s, /* [] */0);
-      if (match$2.tag) {
-        return Curry._2(cb, state, /* Some */[match$2[0]]);
-      } else {
-        return Curry._3(match$1[0], match$2[0], state, (function (param) {
-                      if (param.tag) {
-                        return Curry._2(cb, state, /* Some */[param[0]]);
-                      } else {
-                        var state$1 = param[0];
-                        return Curry._2(cb, /* record */[
-                                    /* variables */state$1[/* variables */0],
-                                    /* currLine */state$1[/* currLine */1] + 1 | 0
-                                  ], /* None */0);
-                      }
-                    }));
-      }
-    } else {
-      return Curry._2(cb, state, /* Some */["Unknown function " + (i + ".")]);
-    }
-  }
+function inc_line(state) {
+  return /* record */[
+          /* variables */state[/* variables */0],
+          /* content */state[/* content */1],
+          /* currLine */state[/* currLine */2] + 1 | 0
+        ];
 }
 
-function run_until_error(state, funcs, _input, cb) {
+function parse_program(program, funcs, _acc) {
   while(true) {
-    var input = _input;
-    if (input) {
-      var input$1 = input[0];
-      if (input$1 === "") {
-        _input = input[1];
+    var acc = _acc;
+    var match = CharStream.peek(program);
+    var exit = 0;
+    if (match) {
+      var c = match[0];
+      var exit$1 = 0;
+      if (c >= 36) {
+        if (c >= 91) {
+          if (c > 122 || c < 97) {
+            exit$1 = 2;
+          } else {
+            exit = 1;
+          }
+        } else if (c >= 65) {
+          exit = 1;
+        } else {
+          exit$1 = 2;
+        }
+      } else if (c !== 10) {
+        if (c >= 35) {
+          Parse.pop_until_newline(program);
+          continue ;
+          
+        } else {
+          exit$1 = 2;
+        }
+      } else {
+        CharStream.junk(program);
         continue ;
         
+      }
+      if (exit$1 === 2) {
+        return /* Error */Block.__(1, [/* record */[
+                    /* err */Parse.append_char("Unexpected character ", c),
+                    /* line */CharStream.line(program)
+                  ]]);
+      }
+      
+    } else {
+      return /* Ok */Block.__(0, [$$Array.of_list(List.rev(acc))]);
+    }
+    if (exit === 1) {
+      var match$1 = Parse.parse_ident(program, "");
+      if (match$1.tag) {
+        return error(program, match$1[0]);
       } else {
-        var tl = input[1];
-        var s = Stream.of_string(input$1);
-        console.log(input$1);
-        var match = Parse.parse_ident(s, "");
-        if (match.tag) {
-          return Curry._2(cb, state, /* Some */[match[0]]);
-        } else {
-          var i = match[0];
-          var match$1 = Common.StringMap[/* get */24](i, funcs);
-          if (match$1) {
-            var match$2 = parse_args(s, /* [] */0);
-            if (match$2.tag) {
-              return Curry._2(cb, state, /* Some */[match$2[0]]);
-            } else {
-              return Curry._3(match$1[0], match$2[0], state, (function(tl){
-                        return function (param) {
-                          if (param.tag) {
-                            return Curry._2(cb, state, /* Some */[param[0]]);
-                          } else {
-                            var state$1 = param[0];
-                            return run_until_error(/* record */[
-                                        /* variables */state$1[/* variables */0],
-                                        /* currLine */state$1[/* currLine */1] + 1 | 0
-                                      ], funcs, tl, cb);
-                          }
-                        }
-                        }(tl)));
-            }
+        var fname = match$1[0];
+        var match$2 = Common.StringMap[/* get */24](fname, funcs);
+        if (match$2) {
+          var match$3 = parse_args(program, /* [] */0);
+          if (match$3.tag) {
+            return error(program, match$3[0]);
           } else {
-            return Curry._2(cb, state, /* Some */["Unknown function " + (i + ".")]);
+            var cmd_000 = /* func */match$2[0];
+            var cmd_001 = /* line */CharStream.line(program);
+            var cmd_002 = /* args */match$3[0];
+            var cmd = /* record */[
+              cmd_000,
+              cmd_001,
+              cmd_002
+            ];
+            _acc = /* :: */[
+              cmd,
+              acc
+            ];
+            continue ;
+            
           }
+        } else {
+          return error(program, "Couldn't find command named " + fname);
         }
       }
-    } else {
-      return Curry._2(cb, state, /* None */0);
     }
+    
   };
 }
 
+function cmd(state, cmd$1, cb) {
+  return Curry._3(cmd$1[/* func */0], cmd$1[/* args */2], state, (function (param) {
+                if (param.tag) {
+                  return Curry._2(cb, state, /* Some */[/* record */[
+                                /* err */param[0],
+                                /* line */cmd$1[/* line */1]
+                              ]]);
+                } else {
+                  return Curry._2(cb, inc_line(param[0]), /* None */0);
+                }
+              }));
+}
+
+function run_until_error(state, $staropt$star, cb) {
+  var step = $staropt$star ? $staropt$star[0] : /* false */0;
+  var exit = 0;
+  var input;
+  try {
+    input = Caml_array.caml_array_get(state[/* content */1], state[/* currLine */2]);
+    exit = 1;
+  }
+  catch (raw_exn){
+    var exn = Js_exn.internalToOCamlException(raw_exn);
+    if (exn[0] === Caml_builtin_exceptions.invalid_argument) {
+      if (exn[1] === "index out of bounds") {
+        return Curry._2(cb, state, /* None */0);
+      } else {
+        throw exn;
+      }
+    } else {
+      throw exn;
+    }
+  }
+  if (exit === 1) {
+    return cmd(state, input, (function (state, err) {
+                  if (err) {
+                    return Curry._2(cb, state, /* Some */[err[0]]);
+                  } else if (step) {
+                    return Curry._2(cb, state, /* None */0);
+                  } else {
+                    return run_until_error(state, /* Some */[/* false */0], cb);
+                  }
+                }));
+  }
+  
+}
+
+exports.error           = error;
 exports.empty           = empty;
 exports.parse_arg       = parse_arg;
 exports.parse_args      = parse_args;
+exports.inc_line        = inc_line;
+exports.parse_program   = parse_program;
 exports.cmd             = cmd;
 exports.run_until_error = run_until_error;
 /* Common Not a pure module */
 
-},{"./common.js":4,"./parse.js":6,"bs-platform/lib/js/block.js":8,"bs-platform/lib/js/curry.js":29,"bs-platform/lib/js/list.js":31,"bs-platform/lib/js/stream.js":37}],6:[function(require,module,exports){
+},{"./charStream.js":4,"./common.js":5,"./parse.js":7,"bs-platform/lib/js/array.js":8,"bs-platform/lib/js/block.js":9,"bs-platform/lib/js/caml_array.js":12,"bs-platform/lib/js/caml_builtin_exceptions.js":13,"bs-platform/lib/js/curry.js":29,"bs-platform/lib/js/js_exn.js":30,"bs-platform/lib/js/list.js":31}],7:[function(require,module,exports){
 // Generated by BUCKLESCRIPT VERSION 1.8.3, PLEASE EDIT WITH CARE
 'use strict';
 
 var Block       = require("bs-platform/lib/js/block.js");
-var Stream      = require("bs-platform/lib/js/stream.js");
 var $$String    = require("bs-platform/lib/js/string.js");
+var CharStream  = require("./charStream.js");
 var Caml_format = require("bs-platform/lib/js/caml_format.js");
 
 function append_char(s, c) {
@@ -1942,7 +1227,7 @@ function append_char(s, c) {
 }
 
 function pop_stream(s) {
-  Stream.junk(s);
+  CharStream.junk(s);
   return s;
 }
 
@@ -1950,19 +1235,19 @@ function parse_string(_stream, _acc) {
   while(true) {
     var acc = _acc;
     var stream = _stream;
-    var match = Stream.peek(stream);
+    var match = CharStream.peek(stream);
     if (match) {
       var c = match[0];
       if (c !== 34) {
         if (c !== 92) {
           _acc = append_char(acc, c);
-          Stream.junk(stream);
+          CharStream.junk(stream);
           _stream = stream;
           continue ;
           
         } else {
-          Stream.junk(stream);
-          var match$1 = Stream.peek(stream);
+          CharStream.junk(stream);
+          var match$1 = CharStream.peek(stream);
           if (match$1) {
             var c$1 = match$1[0];
             var exit = 0;
@@ -1973,21 +1258,21 @@ function parse_string(_stream, _acc) {
                     exit = 1;
                   } else {
                     _acc = append_char(acc, /* "\\" */92);
-                    Stream.junk(stream);
+                    CharStream.junk(stream);
                     _stream = stream;
                     continue ;
                     
                   }
                 } else {
                   _acc = append_char(acc, /* "\t" */9);
-                  Stream.junk(stream);
+                  CharStream.junk(stream);
                   _stream = stream;
                   continue ;
                   
                 }
               } else {
                 _acc = append_char(acc, /* "\n" */10);
-                Stream.junk(stream);
+                CharStream.junk(stream);
                 _stream = stream;
                 continue ;
                 
@@ -1997,14 +1282,14 @@ function parse_string(_stream, _acc) {
                 exit = 1;
               } else {
                 _acc = append_char(acc, /* "'" */39);
-                Stream.junk(stream);
+                CharStream.junk(stream);
                 _stream = stream;
                 continue ;
                 
               }
             } else {
               _acc = append_char(acc, /* "\"" */34);
-              Stream.junk(stream);
+              CharStream.junk(stream);
               _stream = stream;
               continue ;
               
@@ -2018,7 +1303,7 @@ function parse_string(_stream, _acc) {
           }
         }
       } else {
-        Stream.junk(stream);
+        CharStream.junk(stream);
         return /* Ok */Block.__(0, [acc]);
       }
     } else {
@@ -2031,13 +1316,13 @@ function parse_ident(_stream, _acc) {
   while(true) {
     var acc = _acc;
     var stream = _stream;
-    var match = Stream.peek(stream);
+    var match = CharStream.peek(stream);
     if (match) {
       var c = match[0];
       if (c >= 11) {
         if (c !== 32) {
           _acc = append_char(acc, c);
-          Stream.junk(stream);
+          CharStream.junk(stream);
           _stream = stream;
           continue ;
           
@@ -2048,7 +1333,7 @@ function parse_ident(_stream, _acc) {
         return /* Ok */Block.__(0, [acc]);
       } else {
         _acc = append_char(acc, c);
-        Stream.junk(stream);
+        CharStream.junk(stream);
         _stream = stream;
         continue ;
         
@@ -2063,7 +1348,7 @@ function parse_num(_stream, _acc) {
   while(true) {
     var acc = _acc;
     var stream = _stream;
-    var match = Stream.peek(stream);
+    var match = CharStream.peek(stream);
     var exit = 0;
     if (match) {
       var c = match[0];
@@ -2072,7 +1357,7 @@ function parse_num(_stream, _acc) {
           exit = 1;
         } else {
           _acc = append_char(acc, c);
-          Stream.junk(stream);
+          CharStream.junk(stream);
           _stream = stream;
           continue ;
           
@@ -2081,7 +1366,7 @@ function parse_num(_stream, _acc) {
         exit = 1;
       } else {
         _acc = append_char(acc, c);
-        Stream.junk(stream);
+        CharStream.junk(stream);
         _stream = stream;
         continue ;
         
@@ -2110,15 +1395,15 @@ function parse_num(_stream, _acc) {
 function pop_until_newline(_stream) {
   while(true) {
     var stream = _stream;
-    var match = Stream.peek(stream);
+    var match = CharStream.peek(stream);
     if (match) {
       if (match[0] !== 10) {
-        Stream.junk(stream);
+        CharStream.junk(stream);
         _stream = stream;
         continue ;
         
       } else {
-        return Stream.junk(stream);
+        return CharStream.junk(stream);
       }
     } else {
       return /* () */0;
@@ -2134,7 +1419,7 @@ exports.parse_num         = parse_num;
 exports.pop_until_newline = pop_until_newline;
 /* No side effect */
 
-},{"bs-platform/lib/js/block.js":8,"bs-platform/lib/js/caml_format.js":16,"bs-platform/lib/js/stream.js":37,"bs-platform/lib/js/string.js":38}],7:[function(require,module,exports){
+},{"./charStream.js":4,"bs-platform/lib/js/block.js":9,"bs-platform/lib/js/caml_format.js":17,"bs-platform/lib/js/string.js":35}],8:[function(require,module,exports){
 'use strict';
 
 var Curry                   = require("./curry.js");
@@ -2568,7 +1853,7 @@ exports.stable_sort   = stable_sort;
 exports.fast_sort     = fast_sort;
 /* No side effect */
 
-},{"./caml_array.js":11,"./caml_builtin_exceptions.js":12,"./caml_exceptions.js":14,"./curry.js":29,"./js_exn.js":30}],8:[function(require,module,exports){
+},{"./caml_array.js":12,"./caml_builtin_exceptions.js":13,"./caml_exceptions.js":15,"./curry.js":29,"./js_exn.js":30}],9:[function(require,module,exports){
 'use strict';
 
 
@@ -2580,7 +1865,7 @@ function __(tag, block) {
 exports.__ = __;
 /* No side effect */
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 'use strict';
 
 var Sys                     = require("./sys.js");
@@ -2947,7 +2232,7 @@ exports.add_channel    = add_channel;
 exports.output_buffer  = output_buffer;
 /* No side effect */
 
-},{"./bytes.js":10,"./caml_builtin_exceptions.js":12,"./caml_string.js":22,"./curry.js":29,"./pervasives.js":35,"./string.js":38,"./sys.js":39}],10:[function(require,module,exports){
+},{"./bytes.js":11,"./caml_builtin_exceptions.js":13,"./caml_string.js":23,"./curry.js":29,"./pervasives.js":33,"./string.js":35,"./sys.js":36}],11:[function(require,module,exports){
 'use strict';
 
 var Char                    = require("./char.js");
@@ -3444,7 +2729,7 @@ exports.unsafe_to_string = unsafe_to_string;
 exports.unsafe_of_string = unsafe_of_string;
 /* No side effect */
 
-},{"./caml_builtin_exceptions.js":12,"./caml_int32.js":17,"./caml_obj.js":21,"./caml_string.js":22,"./char.js":28,"./curry.js":29,"./list.js":31,"./pervasives.js":35}],11:[function(require,module,exports){
+},{"./caml_builtin_exceptions.js":13,"./caml_int32.js":18,"./caml_obj.js":22,"./caml_string.js":23,"./char.js":28,"./curry.js":29,"./list.js":31,"./pervasives.js":33}],12:[function(require,module,exports){
 'use strict';
 
 var Caml_builtin_exceptions = require("./caml_builtin_exceptions.js");
@@ -3560,7 +2845,7 @@ exports.caml_array_get    = caml_array_get;
 exports.caml_array_set    = caml_array_set;
 /* No side effect */
 
-},{"./caml_builtin_exceptions.js":12}],12:[function(require,module,exports){
+},{"./caml_builtin_exceptions.js":13}],13:[function(require,module,exports){
 'use strict';
 
 
@@ -3662,7 +2947,7 @@ exports.assert_failure             = assert_failure;
 exports.undefined_recursive_module = undefined_recursive_module;
 /*  Not a pure module */
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 'use strict';
 
 var Caml_builtin_exceptions = require("./caml_builtin_exceptions.js");
@@ -3681,7 +2966,7 @@ function get(s, i) {
 exports.get = get;
 /* No side effect */
 
-},{"./caml_builtin_exceptions.js":12}],14:[function(require,module,exports){
+},{"./caml_builtin_exceptions.js":13}],15:[function(require,module,exports){
 'use strict';
 
 
@@ -3729,7 +3014,7 @@ exports.create                       = create;
 exports.isCamlExceptionOrOpenVariant = isCamlExceptionOrOpenVariant;
 /* No side effect */
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 'use strict';
 
 
@@ -3900,7 +3185,7 @@ exports.caml_hypot_float         = caml_hypot_float;
 exports.caml_log10_float         = caml_log10_float;
 /* No side effect */
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 'use strict';
 
 var Curry                   = require("./curry.js");
@@ -4703,7 +3988,7 @@ exports.caml_int64_of_string     = caml_int64_of_string;
 exports.caml_nativeint_of_string = caml_nativeint_of_string;
 /* float_of_string Not a pure module */
 
-},{"./caml_builtin_exceptions.js":12,"./caml_int32.js":17,"./caml_int64.js":18,"./caml_utils.js":24,"./curry.js":29}],17:[function(require,module,exports){
+},{"./caml_builtin_exceptions.js":13,"./caml_int32.js":18,"./caml_int64.js":19,"./caml_utils.js":25,"./curry.js":29}],18:[function(require,module,exports){
 'use strict';
 
 var Caml_builtin_exceptions = require("./caml_builtin_exceptions.js");
@@ -4747,7 +4032,7 @@ exports.caml_nativeint_bswap = caml_nativeint_bswap;
 exports.imul                 = imul;
 /* imul Not a pure module */
 
-},{"./caml_builtin_exceptions.js":12}],18:[function(require,module,exports){
+},{"./caml_builtin_exceptions.js":13}],19:[function(require,module,exports){
 'use strict';
 
 var Caml_obj                = require("./caml_obj.js");
@@ -5349,7 +4634,7 @@ exports.bits_of_float = bits_of_float;
 exports.get64         = get64;
 /* two_ptr_32_dbl Not a pure module */
 
-},{"./caml_builtin_exceptions.js":12,"./caml_int32.js":17,"./caml_obj.js":21,"./caml_utils.js":24}],19:[function(require,module,exports){
+},{"./caml_builtin_exceptions.js":13,"./caml_int32.js":18,"./caml_obj.js":22,"./caml_utils.js":25}],20:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -5483,7 +4768,7 @@ exports.caml_ml_out_channels_list   = caml_ml_out_channels_list;
 /* stdin Not a pure module */
 
 }).call(this,require('_process'))
-},{"./caml_builtin_exceptions.js":12,"./curry.js":29,"_process":66}],20:[function(require,module,exports){
+},{"./caml_builtin_exceptions.js":13,"./curry.js":29,"_process":63}],21:[function(require,module,exports){
 'use strict';
 
 
@@ -5492,7 +4777,7 @@ var not_implemented = (function (s){ throw new Error(s)});
 exports.not_implemented = not_implemented;
 /* not_implemented Not a pure module */
 
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 'use strict';
 
 var Block                   = require("./block.js");
@@ -5799,7 +5084,7 @@ exports.caml_lessthan          = caml_lessthan;
 exports.caml_lessequal         = caml_lessequal;
 /* No side effect */
 
-},{"./block.js":8,"./caml_builtin_exceptions.js":12}],22:[function(require,module,exports){
+},{"./block.js":9,"./caml_builtin_exceptions.js":13}],23:[function(require,module,exports){
 'use strict';
 
 var Caml_builtin_exceptions = require("./caml_builtin_exceptions.js");
@@ -6004,7 +5289,7 @@ exports.string_of_char            = string_of_char;
 exports.get                       = get;
 /* No side effect */
 
-},{"./caml_builtin_exceptions.js":12}],23:[function(require,module,exports){
+},{"./caml_builtin_exceptions.js":13}],24:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -6100,7 +5385,7 @@ exports.caml_sys_file_exists    = caml_sys_file_exists;
 /* No side effect */
 
 }).call(this,require('_process'))
-},{"./caml_builtin_exceptions.js":12,"_process":66}],24:[function(require,module,exports){
+},{"./caml_builtin_exceptions.js":13,"_process":63}],25:[function(require,module,exports){
 'use strict';
 
 
@@ -6133,7 +5418,7 @@ var repeat = ( (String.prototype.repeat && function (count,self){return self.rep
 exports.repeat = repeat;
 /* repeat Not a pure module */
 
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 'use strict';
 
 var Sys                      = require("./sys.js");
@@ -12679,7 +11964,7 @@ exports.trans                          = trans;
 exports.recast                         = recast;
 /* No side effect */
 
-},{"./block.js":8,"./buffer.js":9,"./bytes.js":10,"./caml_builtin_exceptions.js":12,"./caml_bytes.js":13,"./caml_exceptions.js":14,"./caml_float.js":15,"./caml_format.js":16,"./caml_int32.js":17,"./caml_io.js":19,"./caml_obj.js":21,"./caml_string.js":22,"./camlinternalFormatBasics.js":26,"./char.js":28,"./curry.js":29,"./js_exn.js":30,"./pervasives.js":35,"./string.js":38,"./sys.js":39}],26:[function(require,module,exports){
+},{"./block.js":9,"./buffer.js":10,"./bytes.js":11,"./caml_builtin_exceptions.js":13,"./caml_bytes.js":14,"./caml_exceptions.js":15,"./caml_float.js":16,"./caml_format.js":17,"./caml_int32.js":18,"./caml_io.js":20,"./caml_obj.js":22,"./caml_string.js":23,"./camlinternalFormatBasics.js":27,"./char.js":28,"./curry.js":29,"./js_exn.js":30,"./pervasives.js":33,"./string.js":35,"./sys.js":36}],27:[function(require,module,exports){
 'use strict';
 
 var Block = require("./block.js");
@@ -12909,75 +12194,7 @@ exports.erase_rel    = erase_rel;
 exports.concat_fmt   = concat_fmt;
 /* No side effect */
 
-},{"./block.js":8}],27:[function(require,module,exports){
-'use strict';
-
-var Obj             = require("./obj.js");
-var Curry           = require("./curry.js");
-var Caml_exceptions = require("./caml_exceptions.js");
-
-var Undefined = Caml_exceptions.create("CamlinternalLazy.Undefined");
-
-function raise_undefined() {
-  throw Undefined;
-}
-
-function force_lazy_block(blk) {
-  var closure = blk[0];
-  blk[0] = raise_undefined;
-  try {
-    var result = Curry._1(closure, /* () */0);
-    blk[0] = result;
-    blk.tag = Obj.forward_tag;
-    return result;
-  }
-  catch (e){
-    blk[0] = (function () {
-        throw e;
-      });
-    throw e;
-  }
-}
-
-function force_val_lazy_block(blk) {
-  var closure = blk[0];
-  blk[0] = raise_undefined;
-  var result = Curry._1(closure, /* () */0);
-  blk[0] = result;
-  blk.tag = Obj.forward_tag;
-  return result;
-}
-
-function force(lzv) {
-  var t = lzv.tag | 0;
-  if (t === Obj.forward_tag) {
-    return lzv[0];
-  } else if (t !== Obj.lazy_tag) {
-    return lzv;
-  } else {
-    return force_lazy_block(lzv);
-  }
-}
-
-function force_val(lzv) {
-  var t = lzv.tag | 0;
-  if (t === Obj.forward_tag) {
-    return lzv[0];
-  } else if (t !== Obj.lazy_tag) {
-    return lzv;
-  } else {
-    return force_val_lazy_block(lzv);
-  }
-}
-
-exports.Undefined            = Undefined;
-exports.force_lazy_block     = force_lazy_block;
-exports.force_val_lazy_block = force_val_lazy_block;
-exports.force                = force;
-exports.force_val            = force_val;
-/* No side effect */
-
-},{"./caml_exceptions.js":14,"./curry.js":29,"./obj.js":34}],28:[function(require,module,exports){
+},{"./block.js":9}],28:[function(require,module,exports){
 'use strict';
 
 var Caml_string             = require("./caml_string.js");
@@ -13078,7 +12295,7 @@ exports.uppercase = uppercase;
 exports.compare   = compare;
 /* No side effect */
 
-},{"./caml_builtin_exceptions.js":12,"./caml_string.js":22}],29:[function(require,module,exports){
+},{"./caml_builtin_exceptions.js":13,"./caml_string.js":23}],29:[function(require,module,exports){
 'use strict';
 
 var Caml_array = require("./caml_array.js");
@@ -13715,7 +12932,7 @@ exports._8      = _8;
 exports.__8     = __8;
 /* No side effect */
 
-},{"./caml_array.js":11}],30:[function(require,module,exports){
+},{"./caml_array.js":12}],30:[function(require,module,exports){
 'use strict';
 
 var Caml_exceptions = require("./caml_exceptions.js");
@@ -13772,7 +12989,7 @@ exports.raiseTypeError           = raiseTypeError;
 exports.raiseUriError            = raiseUriError;
 /* No side effect */
 
-},{"./caml_exceptions.js":14}],31:[function(require,module,exports){
+},{"./caml_exceptions.js":15}],31:[function(require,module,exports){
 'use strict';
 
 var Curry                   = require("./curry.js");
@@ -15465,7 +14682,7 @@ exports.sort_uniq    = sort_uniq;
 exports.merge        = merge;
 /* No side effect */
 
-},{"./caml_builtin_exceptions.js":12,"./caml_obj.js":21,"./curry.js":29,"./pervasives.js":35}],32:[function(require,module,exports){
+},{"./caml_builtin_exceptions.js":13,"./caml_obj.js":22,"./curry.js":29,"./pervasives.js":33}],32:[function(require,module,exports){
 'use strict';
 
 var Curry                   = require("./curry.js");
@@ -16122,231 +15339,7 @@ function Make(funarg) {
 exports.Make = Make;
 /* No side effect */
 
-},{"./caml_builtin_exceptions.js":12,"./curry.js":29}],33:[function(require,module,exports){
-'use strict';
-
-var Caml_string             = require("./caml_string.js");
-var Caml_missing_polyfill   = require("./caml_missing_polyfill.js");
-var Caml_builtin_exceptions = require("./caml_builtin_exceptions.js");
-
-function to_buffer(buff, ofs, len, _, _$1) {
-  if (ofs < 0 || len < 0 || ofs > (buff.length - len | 0)) {
-    throw [
-          Caml_builtin_exceptions.invalid_argument,
-          "Marshal.to_buffer: substring out of bounds"
-        ];
-  } else {
-    return Caml_missing_polyfill.not_implemented("caml_output_value_to_buffer not implemented by bucklescript yet\n");
-  }
-}
-
-function data_size(buff, ofs) {
-  if (ofs < 0 || ofs > (buff.length - 20 | 0)) {
-    throw [
-          Caml_builtin_exceptions.invalid_argument,
-          "Marshal.data_size"
-        ];
-  } else {
-    return Caml_missing_polyfill.not_implemented("caml_marshal_data_size not implemented by bucklescript yet\n");
-  }
-}
-
-function total_size(buff, ofs) {
-  return 20 + data_size(buff, ofs) | 0;
-}
-
-function from_bytes(buff, ofs) {
-  if (ofs < 0 || ofs > (buff.length - 20 | 0)) {
-    throw [
-          Caml_builtin_exceptions.invalid_argument,
-          "Marshal.from_bytes"
-        ];
-  } else {
-    var len = Caml_missing_polyfill.not_implemented("caml_marshal_data_size not implemented by bucklescript yet\n");
-    if (ofs > (buff.length - (20 + len | 0) | 0)) {
-      throw [
-            Caml_builtin_exceptions.invalid_argument,
-            "Marshal.from_bytes"
-          ];
-    } else {
-      return Caml_missing_polyfill.not_implemented("caml_input_value_from_string not implemented by bucklescript yet\n");
-    }
-  }
-}
-
-function from_string(buff, ofs) {
-  return from_bytes(Caml_string.bytes_of_string(buff), ofs);
-}
-
-function to_channel(_, _$1, _$2) {
-  return Caml_missing_polyfill.not_implemented("caml_output_value not implemented by bucklescript yet\n");
-}
-
-function from_channel() {
-  return Caml_missing_polyfill.not_implemented("caml_input_value not implemented by bucklescript yet\n");
-}
-
-var header_size = 20;
-
-exports.to_channel   = to_channel;
-exports.to_buffer    = to_buffer;
-exports.from_channel = from_channel;
-exports.from_bytes   = from_bytes;
-exports.from_string  = from_string;
-exports.header_size  = header_size;
-exports.data_size    = data_size;
-exports.total_size   = total_size;
-/* No side effect */
-
-},{"./caml_builtin_exceptions.js":12,"./caml_missing_polyfill.js":20,"./caml_string.js":22}],34:[function(require,module,exports){
-'use strict';
-
-var Marshal                 = require("./marshal.js");
-var Caml_array              = require("./caml_array.js");
-var Caml_missing_polyfill   = require("./caml_missing_polyfill.js");
-var Caml_builtin_exceptions = require("./caml_builtin_exceptions.js");
-
-var double_field = Caml_array.caml_array_get;
-
-var set_double_field = Caml_array.caml_array_set;
-
-function marshal() {
-  return Caml_missing_polyfill.not_implemented("caml_output_value_to_string not implemented by bucklescript yet\n");
-}
-
-function unmarshal(str, pos) {
-  return /* tuple */[
-          Marshal.from_bytes(str, pos),
-          pos + Marshal.total_size(str, pos) | 0
-        ];
-}
-
-function extension_slot(x) {
-  var slot = x.length !== undefined && (x.tag | 0) !== 248 && x.length >= 1 ? x[0] : x;
-  var name;
-  if (slot.length !== undefined && slot.tag === 248) {
-    name = slot[0];
-  } else {
-    throw Caml_builtin_exceptions.not_found;
-  }
-  if (name.tag === 252) {
-    return slot;
-  } else {
-    throw Caml_builtin_exceptions.not_found;
-  }
-}
-
-function extension_name(x) {
-  try {
-    var slot = extension_slot(x);
-    return slot[0];
-  }
-  catch (exn){
-    if (exn === Caml_builtin_exceptions.not_found) {
-      throw [
-            Caml_builtin_exceptions.invalid_argument,
-            "Obj.extension_name"
-          ];
-    } else {
-      throw exn;
-    }
-  }
-}
-
-function extension_id(x) {
-  try {
-    var slot = extension_slot(x);
-    return slot[1];
-  }
-  catch (exn){
-    if (exn === Caml_builtin_exceptions.not_found) {
-      throw [
-            Caml_builtin_exceptions.invalid_argument,
-            "Obj.extension_id"
-          ];
-    } else {
-      throw exn;
-    }
-  }
-}
-
-function extension_slot$1(x) {
-  try {
-    return extension_slot(x);
-  }
-  catch (exn){
-    if (exn === Caml_builtin_exceptions.not_found) {
-      throw [
-            Caml_builtin_exceptions.invalid_argument,
-            "Obj.extension_slot"
-          ];
-    } else {
-      throw exn;
-    }
-  }
-}
-
-var first_non_constant_constructor_tag = 0;
-
-var last_non_constant_constructor_tag = 245;
-
-var lazy_tag = 246;
-
-var closure_tag = 247;
-
-var object_tag = 248;
-
-var infix_tag = 249;
-
-var forward_tag = 250;
-
-var no_scan_tag = 251;
-
-var abstract_tag = 251;
-
-var string_tag = 252;
-
-var double_tag = 253;
-
-var double_array_tag = 254;
-
-var custom_tag = 255;
-
-var final_tag = 255;
-
-var int_tag = 1000;
-
-var out_of_heap_tag = 1001;
-
-var unaligned_tag = 1002;
-
-exports.double_field                       = double_field;
-exports.set_double_field                   = set_double_field;
-exports.first_non_constant_constructor_tag = first_non_constant_constructor_tag;
-exports.last_non_constant_constructor_tag  = last_non_constant_constructor_tag;
-exports.lazy_tag                           = lazy_tag;
-exports.closure_tag                        = closure_tag;
-exports.object_tag                         = object_tag;
-exports.infix_tag                          = infix_tag;
-exports.forward_tag                        = forward_tag;
-exports.no_scan_tag                        = no_scan_tag;
-exports.abstract_tag                       = abstract_tag;
-exports.string_tag                         = string_tag;
-exports.double_tag                         = double_tag;
-exports.double_array_tag                   = double_array_tag;
-exports.custom_tag                         = custom_tag;
-exports.final_tag                          = final_tag;
-exports.int_tag                            = int_tag;
-exports.out_of_heap_tag                    = out_of_heap_tag;
-exports.unaligned_tag                      = unaligned_tag;
-exports.extension_name                     = extension_name;
-exports.extension_id                       = extension_id;
-exports.extension_slot                     = extension_slot$1;
-exports.marshal                            = marshal;
-exports.unmarshal                          = unmarshal;
-/* No side effect */
-
-},{"./caml_array.js":11,"./caml_builtin_exceptions.js":12,"./caml_missing_polyfill.js":20,"./marshal.js":33}],35:[function(require,module,exports){
+},{"./caml_builtin_exceptions.js":13,"./curry.js":29}],33:[function(require,module,exports){
 'use strict';
 
 var Curry                    = require("./curry.js");
@@ -17042,7 +16035,7 @@ exports.unsafe_really_input = unsafe_really_input;
 exports.do_at_exit          = do_at_exit;
 /* No side effect */
 
-},{"./caml_builtin_exceptions.js":12,"./caml_exceptions.js":14,"./caml_format.js":16,"./caml_io.js":19,"./caml_missing_polyfill.js":20,"./caml_obj.js":21,"./caml_string.js":22,"./caml_sys.js":23,"./camlinternalFormatBasics.js":26,"./curry.js":29}],36:[function(require,module,exports){
+},{"./caml_builtin_exceptions.js":13,"./caml_exceptions.js":15,"./caml_format.js":17,"./caml_io.js":20,"./caml_missing_polyfill.js":21,"./caml_obj.js":22,"./caml_string.js":23,"./caml_sys.js":24,"./camlinternalFormatBasics.js":27,"./curry.js":29}],34:[function(require,module,exports){
 'use strict';
 
 var Curry              = require("./curry.js");
@@ -17126,532 +16119,7 @@ exports.kbprintf  = kbprintf;
 exports.kprintf   = kprintf;
 /* No side effect */
 
-},{"./buffer.js":9,"./camlinternalFormat.js":25,"./curry.js":29,"./pervasives.js":35}],37:[function(require,module,exports){
-'use strict';
-
-var List                    = require("./list.js");
-var Block                   = require("./block.js");
-var Curry                   = require("./curry.js");
-var Caml_bytes              = require("./caml_bytes.js");
-var Pervasives              = require("./pervasives.js");
-var Caml_string             = require("./caml_string.js");
-var Caml_exceptions         = require("./caml_exceptions.js");
-var CamlinternalLazy        = require("./camlinternalLazy.js");
-var Caml_builtin_exceptions = require("./caml_builtin_exceptions.js");
-
-var Failure = Caml_exceptions.create("Stream.Failure");
-
-var $$Error = Caml_exceptions.create("Stream.Error");
-
-function fill_buff(b) {
-  b[/* len */2] = Pervasives.input(b[/* ic */0], b[/* buff */1], 0, b[/* buff */1].length);
-  b[/* ind */3] = 0;
-  return /* () */0;
-}
-
-function get_data(count, _d) {
-  while(true) {
-    var d = _d;
-    if (typeof d === "number") {
-      return d;
-    } else {
-      switch (d.tag | 0) {
-        case 0 : 
-            return d;
-        case 1 : 
-            var d2 = d[1];
-            var match = get_data(count, d[0]);
-            if (typeof match === "number") {
-              if (match) {
-                throw [
-                      Caml_builtin_exceptions.assert_failure,
-                      [
-                        "stream.ml",
-                        53,
-                        12
-                      ]
-                    ];
-              } else {
-                _d = d2;
-                continue ;
-                
-              }
-            } else if (match.tag) {
-              throw [
-                    Caml_builtin_exceptions.assert_failure,
-                    [
-                      "stream.ml",
-                      53,
-                      12
-                    ]
-                  ];
-            } else {
-              return /* Scons */Block.__(0, [
-                        match[0],
-                        /* Sapp */Block.__(1, [
-                            match[1],
-                            d2
-                          ])
-                      ]);
-            }
-            break;
-        case 2 : 
-            var f = d[0];
-            var tag = f.tag | 0;
-            _d = tag === 250 ? f[0] : (
-                tag === 246 ? CamlinternalLazy.force_lazy_block(f) : f
-              );
-            continue ;
-            case 3 : 
-            var g = d[0];
-            var match$1 = g[/* curr */0];
-            if (match$1) {
-              var match$2 = match$1[0];
-              if (match$2) {
-                g[/* curr */0] = /* None */0;
-                return /* Scons */Block.__(0, [
-                          match$2[0],
-                          d
-                        ]);
-              } else {
-                return /* Sempty */0;
-              }
-            } else {
-              var match$3 = Curry._1(g[/* func */1], count);
-              if (match$3) {
-                return /* Scons */Block.__(0, [
-                          match$3[0],
-                          d
-                        ]);
-              } else {
-                g[/* curr */0] = /* Some */[/* None */0];
-                return /* Sempty */0;
-              }
-            }
-            break;
-        case 4 : 
-            var b = d[0];
-            if (b[/* ind */3] >= b[/* len */2]) {
-              fill_buff(b);
-            }
-            if (b[/* len */2]) {
-              var r = b[/* buff */1][b[/* ind */3]];
-              b[/* ind */3] = b[/* ind */3] + 1 | 0;
-              return /* Scons */Block.__(0, [
-                        r,
-                        d
-                      ]);
-            } else {
-              return /* Sempty */0;
-            }
-            break;
-        
-      }
-    }
-  };
-}
-
-function peek(s) {
-  while(true) {
-    var match = s[/* data */1];
-    if (typeof match === "number") {
-      return /* None */0;
-    } else {
-      switch (match.tag | 0) {
-        case 0 : 
-            return /* Some */[match[0]];
-        case 1 : 
-            var d = get_data(s[/* count */0], s[/* data */1]);
-            if (typeof d === "number") {
-              if (d) {
-                throw [
-                      Caml_builtin_exceptions.assert_failure,
-                      [
-                        "stream.ml",
-                        82,
-                        12
-                      ]
-                    ];
-              } else {
-                return /* None */0;
-              }
-            } else if (d.tag) {
-              throw [
-                    Caml_builtin_exceptions.assert_failure,
-                    [
-                      "stream.ml",
-                      82,
-                      12
-                    ]
-                  ];
-            } else {
-              s[1] = d;
-              return /* Some */[d[0]];
-            }
-            break;
-        case 2 : 
-            var f = match[0];
-            var tag = f.tag | 0;
-            s[1] = tag === 250 ? f[0] : (
-                tag === 246 ? CamlinternalLazy.force_lazy_block(f) : f
-              );
-            continue ;
-            case 3 : 
-            var g = match[0];
-            var match$1 = g[/* curr */0];
-            if (match$1) {
-              return match$1[0];
-            } else {
-              var x = Curry._1(g[/* func */1], s[/* count */0]);
-              g[/* curr */0] = /* Some */[x];
-              return x;
-            }
-            break;
-        case 4 : 
-            var b = match[0];
-            if (b[/* ind */3] >= b[/* len */2]) {
-              fill_buff(b);
-            }
-            if (b[/* len */2]) {
-              return /* Some */[b[/* buff */1][b[/* ind */3]]];
-            } else {
-              s[1] = /* Sempty */0;
-              return /* None */0;
-            }
-        
-      }
-    }
-  };
-}
-
-function junk(s) {
-  while(true) {
-    var match = s[/* data */1];
-    var exit = 0;
-    if (typeof match === "number") {
-      exit = 1;
-    } else {
-      switch (match.tag | 0) {
-        case 0 : 
-            s[0] = s[/* count */0] + 1 | 0;
-            s[1] = match[1];
-            return /* () */0;
-        case 3 : 
-            var g = match[0];
-            var match$1 = g[/* curr */0];
-            if (match$1) {
-              s[0] = s[/* count */0] + 1 | 0;
-              g[/* curr */0] = /* None */0;
-              return /* () */0;
-            } else {
-              exit = 1;
-            }
-            break;
-        case 4 : 
-            var b = match[0];
-            s[0] = s[/* count */0] + 1 | 0;
-            b[/* ind */3] = b[/* ind */3] + 1 | 0;
-            return /* () */0;
-        default:
-          exit = 1;
-      }
-    }
-    if (exit === 1) {
-      var match$2 = peek(s);
-      if (match$2) {
-        continue ;
-        
-      } else {
-        return /* () */0;
-      }
-    }
-    
-  };
-}
-
-function nget(n, s) {
-  if (n <= 0) {
-    return /* tuple */[
-            /* [] */0,
-            s[/* data */1],
-            0
-          ];
-  } else {
-    var match = peek(s);
-    if (match) {
-      var a = match[0];
-      junk(s);
-      var match$1 = nget(n - 1 | 0, s);
-      return /* tuple */[
-              /* :: */[
-                a,
-                match$1[0]
-              ],
-              /* Scons */Block.__(0, [
-                  a,
-                  match$1[1]
-                ]),
-              match$1[2] + 1 | 0
-            ];
-    } else {
-      return /* tuple */[
-              /* [] */0,
-              s[/* data */1],
-              0
-            ];
-    }
-  }
-}
-
-function npeek(n, s) {
-  var match = nget(n, s);
-  s[0] = s[/* count */0] - match[2] | 0;
-  s[1] = match[1];
-  return match[0];
-}
-
-function next(s) {
-  var match = peek(s);
-  if (match) {
-    junk(s);
-    return match[0];
-  } else {
-    throw Failure;
-  }
-}
-
-function empty(s) {
-  var match = peek(s);
-  if (match) {
-    throw Failure;
-  } else {
-    return /* () */0;
-  }
-}
-
-function iter(f, strm) {
-  var _param = /* () */0;
-  while(true) {
-    var match = peek(strm);
-    if (match) {
-      junk(strm);
-      Curry._1(f, match[0]);
-      _param = /* () */0;
-      continue ;
-      
-    } else {
-      return /* () */0;
-    }
-  };
-}
-
-function from(f) {
-  return /* record */[
-          /* count */0,
-          /* data : Sgen */Block.__(3, [/* record */[
-                /* curr : None */0,
-                /* func */f
-              ]])
-        ];
-}
-
-function of_list(l) {
-  return /* record */[
-          /* count */0,
-          /* data */List.fold_right((function (x, l) {
-                  return /* Scons */Block.__(0, [
-                            x,
-                            l
-                          ]);
-                }), l, /* Sempty */0)
-        ];
-}
-
-function of_string(s) {
-  var count = [0];
-  return from((function () {
-                var c = count[0];
-                if (c < s.length) {
-                  count[0] = count[0] + 1 | 0;
-                  return /* Some */[Caml_string.get(s, c)];
-                } else {
-                  return /* None */0;
-                }
-              }));
-}
-
-function of_bytes(s) {
-  var count = [0];
-  return from((function () {
-                var c = count[0];
-                if (c < s.length) {
-                  count[0] = count[0] + 1 | 0;
-                  return /* Some */[Caml_bytes.get(s, c)];
-                } else {
-                  return /* None */0;
-                }
-              }));
-}
-
-function of_channel(ic) {
-  return /* record */[
-          /* count */0,
-          /* data : Sbuffio */Block.__(4, [/* record */[
-                /* ic */ic,
-                /* buff */new Array(4096),
-                /* len */0,
-                /* ind */0
-              ]])
-        ];
-}
-
-function iapp(i, s) {
-  return /* record */[
-          /* count */0,
-          /* data : Sapp */Block.__(1, [
-              i[/* data */1],
-              s[/* data */1]
-            ])
-        ];
-}
-
-function icons(i, s) {
-  return /* record */[
-          /* count */0,
-          /* data : Scons */Block.__(0, [
-              i,
-              s[/* data */1]
-            ])
-        ];
-}
-
-function ising(i) {
-  return /* record */[
-          /* count */0,
-          /* data : Scons */Block.__(0, [
-              i,
-              /* Sempty */0
-            ])
-        ];
-}
-
-function lapp(f, s) {
-  return /* record */[
-          /* count */0,
-          /* data : Slazy */Block.__(2, [Block.__(246, [(function () {
-                      return /* Sapp */Block.__(1, [
-                                Curry._1(f, /* () */0)[/* data */1],
-                                s[/* data */1]
-                              ]);
-                    })])])
-        ];
-}
-
-function lcons(f, s) {
-  return /* record */[
-          /* count */0,
-          /* data : Slazy */Block.__(2, [Block.__(246, [(function () {
-                      return /* Scons */Block.__(0, [
-                                Curry._1(f, /* () */0),
-                                s[/* data */1]
-                              ]);
-                    })])])
-        ];
-}
-
-function lsing(f) {
-  return /* record */[
-          /* count */0,
-          /* data : Slazy */Block.__(2, [Block.__(246, [(function () {
-                      return /* Scons */Block.__(0, [
-                                Curry._1(f, /* () */0),
-                                /* Sempty */0
-                              ]);
-                    })])])
-        ];
-}
-
-function slazy(f) {
-  return /* record */[
-          /* count */0,
-          /* data : Slazy */Block.__(2, [Block.__(246, [(function () {
-                      return Curry._1(f, /* () */0)[/* data */1];
-                    })])])
-        ];
-}
-
-function dump_data(f, param) {
-  if (typeof param === "number") {
-    return Pervasives.print_string("Sempty");
-  } else {
-    switch (param.tag | 0) {
-      case 0 : 
-          Pervasives.print_string("Scons (");
-          Curry._1(f, param[0]);
-          Pervasives.print_string(", ");
-          dump_data(f, param[1]);
-          return Pervasives.print_string(")");
-      case 1 : 
-          Pervasives.print_string("Sapp (");
-          dump_data(f, param[0]);
-          Pervasives.print_string(", ");
-          dump_data(f, param[1]);
-          return Pervasives.print_string(")");
-      case 2 : 
-          return Pervasives.print_string("Slazy");
-      case 3 : 
-          return Pervasives.print_string("Sgen");
-      case 4 : 
-          return Pervasives.print_string("Sbuffio");
-      
-    }
-  }
-}
-
-function dump(f, s) {
-  Pervasives.print_string("{count = ");
-  Pervasives.print_int(s[/* count */0]);
-  Pervasives.print_string("; data = ");
-  dump_data(f, s[/* data */1]);
-  Pervasives.print_string("}");
-  return Pervasives.print_newline(/* () */0);
-}
-
-function count(prim) {
-  return prim[0];
-}
-
-var sempty = /* record */[
-  /* count */0,
-  /* data : Sempty */0
-];
-
-exports.Failure    = Failure;
-exports.$$Error    = $$Error;
-exports.from       = from;
-exports.of_list    = of_list;
-exports.of_string  = of_string;
-exports.of_bytes   = of_bytes;
-exports.of_channel = of_channel;
-exports.iter       = iter;
-exports.next       = next;
-exports.empty      = empty;
-exports.peek       = peek;
-exports.junk       = junk;
-exports.count      = count;
-exports.npeek      = npeek;
-exports.iapp       = iapp;
-exports.icons      = icons;
-exports.ising      = ising;
-exports.lapp       = lapp;
-exports.lcons      = lcons;
-exports.lsing      = lsing;
-exports.sempty     = sempty;
-exports.slazy      = slazy;
-exports.dump       = dump;
-/* No side effect */
-
-},{"./block.js":8,"./caml_builtin_exceptions.js":12,"./caml_bytes.js":13,"./caml_exceptions.js":14,"./caml_string.js":22,"./camlinternalLazy.js":27,"./curry.js":29,"./list.js":31,"./pervasives.js":35}],38:[function(require,module,exports){
+},{"./buffer.js":10,"./camlinternalFormat.js":26,"./curry.js":29,"./pervasives.js":33}],35:[function(require,module,exports){
 'use strict';
 
 var List        = require("./list.js");
@@ -17855,7 +16323,7 @@ exports.uncapitalize   = uncapitalize;
 exports.compare        = compare;
 /* No side effect */
 
-},{"./bytes.js":10,"./caml_int32.js":17,"./caml_string.js":22,"./list.js":31}],39:[function(require,module,exports){
+},{"./bytes.js":11,"./caml_int32.js":18,"./caml_string.js":23,"./list.js":31}],36:[function(require,module,exports){
 'use strict';
 
 var Caml_sys        = require("./caml_sys.js");
@@ -17980,7 +16448,7 @@ exports.catch_break       = catch_break;
 exports.ocaml_version     = ocaml_version;
 /* No side effect */
 
-},{"./caml_exceptions.js":14,"./caml_sys.js":23}],40:[function(require,module,exports){
+},{"./caml_exceptions.js":15,"./caml_sys.js":24}],37:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -18856,7 +17324,7 @@ function factory(ReactComponent, isValidElement, ReactNoopUpdateQueue) {
 module.exports = factory;
 
 }).call(this,require('_process'))
-},{"_process":66,"fbjs/lib/emptyObject":50,"fbjs/lib/invariant":57,"fbjs/lib/warning":64,"object-assign":65}],41:[function(require,module,exports){
+},{"_process":63,"fbjs/lib/emptyObject":47,"fbjs/lib/invariant":54,"fbjs/lib/warning":61,"object-assign":62}],38:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -18888,7 +17356,7 @@ module.exports = factory(
   ReactNoopUpdateQueue
 );
 
-},{"./factory":40,"react":223}],42:[function(require,module,exports){
+},{"./factory":37,"react":220}],39:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -18967,7 +17435,7 @@ var EventListener = {
 
 module.exports = EventListener;
 }).call(this,require('_process'))
-},{"./emptyFunction":49,"_process":66}],43:[function(require,module,exports){
+},{"./emptyFunction":46,"_process":63}],40:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -19003,7 +17471,7 @@ var ExecutionEnvironment = {
 };
 
 module.exports = ExecutionEnvironment;
-},{}],44:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 "use strict";
 
 /**
@@ -19035,7 +17503,7 @@ function camelize(string) {
 }
 
 module.exports = camelize;
-},{}],45:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -19075,7 +17543,7 @@ function camelizeStyleName(string) {
 }
 
 module.exports = camelizeStyleName;
-},{"./camelize":44}],46:[function(require,module,exports){
+},{"./camelize":41}],43:[function(require,module,exports){
 'use strict';
 
 /**
@@ -19115,7 +17583,7 @@ function containsNode(outerNode, innerNode) {
 }
 
 module.exports = containsNode;
-},{"./isTextNode":59}],47:[function(require,module,exports){
+},{"./isTextNode":56}],44:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -19244,7 +17712,7 @@ function createArrayFromMixed(obj) {
 
 module.exports = createArrayFromMixed;
 }).call(this,require('_process'))
-},{"./invariant":57,"_process":66}],48:[function(require,module,exports){
+},{"./invariant":54,"_process":63}],45:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -19330,7 +17798,7 @@ function createNodesFromMarkup(markup, handleScript) {
 
 module.exports = createNodesFromMarkup;
 }).call(this,require('_process'))
-},{"./ExecutionEnvironment":43,"./createArrayFromMixed":47,"./getMarkupWrap":53,"./invariant":57,"_process":66}],49:[function(require,module,exports){
+},{"./ExecutionEnvironment":40,"./createArrayFromMixed":44,"./getMarkupWrap":50,"./invariant":54,"_process":63}],46:[function(require,module,exports){
 "use strict";
 
 /**
@@ -19369,7 +17837,7 @@ emptyFunction.thatReturnsArgument = function (arg) {
 };
 
 module.exports = emptyFunction;
-},{}],50:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -19391,7 +17859,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = emptyObject;
 }).call(this,require('_process'))
-},{"_process":66}],51:[function(require,module,exports){
+},{"_process":63}],48:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -19418,7 +17886,7 @@ function focusNode(node) {
 }
 
 module.exports = focusNode;
-},{}],52:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 'use strict';
 
 /**
@@ -19457,7 +17925,7 @@ function getActiveElement(doc) /*?DOMElement*/{
 }
 
 module.exports = getActiveElement;
-},{}],53:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -19554,7 +18022,7 @@ function getMarkupWrap(nodeName) {
 
 module.exports = getMarkupWrap;
 }).call(this,require('_process'))
-},{"./ExecutionEnvironment":43,"./invariant":57,"_process":66}],54:[function(require,module,exports){
+},{"./ExecutionEnvironment":40,"./invariant":54,"_process":63}],51:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -19593,7 +18061,7 @@ function getUnboundedScrollPosition(scrollable) {
 }
 
 module.exports = getUnboundedScrollPosition;
-},{}],55:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 'use strict';
 
 /**
@@ -19626,7 +18094,7 @@ function hyphenate(string) {
 }
 
 module.exports = hyphenate;
-},{}],56:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -19665,7 +18133,7 @@ function hyphenateStyleName(string) {
 }
 
 module.exports = hyphenateStyleName;
-},{"./hyphenate":55}],57:[function(require,module,exports){
+},{"./hyphenate":52}],54:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -19723,7 +18191,7 @@ function invariant(condition, format, a, b, c, d, e, f) {
 
 module.exports = invariant;
 }).call(this,require('_process'))
-},{"_process":66}],58:[function(require,module,exports){
+},{"_process":63}],55:[function(require,module,exports){
 'use strict';
 
 /**
@@ -19748,7 +18216,7 @@ function isNode(object) {
 }
 
 module.exports = isNode;
-},{}],59:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 'use strict';
 
 /**
@@ -19773,7 +18241,7 @@ function isTextNode(object) {
 }
 
 module.exports = isTextNode;
-},{"./isNode":58}],60:[function(require,module,exports){
+},{"./isNode":55}],57:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -19803,7 +18271,7 @@ function memoizeStringOnly(callback) {
 }
 
 module.exports = memoizeStringOnly;
-},{}],61:[function(require,module,exports){
+},{}],58:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -19826,7 +18294,7 @@ if (ExecutionEnvironment.canUseDOM) {
 }
 
 module.exports = performance || {};
-},{"./ExecutionEnvironment":43}],62:[function(require,module,exports){
+},{"./ExecutionEnvironment":40}],59:[function(require,module,exports){
 'use strict';
 
 /**
@@ -19860,7 +18328,7 @@ if (performance.now) {
 }
 
 module.exports = performanceNow;
-},{"./performance":61}],63:[function(require,module,exports){
+},{"./performance":58}],60:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -19928,7 +18396,7 @@ function shallowEqual(objA, objB) {
 }
 
 module.exports = shallowEqual;
-},{}],64:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -19995,7 +18463,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = warning;
 }).call(this,require('_process'))
-},{"./emptyFunction":49,"_process":66}],65:[function(require,module,exports){
+},{"./emptyFunction":46,"_process":63}],62:[function(require,module,exports){
 /*
 object-assign
 (c) Sindre Sorhus
@@ -20087,7 +18555,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 	return to;
 };
 
-},{}],66:[function(require,module,exports){
+},{}],63:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -20273,7 +18741,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],67:[function(require,module,exports){
+},{}],64:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -20338,7 +18806,7 @@ function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
 module.exports = checkPropTypes;
 
 }).call(this,require('_process'))
-},{"./lib/ReactPropTypesSecret":70,"_process":66,"fbjs/lib/invariant":57,"fbjs/lib/warning":64}],68:[function(require,module,exports){
+},{"./lib/ReactPropTypesSecret":67,"_process":63,"fbjs/lib/invariant":54,"fbjs/lib/warning":61}],65:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -20361,7 +18829,7 @@ module.exports = function(isValidElement) {
   return factory(isValidElement, throwOnDirectAccess);
 };
 
-},{"./factoryWithTypeCheckers":69}],69:[function(require,module,exports){
+},{"./factoryWithTypeCheckers":66}],66:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -20877,7 +19345,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 };
 
 }).call(this,require('_process'))
-},{"./checkPropTypes":67,"./lib/ReactPropTypesSecret":70,"_process":66,"fbjs/lib/emptyFunction":49,"fbjs/lib/invariant":57,"fbjs/lib/warning":64}],70:[function(require,module,exports){
+},{"./checkPropTypes":64,"./lib/ReactPropTypesSecret":67,"_process":63,"fbjs/lib/emptyFunction":46,"fbjs/lib/invariant":54,"fbjs/lib/warning":61}],67:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -20893,12 +19361,12 @@ var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
 
 module.exports = ReactPropTypesSecret;
 
-},{}],71:[function(require,module,exports){
+},{}],68:[function(require,module,exports){
 'use strict';
 
 module.exports = require('./lib/ReactDOM');
 
-},{"./lib/ReactDOM":101}],72:[function(require,module,exports){
+},{"./lib/ReactDOM":98}],69:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -20972,7 +19440,7 @@ var ARIADOMPropertyConfig = {
 };
 
 module.exports = ARIADOMPropertyConfig;
-},{}],73:[function(require,module,exports){
+},{}],70:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -20996,7 +19464,7 @@ var AutoFocusUtils = {
 };
 
 module.exports = AutoFocusUtils;
-},{"./ReactDOMComponentTree":104,"fbjs/lib/focusNode":51}],74:[function(require,module,exports){
+},{"./ReactDOMComponentTree":101,"fbjs/lib/focusNode":48}],71:[function(require,module,exports){
 /**
  * Copyright 2013-present Facebook, Inc.
  * All rights reserved.
@@ -21380,7 +19848,7 @@ var BeforeInputEventPlugin = {
 };
 
 module.exports = BeforeInputEventPlugin;
-},{"./EventPropagators":90,"./FallbackCompositionState":91,"./SyntheticCompositionEvent":155,"./SyntheticInputEvent":159,"fbjs/lib/ExecutionEnvironment":43}],75:[function(require,module,exports){
+},{"./EventPropagators":87,"./FallbackCompositionState":88,"./SyntheticCompositionEvent":152,"./SyntheticInputEvent":156,"fbjs/lib/ExecutionEnvironment":40}],72:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -21534,7 +20002,7 @@ var CSSProperty = {
 };
 
 module.exports = CSSProperty;
-},{}],76:[function(require,module,exports){
+},{}],73:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -21751,7 +20219,7 @@ var CSSPropertyOperations = {
 
 module.exports = CSSPropertyOperations;
 }).call(this,require('_process'))
-},{"./CSSProperty":75,"./ReactInstrumentation":133,"./dangerousStyleValue":172,"_process":66,"fbjs/lib/ExecutionEnvironment":43,"fbjs/lib/camelizeStyleName":45,"fbjs/lib/hyphenateStyleName":56,"fbjs/lib/memoizeStringOnly":60,"fbjs/lib/warning":64}],77:[function(require,module,exports){
+},{"./CSSProperty":72,"./ReactInstrumentation":130,"./dangerousStyleValue":169,"_process":63,"fbjs/lib/ExecutionEnvironment":40,"fbjs/lib/camelizeStyleName":42,"fbjs/lib/hyphenateStyleName":53,"fbjs/lib/memoizeStringOnly":57,"fbjs/lib/warning":61}],74:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -21872,7 +20340,7 @@ var CallbackQueue = function () {
 
 module.exports = PooledClass.addPoolingTo(CallbackQueue);
 }).call(this,require('_process'))
-},{"./PooledClass":95,"./reactProdInvariant":191,"_process":66,"fbjs/lib/invariant":57}],78:[function(require,module,exports){
+},{"./PooledClass":92,"./reactProdInvariant":188,"_process":63,"fbjs/lib/invariant":54}],75:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -22184,7 +20652,7 @@ var ChangeEventPlugin = {
 };
 
 module.exports = ChangeEventPlugin;
-},{"./EventPluginHub":87,"./EventPropagators":90,"./ReactDOMComponentTree":104,"./ReactUpdates":148,"./SyntheticEvent":157,"./getEventTarget":180,"./inputValueTracking":186,"./isEventSupported":188,"./isTextInputElement":189,"fbjs/lib/ExecutionEnvironment":43}],79:[function(require,module,exports){
+},{"./EventPluginHub":84,"./EventPropagators":87,"./ReactDOMComponentTree":101,"./ReactUpdates":145,"./SyntheticEvent":154,"./getEventTarget":177,"./inputValueTracking":183,"./isEventSupported":185,"./isTextInputElement":186,"fbjs/lib/ExecutionEnvironment":40}],76:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -22412,7 +20880,7 @@ var DOMChildrenOperations = {
 
 module.exports = DOMChildrenOperations;
 }).call(this,require('_process'))
-},{"./DOMLazyTree":80,"./Danger":84,"./ReactDOMComponentTree":104,"./ReactInstrumentation":133,"./createMicrosoftUnsafeLocalFunction":171,"./setInnerHTML":193,"./setTextContent":194,"_process":66}],80:[function(require,module,exports){
+},{"./DOMLazyTree":77,"./Danger":81,"./ReactDOMComponentTree":101,"./ReactInstrumentation":130,"./createMicrosoftUnsafeLocalFunction":168,"./setInnerHTML":190,"./setTextContent":191,"_process":63}],77:[function(require,module,exports){
 /**
  * Copyright 2015-present, Facebook, Inc.
  * All rights reserved.
@@ -22530,7 +20998,7 @@ DOMLazyTree.queueHTML = queueHTML;
 DOMLazyTree.queueText = queueText;
 
 module.exports = DOMLazyTree;
-},{"./DOMNamespaces":81,"./createMicrosoftUnsafeLocalFunction":171,"./setInnerHTML":193,"./setTextContent":194}],81:[function(require,module,exports){
+},{"./DOMNamespaces":78,"./createMicrosoftUnsafeLocalFunction":168,"./setInnerHTML":190,"./setTextContent":191}],78:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -22550,7 +21018,7 @@ var DOMNamespaces = {
 };
 
 module.exports = DOMNamespaces;
-},{}],82:[function(require,module,exports){
+},{}],79:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -22761,7 +21229,7 @@ var DOMProperty = {
 
 module.exports = DOMProperty;
 }).call(this,require('_process'))
-},{"./reactProdInvariant":191,"_process":66,"fbjs/lib/invariant":57}],83:[function(require,module,exports){
+},{"./reactProdInvariant":188,"_process":63,"fbjs/lib/invariant":54}],80:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -22998,7 +21466,7 @@ var DOMPropertyOperations = {
 
 module.exports = DOMPropertyOperations;
 }).call(this,require('_process'))
-},{"./DOMProperty":82,"./ReactDOMComponentTree":104,"./ReactInstrumentation":133,"./quoteAttributeValueForBrowser":190,"_process":66,"fbjs/lib/warning":64}],84:[function(require,module,exports){
+},{"./DOMProperty":79,"./ReactDOMComponentTree":101,"./ReactInstrumentation":130,"./quoteAttributeValueForBrowser":187,"_process":63,"fbjs/lib/warning":61}],81:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -23046,7 +21514,7 @@ var Danger = {
 
 module.exports = Danger;
 }).call(this,require('_process'))
-},{"./DOMLazyTree":80,"./reactProdInvariant":191,"_process":66,"fbjs/lib/ExecutionEnvironment":43,"fbjs/lib/createNodesFromMarkup":48,"fbjs/lib/emptyFunction":49,"fbjs/lib/invariant":57}],85:[function(require,module,exports){
+},{"./DOMLazyTree":77,"./reactProdInvariant":188,"_process":63,"fbjs/lib/ExecutionEnvironment":40,"fbjs/lib/createNodesFromMarkup":45,"fbjs/lib/emptyFunction":46,"fbjs/lib/invariant":54}],82:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -23072,7 +21540,7 @@ module.exports = Danger;
 var DefaultEventPluginOrder = ['ResponderEventPlugin', 'SimpleEventPlugin', 'TapEventPlugin', 'EnterLeaveEventPlugin', 'ChangeEventPlugin', 'SelectEventPlugin', 'BeforeInputEventPlugin'];
 
 module.exports = DefaultEventPluginOrder;
-},{}],86:[function(require,module,exports){
+},{}],83:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -23170,7 +21638,7 @@ var EnterLeaveEventPlugin = {
 };
 
 module.exports = EnterLeaveEventPlugin;
-},{"./EventPropagators":90,"./ReactDOMComponentTree":104,"./SyntheticMouseEvent":161}],87:[function(require,module,exports){
+},{"./EventPropagators":87,"./ReactDOMComponentTree":101,"./SyntheticMouseEvent":158}],84:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -23446,7 +21914,7 @@ var EventPluginHub = {
 
 module.exports = EventPluginHub;
 }).call(this,require('_process'))
-},{"./EventPluginRegistry":88,"./EventPluginUtils":89,"./ReactErrorUtils":124,"./accumulateInto":168,"./forEachAccumulated":176,"./reactProdInvariant":191,"_process":66,"fbjs/lib/invariant":57}],88:[function(require,module,exports){
+},{"./EventPluginRegistry":85,"./EventPluginUtils":86,"./ReactErrorUtils":121,"./accumulateInto":165,"./forEachAccumulated":173,"./reactProdInvariant":188,"_process":63,"fbjs/lib/invariant":54}],85:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -23701,7 +22169,7 @@ var EventPluginRegistry = {
 
 module.exports = EventPluginRegistry;
 }).call(this,require('_process'))
-},{"./reactProdInvariant":191,"_process":66,"fbjs/lib/invariant":57}],89:[function(require,module,exports){
+},{"./reactProdInvariant":188,"_process":63,"fbjs/lib/invariant":54}],86:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -23929,7 +22397,7 @@ var EventPluginUtils = {
 
 module.exports = EventPluginUtils;
 }).call(this,require('_process'))
-},{"./ReactErrorUtils":124,"./reactProdInvariant":191,"_process":66,"fbjs/lib/invariant":57,"fbjs/lib/warning":64}],90:[function(require,module,exports){
+},{"./ReactErrorUtils":121,"./reactProdInvariant":188,"_process":63,"fbjs/lib/invariant":54,"fbjs/lib/warning":61}],87:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -24065,7 +22533,7 @@ var EventPropagators = {
 
 module.exports = EventPropagators;
 }).call(this,require('_process'))
-},{"./EventPluginHub":87,"./EventPluginUtils":89,"./accumulateInto":168,"./forEachAccumulated":176,"_process":66,"fbjs/lib/warning":64}],91:[function(require,module,exports){
+},{"./EventPluginHub":84,"./EventPluginUtils":86,"./accumulateInto":165,"./forEachAccumulated":173,"_process":63,"fbjs/lib/warning":61}],88:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -24160,7 +22628,7 @@ _assign(FallbackCompositionState.prototype, {
 PooledClass.addPoolingTo(FallbackCompositionState);
 
 module.exports = FallbackCompositionState;
-},{"./PooledClass":95,"./getTextContentAccessor":184,"object-assign":65}],92:[function(require,module,exports){
+},{"./PooledClass":92,"./getTextContentAccessor":181,"object-assign":62}],89:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -24396,7 +22864,7 @@ var HTMLDOMPropertyConfig = {
 };
 
 module.exports = HTMLDOMPropertyConfig;
-},{"./DOMProperty":82}],93:[function(require,module,exports){
+},{"./DOMProperty":79}],90:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -24455,7 +22923,7 @@ var KeyEscapeUtils = {
 };
 
 module.exports = KeyEscapeUtils;
-},{}],94:[function(require,module,exports){
+},{}],91:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -24595,7 +23063,7 @@ var LinkedValueUtils = {
 
 module.exports = LinkedValueUtils;
 }).call(this,require('_process'))
-},{"./ReactPropTypesSecret":141,"./reactProdInvariant":191,"_process":66,"fbjs/lib/invariant":57,"fbjs/lib/warning":64,"prop-types/factory":68,"react/lib/React":200}],95:[function(require,module,exports){
+},{"./ReactPropTypesSecret":138,"./reactProdInvariant":188,"_process":63,"fbjs/lib/invariant":54,"fbjs/lib/warning":61,"prop-types/factory":65,"react/lib/React":197}],92:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -24709,7 +23177,7 @@ var PooledClass = {
 
 module.exports = PooledClass;
 }).call(this,require('_process'))
-},{"./reactProdInvariant":191,"_process":66,"fbjs/lib/invariant":57}],96:[function(require,module,exports){
+},{"./reactProdInvariant":188,"_process":63,"fbjs/lib/invariant":54}],93:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -25033,7 +23501,7 @@ var ReactBrowserEventEmitter = _assign({}, ReactEventEmitterMixin, {
 });
 
 module.exports = ReactBrowserEventEmitter;
-},{"./EventPluginRegistry":88,"./ReactEventEmitterMixin":125,"./ViewportMetrics":167,"./getVendorPrefixedEventName":185,"./isEventSupported":188,"object-assign":65}],97:[function(require,module,exports){
+},{"./EventPluginRegistry":85,"./ReactEventEmitterMixin":122,"./ViewportMetrics":164,"./getVendorPrefixedEventName":182,"./isEventSupported":185,"object-assign":62}],94:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-present, Facebook, Inc.
@@ -25188,7 +23656,7 @@ var ReactChildReconciler = {
 
 module.exports = ReactChildReconciler;
 }).call(this,require('_process'))
-},{"./KeyEscapeUtils":93,"./ReactReconciler":143,"./instantiateReactComponent":187,"./shouldUpdateReactComponent":195,"./traverseAllChildren":196,"_process":66,"fbjs/lib/warning":64,"react/lib/ReactComponentTreeHook":203}],98:[function(require,module,exports){
+},{"./KeyEscapeUtils":90,"./ReactReconciler":140,"./instantiateReactComponent":184,"./shouldUpdateReactComponent":192,"./traverseAllChildren":193,"_process":63,"fbjs/lib/warning":61,"react/lib/ReactComponentTreeHook":200}],95:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -25216,7 +23684,7 @@ var ReactComponentBrowserEnvironment = {
 };
 
 module.exports = ReactComponentBrowserEnvironment;
-},{"./DOMChildrenOperations":79,"./ReactDOMIDOperations":108}],99:[function(require,module,exports){
+},{"./DOMChildrenOperations":76,"./ReactDOMIDOperations":105}],96:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-present, Facebook, Inc.
@@ -25262,7 +23730,7 @@ var ReactComponentEnvironment = {
 
 module.exports = ReactComponentEnvironment;
 }).call(this,require('_process'))
-},{"./reactProdInvariant":191,"_process":66,"fbjs/lib/invariant":57}],100:[function(require,module,exports){
+},{"./reactProdInvariant":188,"_process":63,"fbjs/lib/invariant":54}],97:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -26164,7 +24632,7 @@ var ReactCompositeComponent = {
 
 module.exports = ReactCompositeComponent;
 }).call(this,require('_process'))
-},{"./ReactComponentEnvironment":99,"./ReactErrorUtils":124,"./ReactInstanceMap":132,"./ReactInstrumentation":133,"./ReactNodeTypes":138,"./ReactReconciler":143,"./checkReactTypeSpec":170,"./reactProdInvariant":191,"./shouldUpdateReactComponent":195,"_process":66,"fbjs/lib/emptyObject":50,"fbjs/lib/invariant":57,"fbjs/lib/shallowEqual":63,"fbjs/lib/warning":64,"object-assign":65,"react/lib/React":200,"react/lib/ReactCurrentOwner":204}],101:[function(require,module,exports){
+},{"./ReactComponentEnvironment":96,"./ReactErrorUtils":121,"./ReactInstanceMap":129,"./ReactInstrumentation":130,"./ReactNodeTypes":135,"./ReactReconciler":140,"./checkReactTypeSpec":167,"./reactProdInvariant":188,"./shouldUpdateReactComponent":192,"_process":63,"fbjs/lib/emptyObject":47,"fbjs/lib/invariant":54,"fbjs/lib/shallowEqual":60,"fbjs/lib/warning":61,"object-assign":62,"react/lib/React":197,"react/lib/ReactCurrentOwner":201}],98:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -26277,7 +24745,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = ReactDOM;
 }).call(this,require('_process'))
-},{"./ReactDOMComponentTree":104,"./ReactDOMInvalidARIAHook":110,"./ReactDOMNullInputValuePropHook":111,"./ReactDOMUnknownPropertyHook":118,"./ReactDefaultInjection":121,"./ReactInstrumentation":133,"./ReactMount":136,"./ReactReconciler":143,"./ReactUpdates":148,"./ReactVersion":149,"./findDOMNode":174,"./getHostComponentFromComposite":181,"./renderSubtreeIntoContainer":192,"_process":66,"fbjs/lib/ExecutionEnvironment":43,"fbjs/lib/warning":64}],102:[function(require,module,exports){
+},{"./ReactDOMComponentTree":101,"./ReactDOMInvalidARIAHook":107,"./ReactDOMNullInputValuePropHook":108,"./ReactDOMUnknownPropertyHook":115,"./ReactDefaultInjection":118,"./ReactInstrumentation":130,"./ReactMount":133,"./ReactReconciler":140,"./ReactUpdates":145,"./ReactVersion":146,"./findDOMNode":171,"./getHostComponentFromComposite":178,"./renderSubtreeIntoContainer":189,"_process":63,"fbjs/lib/ExecutionEnvironment":40,"fbjs/lib/warning":61}],99:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -27289,7 +25757,7 @@ _assign(ReactDOMComponent.prototype, ReactDOMComponent.Mixin, ReactMultiChild.Mi
 
 module.exports = ReactDOMComponent;
 }).call(this,require('_process'))
-},{"./AutoFocusUtils":73,"./CSSPropertyOperations":76,"./DOMLazyTree":80,"./DOMNamespaces":81,"./DOMProperty":82,"./DOMPropertyOperations":83,"./EventPluginHub":87,"./EventPluginRegistry":88,"./ReactBrowserEventEmitter":96,"./ReactDOMComponentFlags":103,"./ReactDOMComponentTree":104,"./ReactDOMInput":109,"./ReactDOMOption":112,"./ReactDOMSelect":113,"./ReactDOMTextarea":116,"./ReactInstrumentation":133,"./ReactMultiChild":137,"./ReactServerRenderingTransaction":145,"./escapeTextContentForBrowser":173,"./inputValueTracking":186,"./isEventSupported":188,"./reactProdInvariant":191,"./validateDOMNesting":197,"_process":66,"fbjs/lib/emptyFunction":49,"fbjs/lib/invariant":57,"fbjs/lib/shallowEqual":63,"fbjs/lib/warning":64,"object-assign":65}],103:[function(require,module,exports){
+},{"./AutoFocusUtils":70,"./CSSPropertyOperations":73,"./DOMLazyTree":77,"./DOMNamespaces":78,"./DOMProperty":79,"./DOMPropertyOperations":80,"./EventPluginHub":84,"./EventPluginRegistry":85,"./ReactBrowserEventEmitter":93,"./ReactDOMComponentFlags":100,"./ReactDOMComponentTree":101,"./ReactDOMInput":106,"./ReactDOMOption":109,"./ReactDOMSelect":110,"./ReactDOMTextarea":113,"./ReactInstrumentation":130,"./ReactMultiChild":134,"./ReactServerRenderingTransaction":142,"./escapeTextContentForBrowser":170,"./inputValueTracking":183,"./isEventSupported":185,"./reactProdInvariant":188,"./validateDOMNesting":194,"_process":63,"fbjs/lib/emptyFunction":46,"fbjs/lib/invariant":54,"fbjs/lib/shallowEqual":60,"fbjs/lib/warning":61,"object-assign":62}],100:[function(require,module,exports){
 /**
  * Copyright 2015-present, Facebook, Inc.
  * All rights reserved.
@@ -27307,7 +25775,7 @@ var ReactDOMComponentFlags = {
 };
 
 module.exports = ReactDOMComponentFlags;
-},{}],104:[function(require,module,exports){
+},{}],101:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -27504,7 +25972,7 @@ var ReactDOMComponentTree = {
 
 module.exports = ReactDOMComponentTree;
 }).call(this,require('_process'))
-},{"./DOMProperty":82,"./ReactDOMComponentFlags":103,"./reactProdInvariant":191,"_process":66,"fbjs/lib/invariant":57}],105:[function(require,module,exports){
+},{"./DOMProperty":79,"./ReactDOMComponentFlags":100,"./reactProdInvariant":188,"_process":63,"fbjs/lib/invariant":54}],102:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -27539,7 +26007,7 @@ function ReactDOMContainerInfo(topLevelWrapper, node) {
 
 module.exports = ReactDOMContainerInfo;
 }).call(this,require('_process'))
-},{"./validateDOMNesting":197,"_process":66}],106:[function(require,module,exports){
+},{"./validateDOMNesting":194,"_process":63}],103:[function(require,module,exports){
 /**
  * Copyright 2014-present, Facebook, Inc.
  * All rights reserved.
@@ -27599,7 +26067,7 @@ _assign(ReactDOMEmptyComponent.prototype, {
 });
 
 module.exports = ReactDOMEmptyComponent;
-},{"./DOMLazyTree":80,"./ReactDOMComponentTree":104,"object-assign":65}],107:[function(require,module,exports){
+},{"./DOMLazyTree":77,"./ReactDOMComponentTree":101,"object-assign":62}],104:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -27618,7 +26086,7 @@ var ReactDOMFeatureFlags = {
 };
 
 module.exports = ReactDOMFeatureFlags;
-},{}],108:[function(require,module,exports){
+},{}],105:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -27651,7 +26119,7 @@ var ReactDOMIDOperations = {
 };
 
 module.exports = ReactDOMIDOperations;
-},{"./DOMChildrenOperations":79,"./ReactDOMComponentTree":104}],109:[function(require,module,exports){
+},{"./DOMChildrenOperations":76,"./ReactDOMComponentTree":101}],106:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -27940,7 +26408,7 @@ function _handleChange(event) {
 
 module.exports = ReactDOMInput;
 }).call(this,require('_process'))
-},{"./DOMPropertyOperations":83,"./LinkedValueUtils":94,"./ReactDOMComponentTree":104,"./ReactUpdates":148,"./reactProdInvariant":191,"_process":66,"fbjs/lib/invariant":57,"fbjs/lib/warning":64,"object-assign":65}],110:[function(require,module,exports){
+},{"./DOMPropertyOperations":80,"./LinkedValueUtils":91,"./ReactDOMComponentTree":101,"./ReactUpdates":145,"./reactProdInvariant":188,"_process":63,"fbjs/lib/invariant":54,"fbjs/lib/warning":61,"object-assign":62}],107:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -28035,7 +26503,7 @@ var ReactDOMInvalidARIAHook = {
 
 module.exports = ReactDOMInvalidARIAHook;
 }).call(this,require('_process'))
-},{"./DOMProperty":82,"_process":66,"fbjs/lib/warning":64,"react/lib/ReactComponentTreeHook":203}],111:[function(require,module,exports){
+},{"./DOMProperty":79,"_process":63,"fbjs/lib/warning":61,"react/lib/ReactComponentTreeHook":200}],108:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -28080,7 +26548,7 @@ var ReactDOMNullInputValuePropHook = {
 
 module.exports = ReactDOMNullInputValuePropHook;
 }).call(this,require('_process'))
-},{"_process":66,"fbjs/lib/warning":64,"react/lib/ReactComponentTreeHook":203}],112:[function(require,module,exports){
+},{"_process":63,"fbjs/lib/warning":61,"react/lib/ReactComponentTreeHook":200}],109:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -28204,7 +26672,7 @@ var ReactDOMOption = {
 
 module.exports = ReactDOMOption;
 }).call(this,require('_process'))
-},{"./ReactDOMComponentTree":104,"./ReactDOMSelect":113,"_process":66,"fbjs/lib/warning":64,"object-assign":65,"react/lib/React":200}],113:[function(require,module,exports){
+},{"./ReactDOMComponentTree":101,"./ReactDOMSelect":110,"_process":63,"fbjs/lib/warning":61,"object-assign":62,"react/lib/React":197}],110:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -28406,7 +26874,7 @@ function _handleChange(event) {
 
 module.exports = ReactDOMSelect;
 }).call(this,require('_process'))
-},{"./LinkedValueUtils":94,"./ReactDOMComponentTree":104,"./ReactUpdates":148,"_process":66,"fbjs/lib/warning":64,"object-assign":65}],114:[function(require,module,exports){
+},{"./LinkedValueUtils":91,"./ReactDOMComponentTree":101,"./ReactUpdates":145,"_process":63,"fbjs/lib/warning":61,"object-assign":62}],111:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -28618,7 +27086,7 @@ var ReactDOMSelection = {
 };
 
 module.exports = ReactDOMSelection;
-},{"./getNodeForCharacterOffset":183,"./getTextContentAccessor":184,"fbjs/lib/ExecutionEnvironment":43}],115:[function(require,module,exports){
+},{"./getNodeForCharacterOffset":180,"./getTextContentAccessor":181,"fbjs/lib/ExecutionEnvironment":40}],112:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -28782,7 +27250,7 @@ _assign(ReactDOMTextComponent.prototype, {
 
 module.exports = ReactDOMTextComponent;
 }).call(this,require('_process'))
-},{"./DOMChildrenOperations":79,"./DOMLazyTree":80,"./ReactDOMComponentTree":104,"./escapeTextContentForBrowser":173,"./reactProdInvariant":191,"./validateDOMNesting":197,"_process":66,"fbjs/lib/invariant":57,"object-assign":65}],116:[function(require,module,exports){
+},{"./DOMChildrenOperations":76,"./DOMLazyTree":77,"./ReactDOMComponentTree":101,"./escapeTextContentForBrowser":170,"./reactProdInvariant":188,"./validateDOMNesting":194,"_process":63,"fbjs/lib/invariant":54,"object-assign":62}],113:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -28944,7 +27412,7 @@ function _handleChange(event) {
 
 module.exports = ReactDOMTextarea;
 }).call(this,require('_process'))
-},{"./LinkedValueUtils":94,"./ReactDOMComponentTree":104,"./ReactUpdates":148,"./reactProdInvariant":191,"_process":66,"fbjs/lib/invariant":57,"fbjs/lib/warning":64,"object-assign":65}],117:[function(require,module,exports){
+},{"./LinkedValueUtils":91,"./ReactDOMComponentTree":101,"./ReactUpdates":145,"./reactProdInvariant":188,"_process":63,"fbjs/lib/invariant":54,"fbjs/lib/warning":61,"object-assign":62}],114:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2015-present, Facebook, Inc.
@@ -29082,7 +27550,7 @@ module.exports = {
   traverseEnterLeave: traverseEnterLeave
 };
 }).call(this,require('_process'))
-},{"./reactProdInvariant":191,"_process":66,"fbjs/lib/invariant":57}],118:[function(require,module,exports){
+},{"./reactProdInvariant":188,"_process":63,"fbjs/lib/invariant":54}],115:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -29196,7 +27664,7 @@ var ReactDOMUnknownPropertyHook = {
 
 module.exports = ReactDOMUnknownPropertyHook;
 }).call(this,require('_process'))
-},{"./DOMProperty":82,"./EventPluginRegistry":88,"_process":66,"fbjs/lib/warning":64,"react/lib/ReactComponentTreeHook":203}],119:[function(require,module,exports){
+},{"./DOMProperty":79,"./EventPluginRegistry":85,"_process":63,"fbjs/lib/warning":61,"react/lib/ReactComponentTreeHook":200}],116:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2016-present, Facebook, Inc.
@@ -29559,7 +28027,7 @@ if (/[?&]react_perf\b/.test(url)) {
 
 module.exports = ReactDebugTool;
 }).call(this,require('_process'))
-},{"./ReactHostOperationHistoryHook":129,"./ReactInvalidSetStateWarningHook":134,"_process":66,"fbjs/lib/ExecutionEnvironment":43,"fbjs/lib/performanceNow":62,"fbjs/lib/warning":64,"react/lib/ReactComponentTreeHook":203}],120:[function(require,module,exports){
+},{"./ReactHostOperationHistoryHook":126,"./ReactInvalidSetStateWarningHook":131,"_process":63,"fbjs/lib/ExecutionEnvironment":40,"fbjs/lib/performanceNow":59,"fbjs/lib/warning":61,"react/lib/ReactComponentTreeHook":200}],117:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -29627,7 +28095,7 @@ var ReactDefaultBatchingStrategy = {
 };
 
 module.exports = ReactDefaultBatchingStrategy;
-},{"./ReactUpdates":148,"./Transaction":166,"fbjs/lib/emptyFunction":49,"object-assign":65}],121:[function(require,module,exports){
+},{"./ReactUpdates":145,"./Transaction":163,"fbjs/lib/emptyFunction":46,"object-assign":62}],118:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -29713,7 +28181,7 @@ function inject() {
 module.exports = {
   inject: inject
 };
-},{"./ARIADOMPropertyConfig":72,"./BeforeInputEventPlugin":74,"./ChangeEventPlugin":78,"./DefaultEventPluginOrder":85,"./EnterLeaveEventPlugin":86,"./HTMLDOMPropertyConfig":92,"./ReactComponentBrowserEnvironment":98,"./ReactDOMComponent":102,"./ReactDOMComponentTree":104,"./ReactDOMEmptyComponent":106,"./ReactDOMTextComponent":115,"./ReactDOMTreeTraversal":117,"./ReactDefaultBatchingStrategy":120,"./ReactEventListener":126,"./ReactInjection":130,"./ReactReconcileTransaction":142,"./SVGDOMPropertyConfig":150,"./SelectEventPlugin":151,"./SimpleEventPlugin":152}],122:[function(require,module,exports){
+},{"./ARIADOMPropertyConfig":69,"./BeforeInputEventPlugin":71,"./ChangeEventPlugin":75,"./DefaultEventPluginOrder":82,"./EnterLeaveEventPlugin":83,"./HTMLDOMPropertyConfig":89,"./ReactComponentBrowserEnvironment":95,"./ReactDOMComponent":99,"./ReactDOMComponentTree":101,"./ReactDOMEmptyComponent":103,"./ReactDOMTextComponent":112,"./ReactDOMTreeTraversal":114,"./ReactDefaultBatchingStrategy":117,"./ReactEventListener":123,"./ReactInjection":127,"./ReactReconcileTransaction":139,"./SVGDOMPropertyConfig":147,"./SelectEventPlugin":148,"./SimpleEventPlugin":149}],119:[function(require,module,exports){
 /**
  * Copyright 2014-present, Facebook, Inc.
  * All rights reserved.
@@ -29733,7 +28201,7 @@ module.exports = {
 var REACT_ELEMENT_TYPE = typeof Symbol === 'function' && Symbol['for'] && Symbol['for']('react.element') || 0xeac7;
 
 module.exports = REACT_ELEMENT_TYPE;
-},{}],123:[function(require,module,exports){
+},{}],120:[function(require,module,exports){
 /**
  * Copyright 2014-present, Facebook, Inc.
  * All rights reserved.
@@ -29763,7 +28231,7 @@ var ReactEmptyComponent = {
 ReactEmptyComponent.injection = ReactEmptyComponentInjection;
 
 module.exports = ReactEmptyComponent;
-},{}],124:[function(require,module,exports){
+},{}],121:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -29841,7 +28309,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = ReactErrorUtils;
 }).call(this,require('_process'))
-},{"_process":66}],125:[function(require,module,exports){
+},{"_process":63}],122:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -29873,7 +28341,7 @@ var ReactEventEmitterMixin = {
 };
 
 module.exports = ReactEventEmitterMixin;
-},{"./EventPluginHub":87}],126:[function(require,module,exports){
+},{"./EventPluginHub":84}],123:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -30028,7 +28496,7 @@ var ReactEventListener = {
 };
 
 module.exports = ReactEventListener;
-},{"./PooledClass":95,"./ReactDOMComponentTree":104,"./ReactUpdates":148,"./getEventTarget":180,"fbjs/lib/EventListener":42,"fbjs/lib/ExecutionEnvironment":43,"fbjs/lib/getUnboundedScrollPosition":54,"object-assign":65}],127:[function(require,module,exports){
+},{"./PooledClass":92,"./ReactDOMComponentTree":101,"./ReactUpdates":145,"./getEventTarget":177,"fbjs/lib/EventListener":39,"fbjs/lib/ExecutionEnvironment":40,"fbjs/lib/getUnboundedScrollPosition":51,"object-assign":62}],124:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -30050,7 +28518,7 @@ var ReactFeatureFlags = {
 };
 
 module.exports = ReactFeatureFlags;
-},{}],128:[function(require,module,exports){
+},{}],125:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-present, Facebook, Inc.
@@ -30120,7 +28588,7 @@ var ReactHostComponent = {
 
 module.exports = ReactHostComponent;
 }).call(this,require('_process'))
-},{"./reactProdInvariant":191,"_process":66,"fbjs/lib/invariant":57}],129:[function(require,module,exports){
+},{"./reactProdInvariant":188,"_process":63,"fbjs/lib/invariant":54}],126:[function(require,module,exports){
 /**
  * Copyright 2016-present, Facebook, Inc.
  * All rights reserved.
@@ -30154,7 +28622,7 @@ var ReactHostOperationHistoryHook = {
 };
 
 module.exports = ReactHostOperationHistoryHook;
-},{}],130:[function(require,module,exports){
+},{}],127:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -30188,7 +28656,7 @@ var ReactInjection = {
 };
 
 module.exports = ReactInjection;
-},{"./DOMProperty":82,"./EventPluginHub":87,"./EventPluginUtils":89,"./ReactBrowserEventEmitter":96,"./ReactComponentEnvironment":99,"./ReactEmptyComponent":123,"./ReactHostComponent":128,"./ReactUpdates":148}],131:[function(require,module,exports){
+},{"./DOMProperty":79,"./EventPluginHub":84,"./EventPluginUtils":86,"./ReactBrowserEventEmitter":93,"./ReactComponentEnvironment":96,"./ReactEmptyComponent":120,"./ReactHostComponent":125,"./ReactUpdates":145}],128:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -30311,7 +28779,7 @@ var ReactInputSelection = {
 };
 
 module.exports = ReactInputSelection;
-},{"./ReactDOMSelection":114,"fbjs/lib/containsNode":46,"fbjs/lib/focusNode":51,"fbjs/lib/getActiveElement":52}],132:[function(require,module,exports){
+},{"./ReactDOMSelection":111,"fbjs/lib/containsNode":43,"fbjs/lib/focusNode":48,"fbjs/lib/getActiveElement":49}],129:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -30357,7 +28825,7 @@ var ReactInstanceMap = {
 };
 
 module.exports = ReactInstanceMap;
-},{}],133:[function(require,module,exports){
+},{}],130:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2016-present, Facebook, Inc.
@@ -30383,7 +28851,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = { debugTool: debugTool };
 }).call(this,require('_process'))
-},{"./ReactDebugTool":119,"_process":66}],134:[function(require,module,exports){
+},{"./ReactDebugTool":116,"_process":63}],131:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2016-present, Facebook, Inc.
@@ -30422,7 +28890,7 @@ var ReactInvalidSetStateWarningHook = {
 
 module.exports = ReactInvalidSetStateWarningHook;
 }).call(this,require('_process'))
-},{"_process":66,"fbjs/lib/warning":64}],135:[function(require,module,exports){
+},{"_process":63,"fbjs/lib/warning":61}],132:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -30472,7 +28940,7 @@ var ReactMarkupChecksum = {
 };
 
 module.exports = ReactMarkupChecksum;
-},{"./adler32":169}],136:[function(require,module,exports){
+},{"./adler32":166}],133:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -31012,7 +29480,7 @@ var ReactMount = {
 
 module.exports = ReactMount;
 }).call(this,require('_process'))
-},{"./DOMLazyTree":80,"./DOMProperty":82,"./ReactBrowserEventEmitter":96,"./ReactDOMComponentTree":104,"./ReactDOMContainerInfo":105,"./ReactDOMFeatureFlags":107,"./ReactFeatureFlags":127,"./ReactInstanceMap":132,"./ReactInstrumentation":133,"./ReactMarkupChecksum":135,"./ReactReconciler":143,"./ReactUpdateQueue":147,"./ReactUpdates":148,"./instantiateReactComponent":187,"./reactProdInvariant":191,"./setInnerHTML":193,"./shouldUpdateReactComponent":195,"_process":66,"fbjs/lib/emptyObject":50,"fbjs/lib/invariant":57,"fbjs/lib/warning":64,"react/lib/React":200,"react/lib/ReactCurrentOwner":204}],137:[function(require,module,exports){
+},{"./DOMLazyTree":77,"./DOMProperty":79,"./ReactBrowserEventEmitter":93,"./ReactDOMComponentTree":101,"./ReactDOMContainerInfo":102,"./ReactDOMFeatureFlags":104,"./ReactFeatureFlags":124,"./ReactInstanceMap":129,"./ReactInstrumentation":130,"./ReactMarkupChecksum":132,"./ReactReconciler":140,"./ReactUpdateQueue":144,"./ReactUpdates":145,"./instantiateReactComponent":184,"./reactProdInvariant":188,"./setInnerHTML":190,"./shouldUpdateReactComponent":192,"_process":63,"fbjs/lib/emptyObject":47,"fbjs/lib/invariant":54,"fbjs/lib/warning":61,"react/lib/React":197,"react/lib/ReactCurrentOwner":201}],134:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -31460,7 +29928,7 @@ var ReactMultiChild = {
 
 module.exports = ReactMultiChild;
 }).call(this,require('_process'))
-},{"./ReactChildReconciler":97,"./ReactComponentEnvironment":99,"./ReactInstanceMap":132,"./ReactInstrumentation":133,"./ReactReconciler":143,"./flattenChildren":175,"./reactProdInvariant":191,"_process":66,"fbjs/lib/emptyFunction":49,"fbjs/lib/invariant":57,"react/lib/ReactCurrentOwner":204}],138:[function(require,module,exports){
+},{"./ReactChildReconciler":94,"./ReactComponentEnvironment":96,"./ReactInstanceMap":129,"./ReactInstrumentation":130,"./ReactReconciler":140,"./flattenChildren":172,"./reactProdInvariant":188,"_process":63,"fbjs/lib/emptyFunction":46,"fbjs/lib/invariant":54,"react/lib/ReactCurrentOwner":201}],135:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -31502,7 +29970,7 @@ var ReactNodeTypes = {
 
 module.exports = ReactNodeTypes;
 }).call(this,require('_process'))
-},{"./reactProdInvariant":191,"_process":66,"fbjs/lib/invariant":57,"react/lib/React":200}],139:[function(require,module,exports){
+},{"./reactProdInvariant":188,"_process":63,"fbjs/lib/invariant":54,"react/lib/React":197}],136:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -31597,7 +30065,7 @@ var ReactOwner = {
 
 module.exports = ReactOwner;
 }).call(this,require('_process'))
-},{"./reactProdInvariant":191,"_process":66,"fbjs/lib/invariant":57}],140:[function(require,module,exports){
+},{"./reactProdInvariant":188,"_process":63,"fbjs/lib/invariant":54}],137:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -31624,7 +30092,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = ReactPropTypeLocationNames;
 }).call(this,require('_process'))
-},{"_process":66}],141:[function(require,module,exports){
+},{"_process":63}],138:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -31641,7 +30109,7 @@ module.exports = ReactPropTypeLocationNames;
 var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
 
 module.exports = ReactPropTypesSecret;
-},{}],142:[function(require,module,exports){
+},{}],139:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -31821,7 +30289,7 @@ PooledClass.addPoolingTo(ReactReconcileTransaction);
 
 module.exports = ReactReconcileTransaction;
 }).call(this,require('_process'))
-},{"./CallbackQueue":77,"./PooledClass":95,"./ReactBrowserEventEmitter":96,"./ReactInputSelection":131,"./ReactInstrumentation":133,"./ReactUpdateQueue":147,"./Transaction":166,"_process":66,"object-assign":65}],143:[function(require,module,exports){
+},{"./CallbackQueue":74,"./PooledClass":92,"./ReactBrowserEventEmitter":93,"./ReactInputSelection":128,"./ReactInstrumentation":130,"./ReactUpdateQueue":144,"./Transaction":163,"_process":63,"object-assign":62}],140:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -31989,7 +30457,7 @@ var ReactReconciler = {
 
 module.exports = ReactReconciler;
 }).call(this,require('_process'))
-},{"./ReactInstrumentation":133,"./ReactRef":144,"_process":66,"fbjs/lib/warning":64}],144:[function(require,module,exports){
+},{"./ReactInstrumentation":130,"./ReactRef":141,"_process":63,"fbjs/lib/warning":61}],141:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -32078,7 +30546,7 @@ ReactRef.detachRefs = function (instance, element) {
 };
 
 module.exports = ReactRef;
-},{"./ReactOwner":139}],145:[function(require,module,exports){
+},{"./ReactOwner":136}],142:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-present, Facebook, Inc.
@@ -32170,7 +30638,7 @@ PooledClass.addPoolingTo(ReactServerRenderingTransaction);
 
 module.exports = ReactServerRenderingTransaction;
 }).call(this,require('_process'))
-},{"./PooledClass":95,"./ReactInstrumentation":133,"./ReactServerUpdateQueue":146,"./Transaction":166,"_process":66,"object-assign":65}],146:[function(require,module,exports){
+},{"./PooledClass":92,"./ReactInstrumentation":130,"./ReactServerUpdateQueue":143,"./Transaction":163,"_process":63,"object-assign":62}],143:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2015-present, Facebook, Inc.
@@ -32311,7 +30779,7 @@ var ReactServerUpdateQueue = function () {
 
 module.exports = ReactServerUpdateQueue;
 }).call(this,require('_process'))
-},{"./ReactUpdateQueue":147,"_process":66,"fbjs/lib/warning":64}],147:[function(require,module,exports){
+},{"./ReactUpdateQueue":144,"_process":63,"fbjs/lib/warning":61}],144:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2015-present, Facebook, Inc.
@@ -32547,7 +31015,7 @@ var ReactUpdateQueue = {
 
 module.exports = ReactUpdateQueue;
 }).call(this,require('_process'))
-},{"./ReactInstanceMap":132,"./ReactInstrumentation":133,"./ReactUpdates":148,"./reactProdInvariant":191,"_process":66,"fbjs/lib/invariant":57,"fbjs/lib/warning":64,"react/lib/ReactCurrentOwner":204}],148:[function(require,module,exports){
+},{"./ReactInstanceMap":129,"./ReactInstrumentation":130,"./ReactUpdates":145,"./reactProdInvariant":188,"_process":63,"fbjs/lib/invariant":54,"fbjs/lib/warning":61,"react/lib/ReactCurrentOwner":201}],145:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -32800,7 +31268,7 @@ var ReactUpdates = {
 
 module.exports = ReactUpdates;
 }).call(this,require('_process'))
-},{"./CallbackQueue":77,"./PooledClass":95,"./ReactFeatureFlags":127,"./ReactReconciler":143,"./Transaction":166,"./reactProdInvariant":191,"_process":66,"fbjs/lib/invariant":57,"object-assign":65}],149:[function(require,module,exports){
+},{"./CallbackQueue":74,"./PooledClass":92,"./ReactFeatureFlags":124,"./ReactReconciler":140,"./Transaction":163,"./reactProdInvariant":188,"_process":63,"fbjs/lib/invariant":54,"object-assign":62}],146:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -32814,7 +31282,7 @@ module.exports = ReactUpdates;
 'use strict';
 
 module.exports = '15.6.1';
-},{}],150:[function(require,module,exports){
+},{}],147:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -33116,7 +31584,7 @@ Object.keys(ATTRS).forEach(function (key) {
 });
 
 module.exports = SVGDOMPropertyConfig;
-},{}],151:[function(require,module,exports){
+},{}],148:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -33304,7 +31772,7 @@ var SelectEventPlugin = {
 };
 
 module.exports = SelectEventPlugin;
-},{"./EventPropagators":90,"./ReactDOMComponentTree":104,"./ReactInputSelection":131,"./SyntheticEvent":157,"./isTextInputElement":189,"fbjs/lib/ExecutionEnvironment":43,"fbjs/lib/getActiveElement":52,"fbjs/lib/shallowEqual":63}],152:[function(require,module,exports){
+},{"./EventPropagators":87,"./ReactDOMComponentTree":101,"./ReactInputSelection":128,"./SyntheticEvent":154,"./isTextInputElement":186,"fbjs/lib/ExecutionEnvironment":40,"fbjs/lib/getActiveElement":49,"fbjs/lib/shallowEqual":60}],149:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -33532,7 +32000,7 @@ var SimpleEventPlugin = {
 
 module.exports = SimpleEventPlugin;
 }).call(this,require('_process'))
-},{"./EventPropagators":90,"./ReactDOMComponentTree":104,"./SyntheticAnimationEvent":153,"./SyntheticClipboardEvent":154,"./SyntheticDragEvent":156,"./SyntheticEvent":157,"./SyntheticFocusEvent":158,"./SyntheticKeyboardEvent":160,"./SyntheticMouseEvent":161,"./SyntheticTouchEvent":162,"./SyntheticTransitionEvent":163,"./SyntheticUIEvent":164,"./SyntheticWheelEvent":165,"./getEventCharCode":177,"./reactProdInvariant":191,"_process":66,"fbjs/lib/EventListener":42,"fbjs/lib/emptyFunction":49,"fbjs/lib/invariant":57}],153:[function(require,module,exports){
+},{"./EventPropagators":87,"./ReactDOMComponentTree":101,"./SyntheticAnimationEvent":150,"./SyntheticClipboardEvent":151,"./SyntheticDragEvent":153,"./SyntheticEvent":154,"./SyntheticFocusEvent":155,"./SyntheticKeyboardEvent":157,"./SyntheticMouseEvent":158,"./SyntheticTouchEvent":159,"./SyntheticTransitionEvent":160,"./SyntheticUIEvent":161,"./SyntheticWheelEvent":162,"./getEventCharCode":174,"./reactProdInvariant":188,"_process":63,"fbjs/lib/EventListener":39,"fbjs/lib/emptyFunction":46,"fbjs/lib/invariant":54}],150:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -33571,7 +32039,7 @@ function SyntheticAnimationEvent(dispatchConfig, dispatchMarker, nativeEvent, na
 SyntheticEvent.augmentClass(SyntheticAnimationEvent, AnimationEventInterface);
 
 module.exports = SyntheticAnimationEvent;
-},{"./SyntheticEvent":157}],154:[function(require,module,exports){
+},{"./SyntheticEvent":154}],151:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -33609,7 +32077,7 @@ function SyntheticClipboardEvent(dispatchConfig, dispatchMarker, nativeEvent, na
 SyntheticEvent.augmentClass(SyntheticClipboardEvent, ClipboardEventInterface);
 
 module.exports = SyntheticClipboardEvent;
-},{"./SyntheticEvent":157}],155:[function(require,module,exports){
+},{"./SyntheticEvent":154}],152:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -33645,7 +32113,7 @@ function SyntheticCompositionEvent(dispatchConfig, dispatchMarker, nativeEvent, 
 SyntheticEvent.augmentClass(SyntheticCompositionEvent, CompositionEventInterface);
 
 module.exports = SyntheticCompositionEvent;
-},{"./SyntheticEvent":157}],156:[function(require,module,exports){
+},{"./SyntheticEvent":154}],153:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -33681,7 +32149,7 @@ function SyntheticDragEvent(dispatchConfig, dispatchMarker, nativeEvent, nativeE
 SyntheticMouseEvent.augmentClass(SyntheticDragEvent, DragEventInterface);
 
 module.exports = SyntheticDragEvent;
-},{"./SyntheticMouseEvent":161}],157:[function(require,module,exports){
+},{"./SyntheticMouseEvent":158}],154:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -33949,7 +32417,7 @@ function getPooledWarningPropertyDefinition(propName, getVal) {
   }
 }
 }).call(this,require('_process'))
-},{"./PooledClass":95,"_process":66,"fbjs/lib/emptyFunction":49,"fbjs/lib/warning":64,"object-assign":65}],158:[function(require,module,exports){
+},{"./PooledClass":92,"_process":63,"fbjs/lib/emptyFunction":46,"fbjs/lib/warning":61,"object-assign":62}],155:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -33985,7 +32453,7 @@ function SyntheticFocusEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticUIEvent.augmentClass(SyntheticFocusEvent, FocusEventInterface);
 
 module.exports = SyntheticFocusEvent;
-},{"./SyntheticUIEvent":164}],159:[function(require,module,exports){
+},{"./SyntheticUIEvent":161}],156:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -34022,7 +32490,7 @@ function SyntheticInputEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticEvent.augmentClass(SyntheticInputEvent, InputEventInterface);
 
 module.exports = SyntheticInputEvent;
-},{"./SyntheticEvent":157}],160:[function(require,module,exports){
+},{"./SyntheticEvent":154}],157:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -34106,7 +32574,7 @@ function SyntheticKeyboardEvent(dispatchConfig, dispatchMarker, nativeEvent, nat
 SyntheticUIEvent.augmentClass(SyntheticKeyboardEvent, KeyboardEventInterface);
 
 module.exports = SyntheticKeyboardEvent;
-},{"./SyntheticUIEvent":164,"./getEventCharCode":177,"./getEventKey":178,"./getEventModifierState":179}],161:[function(require,module,exports){
+},{"./SyntheticUIEvent":161,"./getEventCharCode":174,"./getEventKey":175,"./getEventModifierState":176}],158:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -34178,7 +32646,7 @@ function SyntheticMouseEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticUIEvent.augmentClass(SyntheticMouseEvent, MouseEventInterface);
 
 module.exports = SyntheticMouseEvent;
-},{"./SyntheticUIEvent":164,"./ViewportMetrics":167,"./getEventModifierState":179}],162:[function(require,module,exports){
+},{"./SyntheticUIEvent":161,"./ViewportMetrics":164,"./getEventModifierState":176}],159:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -34223,7 +32691,7 @@ function SyntheticTouchEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticUIEvent.augmentClass(SyntheticTouchEvent, TouchEventInterface);
 
 module.exports = SyntheticTouchEvent;
-},{"./SyntheticUIEvent":164,"./getEventModifierState":179}],163:[function(require,module,exports){
+},{"./SyntheticUIEvent":161,"./getEventModifierState":176}],160:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -34262,7 +32730,7 @@ function SyntheticTransitionEvent(dispatchConfig, dispatchMarker, nativeEvent, n
 SyntheticEvent.augmentClass(SyntheticTransitionEvent, TransitionEventInterface);
 
 module.exports = SyntheticTransitionEvent;
-},{"./SyntheticEvent":157}],164:[function(require,module,exports){
+},{"./SyntheticEvent":154}],161:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -34321,7 +32789,7 @@ function SyntheticUIEvent(dispatchConfig, dispatchMarker, nativeEvent, nativeEve
 SyntheticEvent.augmentClass(SyntheticUIEvent, UIEventInterface);
 
 module.exports = SyntheticUIEvent;
-},{"./SyntheticEvent":157,"./getEventTarget":180}],165:[function(require,module,exports){
+},{"./SyntheticEvent":154,"./getEventTarget":177}],162:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -34372,7 +32840,7 @@ function SyntheticWheelEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticMouseEvent.augmentClass(SyntheticWheelEvent, WheelEventInterface);
 
 module.exports = SyntheticWheelEvent;
-},{"./SyntheticMouseEvent":161}],166:[function(require,module,exports){
+},{"./SyntheticMouseEvent":158}],163:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -34602,7 +33070,7 @@ var TransactionImpl = {
 
 module.exports = TransactionImpl;
 }).call(this,require('_process'))
-},{"./reactProdInvariant":191,"_process":66,"fbjs/lib/invariant":57}],167:[function(require,module,exports){
+},{"./reactProdInvariant":188,"_process":63,"fbjs/lib/invariant":54}],164:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -34627,7 +33095,7 @@ var ViewportMetrics = {
 };
 
 module.exports = ViewportMetrics;
-},{}],168:[function(require,module,exports){
+},{}],165:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-present, Facebook, Inc.
@@ -34687,7 +33155,7 @@ function accumulateInto(current, next) {
 
 module.exports = accumulateInto;
 }).call(this,require('_process'))
-},{"./reactProdInvariant":191,"_process":66,"fbjs/lib/invariant":57}],169:[function(require,module,exports){
+},{"./reactProdInvariant":188,"_process":63,"fbjs/lib/invariant":54}],166:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -34731,7 +33199,7 @@ function adler32(data) {
 }
 
 module.exports = adler32;
-},{}],170:[function(require,module,exports){
+},{}],167:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -34820,7 +33288,7 @@ function checkReactTypeSpec(typeSpecs, values, location, componentName, element,
 
 module.exports = checkReactTypeSpec;
 }).call(this,require('_process'))
-},{"./ReactPropTypeLocationNames":140,"./ReactPropTypesSecret":141,"./reactProdInvariant":191,"_process":66,"fbjs/lib/invariant":57,"fbjs/lib/warning":64,"react/lib/ReactComponentTreeHook":203}],171:[function(require,module,exports){
+},{"./ReactPropTypeLocationNames":137,"./ReactPropTypesSecret":138,"./reactProdInvariant":188,"_process":63,"fbjs/lib/invariant":54,"fbjs/lib/warning":61,"react/lib/ReactComponentTreeHook":200}],168:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -34852,7 +33320,7 @@ var createMicrosoftUnsafeLocalFunction = function (func) {
 };
 
 module.exports = createMicrosoftUnsafeLocalFunction;
-},{}],172:[function(require,module,exports){
+},{}],169:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -34933,7 +33401,7 @@ function dangerousStyleValue(name, value, component, isCustomProperty) {
 
 module.exports = dangerousStyleValue;
 }).call(this,require('_process'))
-},{"./CSSProperty":75,"_process":66,"fbjs/lib/warning":64}],173:[function(require,module,exports){
+},{"./CSSProperty":72,"_process":63,"fbjs/lib/warning":61}],170:[function(require,module,exports){
 /**
  * Copyright 2016-present, Facebook, Inc.
  * All rights reserved.
@@ -35055,7 +33523,7 @@ function escapeTextContentForBrowser(text) {
 }
 
 module.exports = escapeTextContentForBrowser;
-},{}],174:[function(require,module,exports){
+},{}],171:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -35117,7 +33585,7 @@ function findDOMNode(componentOrElement) {
 
 module.exports = findDOMNode;
 }).call(this,require('_process'))
-},{"./ReactDOMComponentTree":104,"./ReactInstanceMap":132,"./getHostComponentFromComposite":181,"./reactProdInvariant":191,"_process":66,"fbjs/lib/invariant":57,"fbjs/lib/warning":64,"react/lib/ReactCurrentOwner":204}],175:[function(require,module,exports){
+},{"./ReactDOMComponentTree":101,"./ReactInstanceMap":129,"./getHostComponentFromComposite":178,"./reactProdInvariant":188,"_process":63,"fbjs/lib/invariant":54,"fbjs/lib/warning":61,"react/lib/ReactCurrentOwner":201}],172:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -35195,7 +33663,7 @@ function flattenChildren(children, selfDebugID) {
 
 module.exports = flattenChildren;
 }).call(this,require('_process'))
-},{"./KeyEscapeUtils":93,"./traverseAllChildren":196,"_process":66,"fbjs/lib/warning":64,"react/lib/ReactComponentTreeHook":203}],176:[function(require,module,exports){
+},{"./KeyEscapeUtils":90,"./traverseAllChildren":193,"_process":63,"fbjs/lib/warning":61,"react/lib/ReactComponentTreeHook":200}],173:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -35226,7 +33694,7 @@ function forEachAccumulated(arr, cb, scope) {
 }
 
 module.exports = forEachAccumulated;
-},{}],177:[function(require,module,exports){
+},{}],174:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -35276,7 +33744,7 @@ function getEventCharCode(nativeEvent) {
 }
 
 module.exports = getEventCharCode;
-},{}],178:[function(require,module,exports){
+},{}],175:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -35388,7 +33856,7 @@ function getEventKey(nativeEvent) {
 }
 
 module.exports = getEventKey;
-},{"./getEventCharCode":177}],179:[function(require,module,exports){
+},{"./getEventCharCode":174}],176:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -35431,7 +33899,7 @@ function getEventModifierState(nativeEvent) {
 }
 
 module.exports = getEventModifierState;
-},{}],180:[function(require,module,exports){
+},{}],177:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -35466,7 +33934,7 @@ function getEventTarget(nativeEvent) {
 }
 
 module.exports = getEventTarget;
-},{}],181:[function(require,module,exports){
+},{}],178:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -35496,7 +33964,7 @@ function getHostComponentFromComposite(inst) {
 }
 
 module.exports = getHostComponentFromComposite;
-},{"./ReactNodeTypes":138}],182:[function(require,module,exports){
+},{"./ReactNodeTypes":135}],179:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -35537,7 +34005,7 @@ function getIteratorFn(maybeIterable) {
 }
 
 module.exports = getIteratorFn;
-},{}],183:[function(require,module,exports){
+},{}],180:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -35611,7 +34079,7 @@ function getNodeForCharacterOffset(root, offset) {
 }
 
 module.exports = getNodeForCharacterOffset;
-},{}],184:[function(require,module,exports){
+},{}],181:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -35644,7 +34112,7 @@ function getTextContentAccessor() {
 }
 
 module.exports = getTextContentAccessor;
-},{"fbjs/lib/ExecutionEnvironment":43}],185:[function(require,module,exports){
+},{"fbjs/lib/ExecutionEnvironment":40}],182:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -35745,7 +34213,7 @@ function getVendorPrefixedEventName(eventName) {
 }
 
 module.exports = getVendorPrefixedEventName;
-},{"fbjs/lib/ExecutionEnvironment":43}],186:[function(require,module,exports){
+},{"fbjs/lib/ExecutionEnvironment":40}],183:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -35868,7 +34336,7 @@ var inputValueTracking = {
 };
 
 module.exports = inputValueTracking;
-},{"./ReactDOMComponentTree":104}],187:[function(require,module,exports){
+},{"./ReactDOMComponentTree":101}],184:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -35999,7 +34467,7 @@ _assign(ReactCompositeComponentWrapper.prototype, ReactCompositeComponent, {
 
 module.exports = instantiateReactComponent;
 }).call(this,require('_process'))
-},{"./ReactCompositeComponent":100,"./ReactEmptyComponent":123,"./ReactHostComponent":128,"./reactProdInvariant":191,"_process":66,"fbjs/lib/invariant":57,"fbjs/lib/warning":64,"object-assign":65,"react/lib/getNextDebugID":218}],188:[function(require,module,exports){
+},{"./ReactCompositeComponent":97,"./ReactEmptyComponent":120,"./ReactHostComponent":125,"./reactProdInvariant":188,"_process":63,"fbjs/lib/invariant":54,"fbjs/lib/warning":61,"object-assign":62,"react/lib/getNextDebugID":215}],185:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -36059,7 +34527,7 @@ function isEventSupported(eventNameSuffix, capture) {
 }
 
 module.exports = isEventSupported;
-},{"fbjs/lib/ExecutionEnvironment":43}],189:[function(require,module,exports){
+},{"fbjs/lib/ExecutionEnvironment":40}],186:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -36110,7 +34578,7 @@ function isTextInputElement(elem) {
 }
 
 module.exports = isTextInputElement;
-},{}],190:[function(require,module,exports){
+},{}],187:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -36136,7 +34604,7 @@ function quoteAttributeValueForBrowser(value) {
 }
 
 module.exports = quoteAttributeValueForBrowser;
-},{"./escapeTextContentForBrowser":173}],191:[function(require,module,exports){
+},{"./escapeTextContentForBrowser":170}],188:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -36175,7 +34643,7 @@ function reactProdInvariant(code) {
 }
 
 module.exports = reactProdInvariant;
-},{}],192:[function(require,module,exports){
+},{}],189:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -36191,7 +34659,7 @@ module.exports = reactProdInvariant;
 var ReactMount = require('./ReactMount');
 
 module.exports = ReactMount.renderSubtreeIntoContainer;
-},{"./ReactMount":136}],193:[function(require,module,exports){
+},{"./ReactMount":133}],190:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -36289,7 +34757,7 @@ if (ExecutionEnvironment.canUseDOM) {
 }
 
 module.exports = setInnerHTML;
-},{"./DOMNamespaces":81,"./createMicrosoftUnsafeLocalFunction":171,"fbjs/lib/ExecutionEnvironment":43}],194:[function(require,module,exports){
+},{"./DOMNamespaces":78,"./createMicrosoftUnsafeLocalFunction":168,"fbjs/lib/ExecutionEnvironment":40}],191:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -36341,7 +34809,7 @@ if (ExecutionEnvironment.canUseDOM) {
 }
 
 module.exports = setTextContent;
-},{"./escapeTextContentForBrowser":173,"./setInnerHTML":193,"fbjs/lib/ExecutionEnvironment":43}],195:[function(require,module,exports){
+},{"./escapeTextContentForBrowser":170,"./setInnerHTML":190,"fbjs/lib/ExecutionEnvironment":40}],192:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -36383,7 +34851,7 @@ function shouldUpdateReactComponent(prevElement, nextElement) {
 }
 
 module.exports = shouldUpdateReactComponent;
-},{}],196:[function(require,module,exports){
+},{}],193:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -36561,7 +35029,7 @@ function traverseAllChildren(children, callback, traverseContext) {
 
 module.exports = traverseAllChildren;
 }).call(this,require('_process'))
-},{"./KeyEscapeUtils":93,"./ReactElementSymbol":122,"./getIteratorFn":182,"./reactProdInvariant":191,"_process":66,"fbjs/lib/invariant":57,"fbjs/lib/warning":64,"react/lib/ReactCurrentOwner":204}],197:[function(require,module,exports){
+},{"./KeyEscapeUtils":90,"./ReactElementSymbol":119,"./getIteratorFn":179,"./reactProdInvariant":188,"_process":63,"fbjs/lib/invariant":54,"fbjs/lib/warning":61,"react/lib/ReactCurrentOwner":201}],194:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2015-present, Facebook, Inc.
@@ -36934,11 +35402,11 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = validateDOMNesting;
 }).call(this,require('_process'))
-},{"_process":66,"fbjs/lib/emptyFunction":49,"fbjs/lib/warning":64,"object-assign":65}],198:[function(require,module,exports){
-arguments[4][93][0].apply(exports,arguments)
-},{"dup":93}],199:[function(require,module,exports){
-arguments[4][95][0].apply(exports,arguments)
-},{"./reactProdInvariant":221,"_process":66,"dup":95,"fbjs/lib/invariant":57}],200:[function(require,module,exports){
+},{"_process":63,"fbjs/lib/emptyFunction":46,"fbjs/lib/warning":61,"object-assign":62}],195:[function(require,module,exports){
+arguments[4][90][0].apply(exports,arguments)
+},{"dup":90}],196:[function(require,module,exports){
+arguments[4][92][0].apply(exports,arguments)
+},{"./reactProdInvariant":218,"_process":63,"dup":92,"fbjs/lib/invariant":54}],197:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -37072,7 +35540,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = React;
 }).call(this,require('_process'))
-},{"./ReactBaseClasses":201,"./ReactChildren":202,"./ReactDOMFactories":205,"./ReactElement":206,"./ReactElementValidator":208,"./ReactPropTypes":211,"./ReactVersion":213,"./canDefineProperty":214,"./createClass":216,"./lowPriorityWarning":219,"./onlyChild":220,"_process":66,"object-assign":65}],201:[function(require,module,exports){
+},{"./ReactBaseClasses":198,"./ReactChildren":199,"./ReactDOMFactories":202,"./ReactElement":203,"./ReactElementValidator":205,"./ReactPropTypes":208,"./ReactVersion":210,"./canDefineProperty":211,"./createClass":213,"./lowPriorityWarning":216,"./onlyChild":217,"_process":63,"object-assign":62}],198:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -37217,7 +35685,7 @@ module.exports = {
   PureComponent: ReactPureComponent
 };
 }).call(this,require('_process'))
-},{"./ReactNoopUpdateQueue":209,"./canDefineProperty":214,"./lowPriorityWarning":219,"./reactProdInvariant":221,"_process":66,"fbjs/lib/emptyObject":50,"fbjs/lib/invariant":57,"object-assign":65}],202:[function(require,module,exports){
+},{"./ReactNoopUpdateQueue":206,"./canDefineProperty":211,"./lowPriorityWarning":216,"./reactProdInvariant":218,"_process":63,"fbjs/lib/emptyObject":47,"fbjs/lib/invariant":54,"object-assign":62}],199:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -37408,7 +35876,7 @@ var ReactChildren = {
 };
 
 module.exports = ReactChildren;
-},{"./PooledClass":199,"./ReactElement":206,"./traverseAllChildren":222,"fbjs/lib/emptyFunction":49}],203:[function(require,module,exports){
+},{"./PooledClass":196,"./ReactElement":203,"./traverseAllChildren":219,"fbjs/lib/emptyFunction":46}],200:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2016-present, Facebook, Inc.
@@ -37789,7 +36257,7 @@ var ReactComponentTreeHook = {
 
 module.exports = ReactComponentTreeHook;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":204,"./reactProdInvariant":221,"_process":66,"fbjs/lib/invariant":57,"fbjs/lib/warning":64}],204:[function(require,module,exports){
+},{"./ReactCurrentOwner":201,"./reactProdInvariant":218,"_process":63,"fbjs/lib/invariant":54,"fbjs/lib/warning":61}],201:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -37818,7 +36286,7 @@ var ReactCurrentOwner = {
 };
 
 module.exports = ReactCurrentOwner;
-},{}],205:[function(require,module,exports){
+},{}],202:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -37989,7 +36457,7 @@ var ReactDOMFactories = {
 
 module.exports = ReactDOMFactories;
 }).call(this,require('_process'))
-},{"./ReactElement":206,"./ReactElementValidator":208,"_process":66}],206:[function(require,module,exports){
+},{"./ReactElement":203,"./ReactElementValidator":205,"_process":63}],203:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-present, Facebook, Inc.
@@ -38332,9 +36800,9 @@ ReactElement.isValidElement = function (object) {
 
 module.exports = ReactElement;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":204,"./ReactElementSymbol":207,"./canDefineProperty":214,"_process":66,"fbjs/lib/warning":64,"object-assign":65}],207:[function(require,module,exports){
-arguments[4][122][0].apply(exports,arguments)
-},{"dup":122}],208:[function(require,module,exports){
+},{"./ReactCurrentOwner":201,"./ReactElementSymbol":204,"./canDefineProperty":211,"_process":63,"fbjs/lib/warning":61,"object-assign":62}],204:[function(require,module,exports){
+arguments[4][119][0].apply(exports,arguments)
+},{"dup":119}],205:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-present, Facebook, Inc.
@@ -38591,7 +37059,7 @@ var ReactElementValidator = {
 
 module.exports = ReactElementValidator;
 }).call(this,require('_process'))
-},{"./ReactComponentTreeHook":203,"./ReactCurrentOwner":204,"./ReactElement":206,"./canDefineProperty":214,"./checkReactTypeSpec":215,"./getIteratorFn":217,"./lowPriorityWarning":219,"_process":66,"fbjs/lib/warning":64}],209:[function(require,module,exports){
+},{"./ReactComponentTreeHook":200,"./ReactCurrentOwner":201,"./ReactElement":203,"./canDefineProperty":211,"./checkReactTypeSpec":212,"./getIteratorFn":214,"./lowPriorityWarning":216,"_process":63,"fbjs/lib/warning":61}],206:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2015-present, Facebook, Inc.
@@ -38688,9 +37156,9 @@ var ReactNoopUpdateQueue = {
 
 module.exports = ReactNoopUpdateQueue;
 }).call(this,require('_process'))
-},{"_process":66,"fbjs/lib/warning":64}],210:[function(require,module,exports){
-arguments[4][140][0].apply(exports,arguments)
-},{"_process":66,"dup":140}],211:[function(require,module,exports){
+},{"_process":63,"fbjs/lib/warning":61}],207:[function(require,module,exports){
+arguments[4][137][0].apply(exports,arguments)
+},{"_process":63,"dup":137}],208:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -38709,11 +37177,11 @@ var _require = require('./ReactElement'),
 var factory = require('prop-types/factory');
 
 module.exports = factory(isValidElement);
-},{"./ReactElement":206,"prop-types/factory":68}],212:[function(require,module,exports){
-arguments[4][141][0].apply(exports,arguments)
-},{"dup":141}],213:[function(require,module,exports){
-arguments[4][149][0].apply(exports,arguments)
-},{"dup":149}],214:[function(require,module,exports){
+},{"./ReactElement":203,"prop-types/factory":65}],209:[function(require,module,exports){
+arguments[4][138][0].apply(exports,arguments)
+},{"dup":138}],210:[function(require,module,exports){
+arguments[4][146][0].apply(exports,arguments)
+},{"dup":146}],211:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -38741,7 +37209,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = canDefineProperty;
 }).call(this,require('_process'))
-},{"_process":66}],215:[function(require,module,exports){
+},{"_process":63}],212:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -38830,7 +37298,7 @@ function checkReactTypeSpec(typeSpecs, values, location, componentName, element,
 
 module.exports = checkReactTypeSpec;
 }).call(this,require('_process'))
-},{"./ReactComponentTreeHook":203,"./ReactPropTypeLocationNames":210,"./ReactPropTypesSecret":212,"./reactProdInvariant":221,"_process":66,"fbjs/lib/invariant":57,"fbjs/lib/warning":64}],216:[function(require,module,exports){
+},{"./ReactComponentTreeHook":200,"./ReactPropTypeLocationNames":207,"./ReactPropTypesSecret":209,"./reactProdInvariant":218,"_process":63,"fbjs/lib/invariant":54,"fbjs/lib/warning":61}],213:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -38853,9 +37321,9 @@ var ReactNoopUpdateQueue = require('./ReactNoopUpdateQueue');
 var factory = require('create-react-class/factory');
 
 module.exports = factory(Component, isValidElement, ReactNoopUpdateQueue);
-},{"./ReactBaseClasses":201,"./ReactElement":206,"./ReactNoopUpdateQueue":209,"create-react-class/factory":40}],217:[function(require,module,exports){
-arguments[4][182][0].apply(exports,arguments)
-},{"dup":182}],218:[function(require,module,exports){
+},{"./ReactBaseClasses":198,"./ReactElement":203,"./ReactNoopUpdateQueue":206,"create-react-class/factory":37}],214:[function(require,module,exports){
+arguments[4][179][0].apply(exports,arguments)
+},{"dup":179}],215:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -38876,7 +37344,7 @@ function getNextDebugID() {
 }
 
 module.exports = getNextDebugID;
-},{}],219:[function(require,module,exports){
+},{}],216:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -38943,7 +37411,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = lowPriorityWarning;
 }).call(this,require('_process'))
-},{"_process":66}],220:[function(require,module,exports){
+},{"_process":63}],217:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -38983,9 +37451,9 @@ function onlyChild(children) {
 
 module.exports = onlyChild;
 }).call(this,require('_process'))
-},{"./ReactElement":206,"./reactProdInvariant":221,"_process":66,"fbjs/lib/invariant":57}],221:[function(require,module,exports){
-arguments[4][191][0].apply(exports,arguments)
-},{"dup":191}],222:[function(require,module,exports){
+},{"./ReactElement":203,"./reactProdInvariant":218,"_process":63,"fbjs/lib/invariant":54}],218:[function(require,module,exports){
+arguments[4][188][0].apply(exports,arguments)
+},{"dup":188}],219:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -39163,12 +37631,12 @@ function traverseAllChildren(children, callback, traverseContext) {
 
 module.exports = traverseAllChildren;
 }).call(this,require('_process'))
-},{"./KeyEscapeUtils":198,"./ReactCurrentOwner":204,"./ReactElementSymbol":207,"./getIteratorFn":217,"./reactProdInvariant":221,"_process":66,"fbjs/lib/invariant":57,"fbjs/lib/warning":64}],223:[function(require,module,exports){
+},{"./KeyEscapeUtils":195,"./ReactCurrentOwner":201,"./ReactElementSymbol":204,"./getIteratorFn":214,"./reactProdInvariant":218,"_process":63,"fbjs/lib/invariant":54,"fbjs/lib/warning":61}],220:[function(require,module,exports){
 'use strict';
 
 module.exports = require('./lib/React');
 
-},{"./lib/React":200}],224:[function(require,module,exports){
+},{"./lib/React":197}],221:[function(require,module,exports){
 // Generated by BUCKLESCRIPT VERSION 1.8.3, PLEASE EDIT WITH CARE
 'use strict';
 
@@ -39222,7 +37690,7 @@ exports.renderToElementWithId        = renderToElementWithId;
 exports.Style                        = Style;
 /* react-dom Not a pure module */
 
-},{"bs-platform/lib/js/caml_array.js":11,"bs-platform/lib/js/caml_builtin_exceptions.js":12,"react-dom":71}],225:[function(require,module,exports){
+},{"bs-platform/lib/js/caml_array.js":12,"bs-platform/lib/js/caml_builtin_exceptions.js":13,"react-dom":68}],222:[function(require,module,exports){
 // Generated by BUCKLESCRIPT VERSION 1.8.3, PLEASE EDIT WITH CARE
 'use strict';
 
@@ -39648,4 +38116,4 @@ exports.createDomElement                    = createDomElement;
 exports.wrapJsForReason                     = wrapJsForReason;
 /* magicNull Not a pure module */
 
-},{"bs-platform/lib/js/caml_builtin_exceptions.js":12,"bs-platform/lib/js/curry.js":29,"create-react-class":41,"react":223}]},{},[2]);
+},{"bs-platform/lib/js/caml_builtin_exceptions.js":13,"bs-platform/lib/js/curry.js":29,"create-react-class":38,"react":220}]},{},[2]);
