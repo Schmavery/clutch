@@ -1,6 +1,6 @@
 type pageStateT = {
   iState: Common.stateT,
-  errors: array string
+  errors: list Common.errT
 };
 
 let default_program = "add 1 2 c\nprint c";
@@ -11,10 +11,10 @@ external getField : charsT => string => string = "" [@@bs.get_index];
 
 external chars : charsT = "window.chars" [@@bs.val];
 
+let getUnicode name => getField chars name;
+
 external array_filteri : array 'a => ('a => int => bool) => array 'a =
   "filter" [@@bs.send];
-
-let getUnicode name => getField chars name;
 
 let stdout_text = ref "";
 
@@ -26,7 +26,6 @@ module EditorButton = {
       <button
         style=(
           ReactDOMRe.Style.make
-            /* backgroundColor::"#21e024" */
             backgroundColor::color
             fontSize::"13px"
             fontWeight::"bold"
@@ -59,17 +58,18 @@ module Editor = {
     ...component,
     initialState: fun () => default_program,
     render: fun self => {
-      let lineColor =
-        switch errors {
-        | [||] => "#dee1e8"
-        | _ => "#ff9393"
+      let (lineColor, linePos) =
+        switch (errors, line) {
+        | ([], line) => ("#dee1e8", line)
+        | ([{Common.line: line, err: _}, ..._], _) => ("#ff9393", line)
         };
       let (bgColor, resetColor) =
         switch line {
         | 0 => ("#fff", "#dee1e8")
         | _ => ("#f4f4f4", "#21e024")
         };
-      let backgroundPosition = "0px " ^ string_of_int (20 * line + 5) ^ "px";
+      let backgroundPosition =
+        "0px " ^ string_of_int (20 * linePos + 5) ^ "px";
       let lineGradient =
         "linear-gradient(to bottom, " ^
         bgColor ^
@@ -197,11 +197,11 @@ module Variables = {
 };
 
 module ErrorList = {
-  let removeError errid _ self => {
-    let errors =
-      array_filteri self.ReasonReact.state.errors (fun _ i => i != errid);
-    ReasonReact.Update {...self.ReasonReact.state, errors}
-  };
+  /* let removeError errid _ self => { */
+  /*   let errors = */
+  /*     array_filteri self.ReasonReact.state.errors (fun _ i => i != errid); */
+  /*   ReasonReact.Update {...self.ReasonReact.state, errors} */
+  /* }; */
   let component = ReasonReact.statelessComponent "ErrorList";
   let make ::errors _children => {
     ...component,
@@ -223,7 +223,7 @@ module ErrorList = {
             ReasonReact.arrayToElement (
               Array.mapi
                 (
-                  fun errid s =>
+                  fun errid {Common.err: err} =>
                     <div
                       key=(string_of_int errid)
                       style=(
@@ -236,10 +236,10 @@ module ErrorList = {
                           /* justifyContent::"space-between" */
                           ()
                       )>
-                      (ReasonReact.stringToElement s)
+                      (ReasonReact.stringToElement err)
                     </div>
                 )
-                errors
+                (Array.of_list errors)
             )
           )
         </div>
@@ -271,10 +271,10 @@ let parse_helper state content => {
   let res = Interpret.parse_program s funcs [];
   switch res {
   | Ok cmds => {
-      errors: [||],
+      errors: [],
       iState: {variables: Common.StringMap.empty, content: cmds, currLine: 0}
     }
-  | Error e => {...state, errors: [|e|]}
+  | Error e => {...state, errors: [e]}
   }
 };
 
@@ -294,10 +294,7 @@ let runCompleteProgram self () =>
               ReasonReact.Update (
                 switch err {
                 | None => {...self.state, iState: state}
-                | Some e => {
-                    iState: state,
-                    errors: Array.append [|e|] self.state.errors
-                  }
+                | Some e => {iState: state, errors: [e]}
                 }
               )
           )
@@ -315,11 +312,8 @@ let stepProgram self () =>
             fun () self =>
               ReasonReact.Update (
                 switch err {
-                | None => {iState, errors: [||]}
-                | Some e => {
-                    ...self.state,
-                    errors: Array.append [|e|] self.state.errors
-                  }
+                | None => {iState, errors: []}
+                | Some e => {...self.state, errors: [e]}
                 }
               )
           )
@@ -337,7 +331,7 @@ let resetProgram self () => {
             currLine: 0,
             variables: Common.StringMap.empty
           },
-          errors: [||]
+          errors: []
         }
     )
     ()
@@ -348,7 +342,7 @@ module Page = {
   let make _children => {
     ...component,
     initialState: fun () =>
-      parse_helper {iState: Interpret.empty, errors: [||]} default_program,
+      parse_helper {iState: Interpret.empty, errors: []} default_program,
     render: fun ({state: {iState, errors}} as self) =>
       <div
         style=(

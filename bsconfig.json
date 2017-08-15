@@ -5,7 +5,7 @@
     "sources": [
       { "dir": "src" },
       { "dir": "frontends/web", "type": "dev"},
-      { "dir": "frontends/cli", "type": "dev"}
+//      { "dir": "frontends/cli", "type": "dev"}
     ],
     "bs-dependencies": ["reason-react"]
 }

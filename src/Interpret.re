@@ -1,5 +1,7 @@
 open Common;
 
+let error program err => Error {err, line: CharStream.line program};
+
 let empty = {variables: StringMap.empty, currLine: 0, content: [||]};
 
 let parse_arg stream =>
@@ -46,7 +48,7 @@ let rec parse_program
         (program: CharStream.t)
         funcs
         (acc: list cmdT)
-        :result (array cmdT) string =>
+        :result (array cmdT) errT =>
   switch (CharStream.peek program) {
   | Some 'a'..'z'
   | Some 'A'..'Z' =>
@@ -58,11 +60,11 @@ let rec parse_program
         | Ok args =>
           let cmd = {func, args, line: CharStream.line program};
           parse_program program funcs [cmd, ...acc]
-        | Error e => Error e
+        | Error e => error program e
         }
-      | None => Error ("Couldn't find command named " ^ fname)
+      | None => error program ("Couldn't find command named " ^ fname)
       }
-    | Error e => Error e
+    | Error e => error program e
     }
   | Some '\n' =>
     CharStream.junk program;
@@ -70,27 +72,31 @@ let rec parse_program
   | Some '#' =>
     Parse.pop_until_newline program;
     parse_program program funcs acc
-  | Some c => Error (Parse.append_char "Unexpected character " c)
+  | Some c =>
+    Error {
+      err: Parse.append_char "Unexpected character " c,
+      line: CharStream.line program
+    }
   | None => Ok (Array.of_list (List.rev acc))
   };
 
 let cmd
     (state: stateT)
     (cmd: cmdT)
-    cb::(cb: stateT => err::option string => unit) =>
+    cb::(cb: stateT => err::option errT => unit) =>
   cmd.func
     cmd.args
     state
     cb::(
       fun
       | Ok state => cb (inc_line state) err::None
-      | Error e => cb state err::(Some e)
+      | Error e => cb state err::(Some {err: e, line: cmd.line})
     );
 
 let rec run_until_error
         (state: stateT)
         ::step=false
-        cb::(cb: stateT => err::option string => unit) =>
+        cb::(cb: stateT => err::option errT => unit) =>
   switch state.content.(state.currLine) {
   | input =>
     cmd

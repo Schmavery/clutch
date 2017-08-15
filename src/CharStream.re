@@ -23,15 +23,15 @@ let junk (stream: t) :unit =>
   | {chars: []} => raise (Failure "Empty CharStream")
   | {chars: ['\n', ...lst], lineNum} =>
     stream := {chars: lst, lineNum: lineNum + 1}
-  | {chars: [_, ...lst], lineNum} => stream := {chars: lst, lineNum}
+  | {chars: [_, ...lst]} => stream := {...!stream, chars: lst}
   };
 
 let line (stream: t) :int => (!stream).lineNum;
 
 let rec eat_spaces (stream: t) :unit =>
   switch !stream {
-  | {chars: [' ', ...lst], lineNum} =>
-    stream := {chars: lst, lineNum: lineNum + 1};
+  | {chars: [' ', ...lst]} =>
+    stream := {...!stream, chars: lst};
     eat_spaces stream
   | _ => ()
   };

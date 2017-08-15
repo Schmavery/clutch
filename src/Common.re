@@ -58,6 +58,11 @@ type valueT =
   | Num float
   | Str string;
 
+type errT = {
+  err: string,
+  line: int
+};
+
 type argT =
   | Var string
   | Val valueT;

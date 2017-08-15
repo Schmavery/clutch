@@ -38,20 +38,28 @@ let rec prompt state =>
     rl
     "> "
     (
-      fun s =>
-        Interpret.cmd
-          state
-          funcs
-          s
-          cb::(
-            fun state ::err =>
-              switch err {
-              | None => prompt state
-              | Some e =>
-                print_endline ("Error: " ^ e);
-                prompt state
-              }
-          )
+      fun s => {
+        let s = CharStream.create s;
+        let parsed = Interpret.parse_program s funcs [];
+        switch parsed {
+        | Ok cmds =>
+          Interpret.run_until_error
+            {state}
+            step::false
+            cb::(
+              fun state ::err =>
+                switch err {
+                | None => prompt state
+                | Some e =>
+                  print_endline ("Error: " ^ e);
+                  prompt state
+                }
+            )
+        | Error e =>
+          print_endline ("Error: " ^ e);
+          prompt state
+        }
+      }
     );
 
 prompt Interpret.empty;
