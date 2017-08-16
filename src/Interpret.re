@@ -96,6 +96,7 @@ let cmd
 let rec run_until_error
         (state: stateT)
         ::step=false
+        ::stop=?
         cb::(cb: stateT => err::option errT => unit) =>
   switch state.content.(state.currLine) {
   | input =>
@@ -106,10 +107,14 @@ let rec run_until_error
         fun state ::err =>
           switch err {
           | None =>
-            if step {
-              cb state err::None
-            } else {
-              run_until_error state step::false ::cb
+            switch (step, stop) {
+            | (true, _) => cb state err::None
+            | (false, Some {contents: true})
+            | (false, None)
+            | (false, Some {contents: false}) =>
+              ignore @@
+              Js.Global.setTimeout
+                (fun () => run_until_error state ::step ::?stop ::cb) 0
             }
           | Some e => cb state err::(Some e)
           }

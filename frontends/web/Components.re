@@ -297,10 +297,12 @@ let parseProgram self (content: string) =>
   self.ReasonReact.update
     (fun () self => ReasonReact.Update (parse_helper self.state content)) ();
 
-let runCompleteProgram self () =>
+let runCompleteProgram self () => {
+  let _stopProgram = ref false;
   Interpret.run_until_error
     self.ReasonReact.state.iState
     step::false
+    stop::_stopProgram
     cb::(
       fun state ::err =>
         self.update
@@ -314,12 +316,14 @@ let runCompleteProgram self () =>
               )
           )
           ()
-    );
+    )
+};
 
 let stepProgram self () =>
   Interpret.run_until_error
     self.ReasonReact.state.iState
     step::true
+    stop::(ref false)
     cb::(
       fun iState ::err =>
         self.update
