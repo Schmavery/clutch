@@ -54,19 +54,34 @@ module Editor = {
     | _ => ReasonReact.NoUpdate
     };
   let component = ReasonReact.statefulComponent "Editor";
-  let make ::errors ::line ::parse ::step ::run ::reset _children => {
+  let make
+      ::errors
+      ::line
+      ::parse
+      ::step
+      ::run
+      ::reset
+      ::programLength
+      _children => {
     ...component,
     initialState: fun () => default_program,
     render: fun self => {
       let (lineColor, linePos) =
         switch (errors, line) {
-        | ([], line) => ("#dee1e8", line)
+        | ([], 0) => ("#fff", line - 1)
+        | ([], line) => ("#dee1e8", line - 1)
         | ([{Common.line: line, err: _}, ..._], _) => ("#ff9393", line)
         };
       let (bgColor, resetColor) =
         switch line {
         | 0 => ("#fff", "#dee1e8")
         | _ => ("#f4f4f4", "#21e024")
+        };
+      let stepColor =
+        if (programLength == line) {
+          "#dee1e8"
+        } else {
+          "#21e024"
         };
       let backgroundPosition =
         "0px " ^ string_of_int (20 * linePos + 5) ^ "px";
@@ -96,9 +111,9 @@ module Editor = {
             <EditorButton
               func=run
               name=("Run " ^ getUnicode "play")
-              color="#21e024"
+              color=stepColor
             />
-            <EditorButton func=step name="Step" color="#21e024" />
+            <EditorButton func=step name="Step" color=stepColor />
           </div>
           <textarea
             spellCheck=Js.false_
@@ -371,6 +386,7 @@ module Page = {
           <Variables variables=iState.Common.variables />
           <Editor
             errors
+            programLength=(Array.length self.state.iState.content)
             line=self.state.iState.currLine
             parse=(parseProgram self)
             step=(stepProgram self)

@@ -7,10 +7,7 @@ let pop_stream s => {
   s
 };
 
-let rec parse_string
-        (stream: CharStream.t)
-        (acc: string)
-        :result string string =>
+let rec parse_string (stream: CharStream.t) (acc: string) :result string string =>
   switch (CharStream.peek stream) {
   | Some '\\' =>
     CharStream.junk stream;
@@ -26,6 +23,8 @@ let rec parse_string
   | Some '"' =>
     CharStream.junk stream;
     Ok acc
+  | Some '\n' =>
+    Error "A string needs to be all on one line. Did you forget a quote at the end?"
   | Some c => parse_string (pop_stream stream) (append_char acc c)
   | None => Error "Unterminated string."
   };
