@@ -2,6 +2,12 @@ open Common;
 
 let error program err => Error {err, line: CharStream.line program};
 
+let parseError prevCh (program: CharStream.t) (cursor: option int) err =>
+  switch cursor {
+  | Some ch when CharStream.ch program + 1 > ch && prevCh < ch => Typing
+  | _ => ParseError {err, line: CharStream.line program}
+  };
+
 let empty = {variables: StringMap.empty, currLine: 0, content: [||]};
 
 let parse_arg stream =>
@@ -28,27 +34,31 @@ let parse_arg stream =>
   | None => Error "No arg"
   };
 
-let rec parse_args stream acc =>
+let rec parse_args stream acc cursor :parseResult (list argT) errT => {
+  let currCh = CharStream.ch stream;
   switch (CharStream.peek stream) {
   | Some ' ' =>
     CharStream.eat_spaces stream;
-    parse_args stream acc
+    parse_args stream acc cursor
   | None
-  | Some '\n' => Ok (List.rev acc)
+  | Some '\n' => ParseOk (List.rev acc)
   | Some _ =>
     switch (parse_arg stream) {
-    | Ok a => parse_args stream [a, ...acc]
-    | Error e => Error e
+    | Ok a => parse_args stream [a, ...acc] cursor
+    | Error e => parseError currCh stream cursor e
     }
-  };
+  }
+};
 
 let inc_line state => {...state, currLine: state.currLine + 1};
 
 let rec parse_program
         (program: CharStream.t)
         (funcs: StringMap.t functionT)
+        ::cursor=?
         (acc: list cmdT)
-        :result (array cmdT) errT =>
+        :parseResult (array cmdT) errT => {
+  let prevCh = CharStream.ch program;
   switch (CharStream.peek program) {
   | Some 'a'..'z'
   | Some 'A'..'Z' =>
@@ -56,33 +66,35 @@ let rec parse_program
     | Ok fname =>
       switch (StringMap.get fname funcs) {
       | Some func =>
-        switch (parse_args program []) {
-        | Ok args =>
+        switch (parse_args program [] cursor) {
+        | ParseOk args =>
           switch (func args) {
           | Ok innerFunc =>
             let cmd = {func: innerFunc, line: CharStream.line program};
-            parse_program program funcs [cmd, ...acc]
-          | Error e => error program e
+            parse_program program funcs ::?cursor [cmd, ...acc]
+          | Error err => parseError prevCh program cursor err
           }
-        | Error e => error program e
+        | ParseError e => ParseError e
+        | Typing => Typing
         }
-      | None => error program ("Couldn't find command named " ^ fname)
+      | None =>
+        parseError
+          prevCh program cursor ("Couldn't find command named " ^ fname)
       }
-    | Error e => error program e
+    | Error e => parseError prevCh program cursor e
     }
   | Some '\n' =>
     CharStream.junk program;
-    parse_program program funcs acc
+    parse_program program funcs ::?cursor acc
   | Some '#' =>
     Parse.pop_until_newline program;
-    parse_program program funcs acc
+    parse_program program funcs ::?cursor acc
   | Some c =>
-    Error {
-      err: Parse.append_char "Unexpected character " c,
-      line: CharStream.line program
-    }
-  | None => Ok (Array.of_list (List.rev acc))
-  };
+    parseError
+      prevCh program cursor (Parse.append_char "Unexpected character " c)
+  | None => ParseOk (Array.of_list (List.rev acc))
+  }
+};
 
 let cmd
     (state: stateT)

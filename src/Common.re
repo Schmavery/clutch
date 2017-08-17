@@ -54,6 +54,11 @@ type result 'a 'b =
   | Ok 'a
   | Error 'b;
 
+type parseResult 'a 'b =
+  | ParseOk 'a
+  | ParseError 'b
+  | Typing;
+
 type valueT =
   | Num float
   | Str string;

@@ -8,6 +8,8 @@ let junk: t => unit;
 
 let line: t => int;
 
+let ch: t => int;
+
 let eat_spaces: t => unit;
 
 let clone: t => t;

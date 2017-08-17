@@ -44,15 +44,40 @@ module Editor = {
   let textChange parse line event _self =>
     switch line {
     | 0 =>
-      let content: string = (
-                              ReactDOMRe.domElementToObj (
-                                ReactEventRe.Form.target event
-                              )
-                            )##value;
-      parse content;
+      let target = ReactDOMRe.domElementToObj (ReactEventRe.Form.target event);
+      let content: string = target##value;
+      let cursor: int = target##selectionStart;
+      parse (Some cursor) content;
       ReasonReact.Update content
     | _ => ReasonReact.NoUpdate
     };
+  let mouseUp parse line event _self =>
+    switch line {
+    | 0 =>
+      let target =
+        ReactDOMRe.domElementToObj (ReactEventRe.Mouse.target event);
+      let content: string = target##value;
+      let cursor: int = target##selectionStart;
+      parse (Some cursor) content;
+      ()
+    | _ => ()
+    };
+  let keyUp parse line event _self => {
+    let target =
+      ReactDOMRe.domElementToObj (ReactEventRe.Keyboard.target event);
+    let keyCode: int = ReactEventRe.Keyboard.keyCode event;
+    switch (line, keyCode) {
+    | (0, 37)
+    | (0, 38)
+    | (0, 39)
+    | (0, 40) =>
+      let content: string = target##value;
+      let cursor: int = target##selectionStart;
+      parse (Some cursor) content;
+      ()
+    | _ => ()
+    }
+  };
   let component = ReasonReact.statefulComponent "Editor";
   let make
       ::errors
@@ -133,6 +158,8 @@ module Editor = {
                 ()
             )
             onChange=(self.update (textChange parse line))
+            onMouseUp=(self.handle (mouseUp parse line))
+            onKeyUp=(self.handle (keyUp parse line))
             value=self.state
           />
         </div>
@@ -212,11 +239,6 @@ module Variables = {
 };
 
 module ErrorList = {
-  /* let removeError errid _ self => { */
-  /*   let errors = */
-  /*     array_filteri self.ReasonReact.state.errors (fun _ i => i != errid); */
-  /*   ReasonReact.Update {...self.ReasonReact.state, errors} */
-  /* }; */
   let component = ReasonReact.statelessComponent "ErrorList";
   let make ::errors _children => {
     ...component,
@@ -281,21 +303,26 @@ let rec drop_some l n =>
   | ([], _) => []
   };
 
-let parse_helper state content => {
+let parse_helper _state ::cursor=? content => {
   let s = CharStream.create content;
-  let res = Interpret.parse_program s funcs [];
+  let res = Interpret.parse_program s funcs ::?cursor [];
   switch res {
-  | Ok cmds => {
+  | ParseOk cmds => {
       errors: [],
       iState: {variables: Common.StringMap.empty, content: cmds, currLine: 0}
     }
-  | Error e => {...state, errors: [e]}
+  | ParseError e => {iState: Interpret.empty, errors: [e]}
+  | Typing => {iState: Interpret.empty, errors: []}
   }
 };
 
-let parseProgram self (content: string) =>
+let parseProgram self cursor (content: string) =>
   self.ReasonReact.update
-    (fun () self => ReasonReact.Update (parse_helper self.state content)) ();
+    (
+      fun () self =>
+        ReasonReact.Update (parse_helper self.state ::?cursor content)
+    )
+    ();
 
 let runCompleteProgram self () => {
   let _stopProgram = ref false;

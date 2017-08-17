@@ -1,6 +1,7 @@
 type trec = {
   chars: list char,
-  lineNum: int
+  lineNum: int,
+  chNum: int
 };
 
 type t = ref trec;
@@ -21,17 +22,20 @@ let second (stream: t) :option char =>
 let junk (stream: t) :unit =>
   switch !stream {
   | {chars: []} => raise (Failure "Empty CharStream")
-  | {chars: ['\n', ...lst], lineNum} =>
-    stream := {chars: lst, lineNum: lineNum + 1}
-  | {chars: [_, ...lst]} => stream := {...!stream, chars: lst}
+  | {chars: ['\n', ...lst], lineNum, chNum} =>
+    stream := {chars: lst, lineNum: lineNum + 1, chNum: chNum + 1}
+  | {chars: [_, ...lst], chNum} =>
+    stream := {...!stream, chars: lst, chNum: chNum + 1}
   };
 
 let line (stream: t) :int => (!stream).lineNum;
 
+let ch (stream: t) :int => (!stream).chNum;
+
 let rec eat_spaces (stream: t) :unit =>
   switch !stream {
-  | {chars: [' ', ...lst]} =>
-    stream := {...!stream, chars: lst};
+  | {chars: [' ', ...lst], chNum} =>
+    stream := {...!stream, chars: lst, chNum: chNum + 1};
     eat_spaces stream
   | _ => ()
   };
@@ -45,5 +49,5 @@ let create (s: string) :t => {
     } else {
       explode (i - 1) [s.[i], ...acc]
     };
-  ref {chars: explode (String.length s - 1) [], lineNum: 0}
+  ref {chars: explode (String.length s - 1) [], lineNum: 0, chNum: 0}
 };
