@@ -53,24 +53,58 @@ function textChange(parse, line, $$event, _) {
   if (line !== 0) {
     return /* NoUpdate */0;
   } else {
-    var content = $$event.target.value;
-    Curry._1(parse, content);
+    var target = $$event.target;
+    var content = target.value;
+    var cursor = target.selectionStart;
+    Curry._2(parse, /* Some */[cursor], content);
     return /* Update */Block.__(0, [content]);
+  }
+}
+
+function mouseUp(parse, line, $$event, _) {
+  if (line !== 0) {
+    return /* () */0;
+  } else {
+    var target = $$event.target;
+    var content = target.value;
+    var cursor = target.selectionStart;
+    Curry._2(parse, /* Some */[cursor], content);
+    return /* () */0;
+  }
+}
+
+function keyUp(parse, line, $$event, _) {
+  var target = $$event.target;
+  var keyCode = $$event.keyCode;
+  if (line !== 0) {
+    return /* () */0;
+  } else if (keyCode > 40 || keyCode < 37) {
+    return /* () */0;
+  } else {
+    var content = target.value;
+    var cursor = target.selectionStart;
+    Curry._2(parse, /* Some */[cursor], content);
+    return /* () */0;
   }
 }
 
 var component$1 = ReasonReact.statefulComponent("Editor");
 
-function make$1(errors, line, parse, step, run, reset, _) {
+function make$1(errors, line, parse, step, run, reset, programLength, _) {
   var newrecord = component$1.slice();
   newrecord[/* render */9] = (function (self) {
       var match = errors ? /* tuple */[
           "#ff9393",
           errors[0][/* line */1]
-        ] : /* tuple */[
-          "#dee1e8",
-          line
-        ];
+        ] : (
+          line !== 0 ? /* tuple */[
+              "#dee1e8",
+              line - 1 | 0
+            ] : /* tuple */[
+              "#fff",
+              line - 1 | 0
+            ]
+        );
       var lineColor = match[0];
       var match$1 = line !== 0 ? /* tuple */[
           "#f4f4f4",
@@ -80,6 +114,7 @@ function make$1(errors, line, parse, step, run, reset, _) {
           "#dee1e8"
         ];
       var bgColor = match$1[0];
+      var stepColor = programLength === line ? "#dee1e8" : "#21e024";
       var backgroundPosition = "0px " + (Pervasives.string_of_int(Caml_int32.imul(20, match[1]) + 5 | 0) + "px");
       var lineGradient = "linear-gradient(to bottom, " + (bgColor + (" 0px, " + (lineColor + (" 0px, " + (lineColor + (" 22px, " + (bgColor + (" 22px)" + backgroundPosition))))))));
       return React.createElement("div", {
@@ -97,7 +132,7 @@ function make$1(errors, line, parse, step, run, reset, _) {
                             display: "flex",
                             justifyContent: "space-around"
                           }
-                        }, ReasonReact.element(/* None */0, /* None */0, make(reset, "Reset " + window.chars["restart"], match$1[1], /* array */[])), ReasonReact.element(/* None */0, /* None */0, make(run, "Run " + window.chars["play"], "#21e024", /* array */[])), ReasonReact.element(/* None */0, /* None */0, make(step, "Step", "#21e024", /* array */[]))), React.createElement("textarea", {
+                        }, ReasonReact.element(/* None */0, /* None */0, make(reset, "Reset " + window.chars["restart"], match$1[1], /* array */[])), ReasonReact.element(/* None */0, /* None */0, make(run, "Run " + window.chars["play"], stepColor, /* array */[])), ReasonReact.element(/* None */0, /* None */0, make(step, "Step", stepColor, /* array */[]))), React.createElement("textarea", {
                           style: {
                             background: lineGradient,
                             backgroundAttachment: "local",
@@ -113,8 +148,14 @@ function make$1(errors, line, parse, step, run, reset, _) {
                           spellCheck: false,
                           autoComplete: "off",
                           value: self[/* state */3],
+                          onKeyUp: Curry._1(self[/* handle */1], (function (param, param$1) {
+                                  return keyUp(parse, line, param, param$1);
+                                })),
                           onChange: Curry._1(self[/* update */2], (function (param, param$1) {
                                   return textChange(parse, line, param, param$1);
+                                })),
+                          onMouseUp: Curry._1(self[/* handle */1], (function (param, param$1) {
+                                  return mouseUp(parse, line, param, param$1);
                                 }))
                         })));
     });
@@ -126,6 +167,8 @@ function make$1(errors, line, parse, step, run, reset, _) {
 
 var Editor = /* module */[
   /* textChange */textChange,
+  /* mouseUp */mouseUp,
+  /* keyUp */keyUp,
   /* component */component$1,
   /* make */make$1
 ];
@@ -277,12 +320,17 @@ function drop_some(_l, _n) {
   };
 }
 
-function parse_helper(state, content) {
+function parse_helper(_, cursor, content) {
   var s = CharStream.create(content);
-  var res = Interpret.parse_program(s, funcs, /* [] */0);
-  if (res.tag) {
+  var res = Interpret.parse_program(s, funcs, cursor, /* [] */0);
+  if (typeof res === "number") {
     return /* record */[
-            /* iState */state[/* iState */0],
+            /* iState */Interpret.empty,
+            /* errors : [] */0
+          ];
+  } else if (res.tag) {
+    return /* record */[
+            /* iState */Interpret.empty,
             /* errors : :: */[
               res[0],
               /* [] */0
@@ -300,14 +348,15 @@ function parse_helper(state, content) {
   }
 }
 
-function parseProgram(self, content) {
+function parseProgram(self, cursor, content) {
   return Curry._2(self[/* update */2], (function (_, self) {
-                return /* Update */Block.__(0, [parse_helper(self[/* state */3], content)]);
+                return /* Update */Block.__(0, [parse_helper(self[/* state */3], cursor, content)]);
               }), /* () */0);
 }
 
 function runCompleteProgram(self, _) {
-  return Interpret.run_until_error(self[/* state */3][/* iState */0], /* Some */[/* false */0], (function (state, err) {
+  var _stopProgram = [/* false */0];
+  return Interpret.run_until_error(self[/* state */3][/* iState */0], /* Some */[/* false */0], /* Some */[_stopProgram], (function (state, err) {
                 return Curry._2(self[/* update */2], (function (_, self) {
                               var $js;
                               if (err) {
@@ -331,7 +380,7 @@ function runCompleteProgram(self, _) {
 }
 
 function stepProgram(self, _) {
-  return Interpret.run_until_error(self[/* state */3][/* iState */0], /* Some */[/* true */1], (function (iState, err) {
+  return Interpret.run_until_error(self[/* state */3][/* iState */0], /* Some */[/* true */1], /* Some */[[/* false */0]], (function (iState, err) {
                 return Curry._2(self[/* update */2], (function (_, self) {
                               var $js;
                               if (err) {
@@ -399,15 +448,15 @@ function make$5() {
                         flexDirection: "row",
                         justifyContent: "center"
                       }
-                    }, ReasonReact.element(/* None */0, /* None */0, make$3(match[/* iState */0][/* variables */0], /* array */[])), ReasonReact.element(/* None */0, /* None */0, make$1(errors, self[/* state */3][/* iState */0][/* currLine */2], (function (param) {
-                                return parseProgram(self, param);
+                    }, ReasonReact.element(/* None */0, /* None */0, make$3(match[/* iState */0][/* variables */0], /* array */[])), ReasonReact.element(/* None */0, /* None */0, make$1(errors, self[/* state */3][/* iState */0][/* currLine */2], (function (param, param$1) {
+                                return parseProgram(self, param, param$1);
                               }), (function (param) {
                                 return stepProgram(self, param);
                               }), (function (param) {
                                 return runCompleteProgram(self, param);
                               }), (function (param) {
                                 return resetProgram(self, param);
-                              }), /* array */[])), React.createElement("div", {
+                              }), self[/* state */3][/* iState */0][/* content */1].length, /* array */[])), React.createElement("div", {
                           style: {
                             display: "flex",
                             flex: "2 1 0",
@@ -419,7 +468,7 @@ function make$5() {
       return parse_helper(/* record */[
                   /* iState */Interpret.empty,
                   /* errors : [] */0
-                ], default_program);
+                ], /* None */0, default_program);
     });
   return newrecord;
 }
@@ -470,37 +519,92 @@ var Curry  = require("bs-platform/lib/js/curry.js");
 var Common = require("./common.js");
 
 function arith(name, op, funcs) {
-  return Curry._3(Common.StringMap[/* add */3], name, (function (l, state, $$return) {
-                if (l) {
-                  var match = l[1];
+  return Curry._3(Common.StringMap[/* add */3], name, (function (param) {
+                var exit = 0;
+                var s;
+                if (param) {
+                  var a = param[0];
+                  var exit$1 = 0;
+                  var match = param[1];
                   if (match) {
                     var match$1 = match[1];
                     if (match$1) {
                       var match$2 = match$1[0];
                       if (match$2.tag) {
-                        return Curry._1($$return, /* Error */Block.__(1, ["Expected 3 args in call to add"]));
-                      } else if (match$1[1]) {
-                        return Curry._1($$return, /* Error */Block.__(1, ["Expected 3 args in call to add"]));
-                      } else {
-                        var match$3 = Common.resolve(l[0], state);
-                        var match$4 = Common.resolve(match[0], state);
-                        if (match$3.tag) {
-                          return Curry._1($$return, /* Error */Block.__(1, ["Need 2 numbers in call to add"]));
-                        } else if (match$4.tag) {
-                          return Curry._1($$return, /* Error */Block.__(1, ["Need 2 numbers in call to add"]));
+                        if (match$1[1]) {
+                          return /* Error */Block.__(1, ["Expected 3 args in call to add"]);
                         } else {
-                          return Curry._1($$return, /* Ok */Block.__(0, [Common.add_variable(match$2[0], /* Num */Block.__(0, [Curry._2(op, match$3[0], match$4[0])]), state)]));
+                          return /* Error */Block.__(1, ["Last input to " + (name + (" was " + (Common.to_visualize_string(match$2[0]) + ", this should be a variable instead")))]);
                         }
+                      } else if (a.tag) {
+                        var match$3 = a[0];
+                        if (match$3.tag) {
+                          if (param[1][1][1]) {
+                            return /* Error */Block.__(1, ["Expected 3 args in call to add"]);
+                          } else {
+                            s = match$3[0];
+                            exit = 1;
+                          }
+                        } else {
+                          exit$1 = 2;
+                        }
+                      } else {
+                        exit$1 = 2;
                       }
                     } else {
-                      return Curry._1($$return, /* Error */Block.__(1, ["Expected 3 args in call to add"]));
+                      return /* Error */Block.__(1, ["Expected 3 args in call to add"]);
                     }
                   } else {
-                    return Curry._1($$return, /* Error */Block.__(1, ["Expected 3 args in call to add"]));
+                    return /* Error */Block.__(1, ["Expected 3 args in call to add"]);
                   }
+                  if (exit$1 === 2) {
+                    var match$4 = param[1];
+                    var b = match$4[0];
+                    var exit$2 = 0;
+                    if (b.tag) {
+                      var match$5 = b[0];
+                      if (match$5.tag) {
+                        if (match$4[1][1]) {
+                          return /* Error */Block.__(1, ["Expected 3 args in call to add"]);
+                        } else {
+                          s = match$5[0];
+                          exit = 1;
+                        }
+                      } else {
+                        exit$2 = 3;
+                      }
+                    } else {
+                      exit$2 = 3;
+                    }
+                    if (exit$2 === 3) {
+                      var match$6 = match$4[1];
+                      if (match$6[1]) {
+                        return /* Error */Block.__(1, ["Expected 3 args in call to add"]);
+                      } else {
+                        var c = match$6[0][0];
+                        return /* Ok */Block.__(0, [(function (state, $$return) {
+                                      var match = Common.resolve(a, state);
+                                      var match$1 = Common.resolve(b, state);
+                                      if (match.tag) {
+                                        return Curry._1($$return, /* Error */Block.__(1, ["Need 2 numbers in call to add"]));
+                                      } else if (match$1.tag) {
+                                        return Curry._1($$return, /* Error */Block.__(1, ["Need 2 numbers in call to add"]));
+                                      } else {
+                                        return Curry._1($$return, /* Ok */Block.__(0, [Common.add_variable(c, /* Num */Block.__(0, [Curry._2(op, match[0], match$1[0])]), state)]));
+                                      }
+                                    })]);
+                      }
+                    }
+                    
+                  }
+                  
                 } else {
-                  return Curry._1($$return, /* Error */Block.__(1, ["Expected 3 args in call to add"]));
+                  return /* Error */Block.__(1, ["Expected 3 args in call to add"]);
                 }
+                if (exit === 1) {
+                  return /* Error */Block.__(1, ["Input to " + (name + (" was \"" + (s + "\", this should be a number instead")))]);
+                }
+                
               }), funcs);
 }
 
@@ -529,49 +633,58 @@ function div(funcs) {
 }
 
 function print(stdout, funcs) {
-  var funcs$1 = Curry._3(Common.StringMap[/* add */3], "print", (function (l, state, $$return) {
-          if (l) {
-            if (l[1]) {
-              return Curry._1($$return, /* Error */Block.__(1, ["Expected one argument in call to print"]));
+  var funcs$1 = Curry._3(Common.StringMap[/* add */3], "print", (function (param) {
+          if (param) {
+            if (param[1]) {
+              return /* Error */Block.__(1, ["Only expected one argument in call to print"]);
             } else {
-              return Curry._1($$return, /* Ok */Block.__(0, [(Curry._1(stdout, Common.to_string(Common.resolve(l[0], state))), state)]));
+              var v = param[0];
+              return /* Ok */Block.__(0, [(function (state, $$return) {
+                            return Curry._1($$return, /* Ok */Block.__(0, [(Curry._1(stdout, Common.to_string(Common.resolve(v, state))), state)]));
+                          })]);
             }
           } else {
-            return Curry._1($$return, /* Error */Block.__(1, ["Expected one argument in call to print"]));
+            return /* Error */Block.__(1, ["Only expected one argument in call to print"]);
           }
         }), funcs);
-  return Curry._3(Common.StringMap[/* add */3], "line", (function (l, state, $$return) {
-                if (l) {
-                  return Curry._1($$return, /* Error */Block.__(1, ["Expected arguments in call to line"]));
+  return Curry._3(Common.StringMap[/* add */3], "line", (function (param) {
+                if (param) {
+                  return /* Error */Block.__(1, ["Expected no arguments in call to line"]);
                 } else {
-                  return Curry._1($$return, /* Ok */Block.__(0, [(Curry._1(stdout, "\n"), state)]));
+                  return /* Ok */Block.__(0, [(function (state, $$return) {
+                                return Curry._1($$return, /* Ok */Block.__(0, [(Curry._1(stdout, "\n"), state)]));
+                              })]);
                 }
               }), funcs$1);
 }
 
 function move(funcs) {
-  return Curry._3(Common.StringMap[/* add */3], "move", (function (l, state, $$return) {
-                if (l) {
-                  var match = l[1];
+  return Curry._3(Common.StringMap[/* add */3], "move", (function (param) {
+                if (param) {
+                  var match = param[1];
                   if (match) {
                     var match$1 = match[0];
+                    var src = param[0];
                     if (match$1.tag) {
                       if (match[1]) {
-                        return Curry._1($$return, /* Error */Block.__(1, ["Expected 2 args in call to move"]));
+                        return /* Error */Block.__(1, ["Expected 2 args in call to move"]);
                       } else {
-                        return Curry._1($$return, /* Error */Block.__(1, ["Second argument must be a variable name"]));
+                        return /* Error */Block.__(1, ["Second argument to move must be a variable name"]);
                       }
                     } else if (match[1]) {
-                      return Curry._1($$return, /* Error */Block.__(1, ["Expected 2 args in call to move"]));
+                      return /* Error */Block.__(1, ["Expected 2 args in call to move"]);
                     } else {
-                      var srcVal = Common.resolve(l[0], state);
-                      return Curry._1($$return, /* Ok */Block.__(0, [Common.add_variable(match$1[0], srcVal, state)]));
+                      var dest = match$1[0];
+                      return /* Ok */Block.__(0, [(function (state, $$return) {
+                                    var srcVal = Common.resolve(src, state);
+                                    return Curry._1($$return, /* Ok */Block.__(0, [Common.add_variable(dest, srcVal, state)]));
+                                  })]);
                     }
                   } else {
-                    return Curry._1($$return, /* Error */Block.__(1, ["Expected 2 args in call to move"]));
+                    return /* Error */Block.__(1, ["Expected 2 args in call to move"]);
                   }
                 } else {
-                  return Curry._1($$return, /* Error */Block.__(1, ["Expected 2 args in call to move"]));
+                  return /* Error */Block.__(1, ["Expected 2 args in call to move"]);
                 }
               }), funcs);
 }
@@ -632,13 +745,15 @@ function junk(stream) {
       var init = stream[0];
       stream[0] = /* record */[
         /* chars */match$1[1],
-        /* lineNum */init[/* lineNum */1]
+        /* lineNum */init[/* lineNum */1],
+        /* chNum */match[/* chNum */2] + 1 | 0
       ];
       return /* () */0;
     } else {
       stream[0] = /* record */[
         /* chars */match$1[1],
-        /* lineNum */match[/* lineNum */1] + 1 | 0
+        /* lineNum */match[/* lineNum */1] + 1 | 0,
+        /* chNum */match[/* chNum */2] + 1 | 0
       ];
       return /* () */0;
     }
@@ -654,6 +769,10 @@ function line(stream) {
   return stream[0][/* lineNum */1];
 }
 
+function ch(stream) {
+  return stream[0][/* chNum */2];
+}
+
 function eat_spaces(stream) {
   while(true) {
     var match = stream[0];
@@ -665,7 +784,8 @@ function eat_spaces(stream) {
         var init = stream[0];
         stream[0] = /* record */[
           /* chars */match$1[1],
-          /* lineNum */init[/* lineNum */1]
+          /* lineNum */init[/* lineNum */1],
+          /* chNum */match[/* chNum */2] + 1 | 0
         ];
         continue ;
         
@@ -700,7 +820,8 @@ function create(s) {
   };
   return [/* record */[
             /* chars */explode(s.length - 1 | 0, /* [] */0),
-            /* lineNum */0
+            /* lineNum */0,
+            /* chNum */0
           ]];
 }
 
@@ -708,6 +829,7 @@ exports.peek       = peek;
 exports.second     = second;
 exports.junk       = junk;
 exports.line       = line;
+exports.ch         = ch;
 exports.eat_spaces = eat_spaces;
 exports.clone      = clone;
 exports.create     = create;
@@ -966,6 +1088,25 @@ function error(program, err) {
             ]]);
 }
 
+function parseError(prevCh, program, cursor, err) {
+  if (cursor) {
+    var ch = cursor[0];
+    if ((CharStream.ch(program) + 1 | 0) > ch && prevCh < ch) {
+      return /* Typing */0;
+    } else {
+      return /* ParseError */Block.__(1, [/* record */[
+                  /* err */err,
+                  /* line */CharStream.line(program)
+                ]]);
+    }
+  } else {
+    return /* ParseError */Block.__(1, [/* record */[
+                /* err */err,
+                /* line */CharStream.line(program)
+              ]]);
+  }
+}
+
 var empty_000 = /* variables */Common.StringMap[/* empty */0];
 
 var empty_001 = /* content : array */[];
@@ -1036,9 +1177,10 @@ function parse_arg(stream) {
   }
 }
 
-function parse_args(stream, _acc) {
+function parse_args(stream, _acc, cursor) {
   while(true) {
     var acc = _acc;
+    var currCh = CharStream.ch(stream);
     var match = CharStream.peek(stream);
     if (match) {
       var match$1 = match[0];
@@ -1046,7 +1188,7 @@ function parse_args(stream, _acc) {
         if (match$1 !== 32) {
           var match$2 = parse_arg(stream);
           if (match$2.tag) {
-            return /* Error */Block.__(1, [match$2[0]]);
+            return parseError(currCh, stream, cursor, match$2[0]);
           } else {
             _acc = /* :: */[
               match$2[0],
@@ -1061,10 +1203,10 @@ function parse_args(stream, _acc) {
           
         }
       } else {
-        return /* Ok */Block.__(0, [List.rev(acc)]);
+        return /* ParseOk */Block.__(0, [List.rev(acc)]);
       }
     } else {
-      return /* Ok */Block.__(0, [List.rev(acc)]);
+      return /* ParseOk */Block.__(0, [List.rev(acc)]);
     }
   };
 }
@@ -1077,9 +1219,10 @@ function inc_line(state) {
         ];
 }
 
-function parse_program(program, funcs, _acc) {
+function parse_program(program, funcs, cursor, _acc) {
   while(true) {
     var acc = _acc;
+    var prevCh = CharStream.ch(program);
     var match = CharStream.peek(program);
     var exit = 0;
     if (match) {
@@ -1111,44 +1254,46 @@ function parse_program(program, funcs, _acc) {
         
       }
       if (exit$1 === 2) {
-        return /* Error */Block.__(1, [/* record */[
-                    /* err */Parse.append_char("Unexpected character ", c),
-                    /* line */CharStream.line(program)
-                  ]]);
+        return parseError(prevCh, program, cursor, Parse.append_char("Unexpected character ", c));
       }
       
     } else {
-      return /* Ok */Block.__(0, [$$Array.of_list(List.rev(acc))]);
+      return /* ParseOk */Block.__(0, [$$Array.of_list(List.rev(acc))]);
     }
     if (exit === 1) {
       var match$1 = Parse.parse_ident(program, "");
       if (match$1.tag) {
-        return error(program, match$1[0]);
+        return parseError(prevCh, program, cursor, match$1[0]);
       } else {
         var fname = match$1[0];
         var match$2 = Common.StringMap[/* get */24](fname, funcs);
         if (match$2) {
-          var match$3 = parse_args(program, /* [] */0);
-          if (match$3.tag) {
-            return error(program, match$3[0]);
+          var match$3 = parse_args(program, /* [] */0, cursor);
+          if (typeof match$3 === "number") {
+            return /* Typing */0;
+          } else if (match$3.tag) {
+            return /* ParseError */Block.__(1, [match$3[0]]);
           } else {
-            var cmd_000 = /* func */match$2[0];
-            var cmd_001 = /* line */CharStream.line(program);
-            var cmd_002 = /* args */match$3[0];
-            var cmd = /* record */[
-              cmd_000,
-              cmd_001,
-              cmd_002
-            ];
-            _acc = /* :: */[
-              cmd,
-              acc
-            ];
-            continue ;
-            
+            var match$4 = Curry._1(match$2[0], match$3[0]);
+            if (match$4.tag) {
+              return parseError(prevCh, program, cursor, match$4[0]);
+            } else {
+              var cmd_000 = /* func */match$4[0];
+              var cmd_001 = /* line */CharStream.line(program);
+              var cmd = /* record */[
+                cmd_000,
+                cmd_001
+              ];
+              _acc = /* :: */[
+                cmd,
+                acc
+              ];
+              continue ;
+              
+            }
           }
         } else {
-          return error(program, "Couldn't find command named " + fname);
+          return parseError(prevCh, program, cursor, "Couldn't find command named " + fname);
         }
       }
     }
@@ -1157,7 +1302,7 @@ function parse_program(program, funcs, _acc) {
 }
 
 function cmd(state, cmd$1, cb) {
-  return Curry._3(cmd$1[/* func */0], cmd$1[/* args */2], state, (function (param) {
+  return Curry._2(cmd$1[/* func */0], state, (function (param) {
                 if (param.tag) {
                   return Curry._2(cb, state, /* Some */[/* record */[
                                 /* err */param[0],
@@ -1169,7 +1314,7 @@ function cmd(state, cmd$1, cb) {
               }));
 }
 
-function run_until_error(state, $staropt$star, cb) {
+function run_until_error(state, $staropt$star, stop, cb) {
   var step = $staropt$star ? $staropt$star[0] : /* false */0;
   var exit = 0;
   var input;
@@ -1193,10 +1338,20 @@ function run_until_error(state, $staropt$star, cb) {
     return cmd(state, input, (function (state, err) {
                   if (err) {
                     return Curry._2(cb, state, /* Some */[err[0]]);
-                  } else if (step) {
-                    return Curry._2(cb, state, /* None */0);
                   } else {
-                    return run_until_error(state, /* Some */[/* false */0], cb);
+                    var exit = 0;
+                    if (step !== 0) {
+                      return Curry._2(cb, state, /* None */0);
+                    } else {
+                      exit = 1;
+                    }
+                    if (exit === 1) {
+                      setTimeout((function () {
+                              return run_until_error(state, /* Some */[step], stop, cb);
+                            }), 0);
+                      return /* () */0;
+                    }
+                    
                   }
                 }));
   }
@@ -1204,6 +1359,7 @@ function run_until_error(state, $staropt$star, cb) {
 }
 
 exports.error           = error;
+exports.parseError      = parseError;
 exports.empty           = empty;
 exports.parse_arg       = parse_arg;
 exports.parse_args      = parse_args;
@@ -1238,73 +1394,77 @@ function parse_string(_stream, _acc) {
     var match = CharStream.peek(stream);
     if (match) {
       var c = match[0];
-      if (c !== 34) {
-        if (c !== 92) {
-          _acc = append_char(acc, c);
-          CharStream.junk(stream);
-          _stream = stream;
-          continue ;
-          
-        } else {
-          CharStream.junk(stream);
-          var match$1 = CharStream.peek(stream);
-          if (match$1) {
-            var c$1 = match$1[0];
-            var exit = 0;
-            if (c$1 >= 92) {
-              if (c$1 !== 110) {
-                if (c$1 !== 116) {
-                  if (c$1 >= 93) {
-                    exit = 1;
+      if (c !== 10) {
+        if (c !== 34) {
+          if (c !== 92) {
+            _acc = append_char(acc, c);
+            CharStream.junk(stream);
+            _stream = stream;
+            continue ;
+            
+          } else {
+            CharStream.junk(stream);
+            var match$1 = CharStream.peek(stream);
+            if (match$1) {
+              var c$1 = match$1[0];
+              var exit = 0;
+              if (c$1 >= 92) {
+                if (c$1 !== 110) {
+                  if (c$1 !== 116) {
+                    if (c$1 >= 93) {
+                      exit = 1;
+                    } else {
+                      _acc = append_char(acc, /* "\\" */92);
+                      CharStream.junk(stream);
+                      _stream = stream;
+                      continue ;
+                      
+                    }
                   } else {
-                    _acc = append_char(acc, /* "\\" */92);
+                    _acc = append_char(acc, /* "\t" */9);
                     CharStream.junk(stream);
                     _stream = stream;
                     continue ;
                     
                   }
                 } else {
-                  _acc = append_char(acc, /* "\t" */9);
+                  _acc = append_char(acc, /* "\n" */10);
+                  CharStream.junk(stream);
+                  _stream = stream;
+                  continue ;
+                  
+                }
+              } else if (c$1 !== 34) {
+                if (c$1 !== 39) {
+                  exit = 1;
+                } else {
+                  _acc = append_char(acc, /* "'" */39);
                   CharStream.junk(stream);
                   _stream = stream;
                   continue ;
                   
                 }
               } else {
-                _acc = append_char(acc, /* "\n" */10);
+                _acc = append_char(acc, /* "\"" */34);
                 CharStream.junk(stream);
                 _stream = stream;
                 continue ;
                 
               }
-            } else if (c$1 !== 34) {
-              if (c$1 !== 39) {
-                exit = 1;
-              } else {
-                _acc = append_char(acc, /* "'" */39);
-                CharStream.junk(stream);
-                _stream = stream;
-                continue ;
-                
+              if (exit === 1) {
+                return /* Error */Block.__(1, ["Invalid escape sequence \\" + (append_char("", c$1) + ".")]);
               }
-            } else {
-              _acc = append_char(acc, /* "\"" */34);
-              CharStream.junk(stream);
-              _stream = stream;
-              continue ;
               
+            } else {
+              return /* Error */Block.__(1, ["Unterminated string."]);
             }
-            if (exit === 1) {
-              return /* Error */Block.__(1, ["Invalid escape sequence \\" + (append_char("", c$1) + ".")]);
-            }
-            
-          } else {
-            return /* Error */Block.__(1, ["Unterminated string."]);
           }
+        } else {
+          CharStream.junk(stream);
+          return /* Ok */Block.__(0, [acc]);
         }
       } else {
-        CharStream.junk(stream);
-        return /* Ok */Block.__(0, [acc]);
+        return /* Error */Block.__(1, ["A string needs to be all on one line. Did you forget a quote at the end?"]);
       }
     } else {
       return /* Error */Block.__(1, ["Unterminated string."]);
