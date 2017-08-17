@@ -68,17 +68,16 @@ type argT =
   | Val valueT;
 
 type cmdT = {
-  func: functionT,
-  line: int,
-  args: list argT
+  func: innerFuncT,
+  line: int
 }
 and stateT = {
   variables: StringMap.t valueT,
   content: array cmdT,
   currLine: int
 }
-and functionT =
-  list argT => stateT => cb::(result stateT string => unit) => unit;
+and innerFuncT = stateT => cb::(result stateT string => unit) => unit
+and functionT = list argT => result innerFuncT string;
 
 let add_variable (name: string) (value: valueT) (s: stateT) :stateT => {
   ...s,

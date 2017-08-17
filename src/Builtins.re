@@ -1,18 +1,33 @@
 open Common;
 
-let arith name op funcs =>
+let arith name op (funcs: StringMap.t functionT) =>
   StringMap.add
     name
     (
-      fun l state cb::return =>
-        switch l {
-        | [a, b, Var c] =>
-          switch (resolve a state, resolve b state) {
-          | (Num a, Num b) => return (Ok (add_variable c (Num (op a b)) state))
-          | _ => return (Error "Need 2 numbers in call to add")
-          }
-        | _ => return (Error "Expected 3 args in call to add")
-        }
+      fun
+      | [_, _, Val v] =>
+        Error (
+          "Last input to " ^
+          name ^
+          " was " ^
+          to_visualize_string v ^ ", this should be a variable instead"
+        )
+      | [Val (Str s), _, _]
+      | [_, Val (Str s), _] =>
+        Error (
+          "Input to " ^
+          name ^ " was \"" ^ s ^ "\", this should be a number instead"
+        )
+      | [a, b, Var c] =>
+        Ok (
+          fun state cb::return =>
+            switch (resolve a state, resolve b state) {
+            | (Num a, Num b) =>
+              return (Ok (add_variable c (Num (op a b)) state))
+            | _ => return (Error "Need 2 numbers in call to add")
+            }
+        )
+      | _ => Error "Expected 3 args in call to add"
     )
     funcs;
 
@@ -29,33 +44,35 @@ let print (stdout: string => unit) funcs => {
     StringMap.add
       "print"
       (
-        fun l state cb::return =>
-          switch l {
-          | [v] =>
-            return (
-              Ok {
-                stdout (to_string (resolve v state));
-                state
-              }
-            )
-          | _ => return (Error "Expected one argument in call to print")
-          }
+        fun
+        | [v] =>
+          Ok (
+            fun state cb::return =>
+              return (
+                Ok {
+                  stdout (to_string (resolve v state));
+                  state
+                }
+              )
+          )
+        | _ => Error "Only expected one argument in call to print"
       )
       funcs;
   StringMap.add
     "line"
     (
-      fun l state cb::return =>
-        switch l {
-        | [] =>
-          return (
-            Ok {
-              stdout "\n";
-              state
-            }
-          )
-        | _ => return (Error "Expected arguments in call to line")
-        }
+      fun
+      | [] =>
+        Ok (
+          fun state cb::return =>
+            return (
+              Ok {
+                stdout "\n";
+                state
+              }
+            )
+        )
+      | _ => Error "Expected no arguments in call to line"
     )
     funcs
 };
@@ -64,15 +81,16 @@ let move funcs =>
   StringMap.add
     "move"
     (
-      fun l state cb::return =>
-        switch l {
-        | [src, Var dest] =>
-          switch (resolve src state) {
-          | srcVal => return (Ok (add_variable dest srcVal state))
+      fun
+      | [src, Var dest] =>
+        Ok (
+          fun state cb::return => {
+            let srcVal = resolve src state;
+            return (Ok (add_variable dest srcVal state))
           }
-        | [_, _] => return (Error "Second argument must be a variable name")
-        | _ => return (Error "Expected 2 args in call to move")
-        }
+        )
+      | [_, _] => Error "Second argument to move must be a variable name"
+      | _ => Error "Expected 2 args in call to move"
     )
     funcs;
 

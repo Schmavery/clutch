@@ -46,7 +46,7 @@ let inc_line state => {...state, currLine: state.currLine + 1};
 
 let rec parse_program
         (program: CharStream.t)
-        funcs
+        (funcs: StringMap.t functionT)
         (acc: list cmdT)
         :result (array cmdT) errT =>
   switch (CharStream.peek program) {
@@ -58,8 +58,12 @@ let rec parse_program
       | Some func =>
         switch (parse_args program []) {
         | Ok args =>
-          let cmd = {func, args, line: CharStream.line program};
-          parse_program program funcs [cmd, ...acc]
+          switch (func args) {
+          | Ok innerFunc =>
+            let cmd = {func: innerFunc, line: CharStream.line program};
+            parse_program program funcs [cmd, ...acc]
+          | Error e => error program e
+          }
         | Error e => error program e
         }
       | None => error program ("Couldn't find command named " ^ fname)
@@ -85,7 +89,6 @@ let cmd
     (cmd: cmdT)
     cb::(cb: stateT => err::option errT => unit) =>
   cmd.func
-    cmd.args
     state
     cb::(
       fun
