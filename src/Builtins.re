@@ -22,8 +22,7 @@ let arith name op (funcs: StringMap.t functionT) =>
         Ok (
           fun state cb::return =>
             switch (resolve a state, resolve b state) {
-            | (Num a, Num b) =>
-              return (Ok (add_variable c (Num (op a b)) state))
+            | (Num a, Num b) => return (add_variable c (Num (op a b)) state)
             | _ => return (Error "Need 2 numbers in call to add")
             }
         )
@@ -86,7 +85,7 @@ let move funcs =>
         Ok (
           fun state cb::return => {
             let srcVal = resolve src state;
-            return (Ok (add_variable dest srcVal state))
+            return (add_variable dest srcVal state)
           }
         )
       | [_, _] => Error "Second argument to move must be a variable name"
@@ -94,8 +93,44 @@ let move funcs =>
     )
     funcs;
 
+let goto (funcs: StringMap.t functionT) => {
+  let funcs =
+    StringMap.add
+      "goto"
+      (
+        fun
+        | [Var name] =>
+          Ok (
+            (
+              fun state cb::return =>
+                switch (StringMap.find name state.labels) {
+                | (currCmd, currLine) =>
+                  return (Ok {...state, currCmd: currCmd - 1, currLine})
+                | exception Not_found =>
+                  return (
+                    Error (
+                      Printf.sprintf
+                        "You tried to goto '%s', but you didn't mark a label for it to jump to."
+                        name
+                    )
+                  )
+                }
+            ): innerFuncT
+          )
+        | [Val v] =>
+          Error (
+            Printf.sprintf
+              "Input to goto must be a label, you gave a %s instead"
+              (to_type v)
+          )
+        | _ => Error "goto expects one variable as input"
+      )
+      funcs;
+  funcs
+};
+
 let load_builtins_list
     (lst: list (StringMap.t functionT => StringMap.t functionT))
-    (state: StringMap.t functionT)
+    (funcs: StringMap.t functionT)
     :StringMap.t functionT =>
-  List.fold_left (fun acc v => v acc) state lst;
+  List.fold_left (fun acc v => v acc) funcs lst;

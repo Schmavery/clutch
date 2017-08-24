@@ -73,27 +73,19 @@ type argT =
   | Val valueT;
 
 type cmdT = {
+  name: string,
   func: innerFuncT,
   line: int
 }
 and stateT = {
   variables: StringMap.t valueT,
+  labels: StringMap.t (int, int),
   content: array cmdT,
+  currCmd: int,
   currLine: int
 }
 and innerFuncT = stateT => cb::(result stateT string => unit) => unit
 and functionT = list argT => result innerFuncT string;
-
-let add_variable (name: string) (value: valueT) (s: stateT) :stateT => {
-  ...s,
-  variables: StringMap.add name value s.variables
-};
-
-let resolve v state =>
-  switch v {
-  | Var v => StringMap.get_default v state.variables (Num 0.)
-  | Val v => v
-  };
 
 let to_string v =>
   switch v {
@@ -101,8 +93,30 @@ let to_string v =>
   | Str s => s
   };
 
+let to_type v =>
+  switch v {
+  | Num _ => "number"
+  | Str _ => "string"
+  };
+
 let to_visualize_string v =>
   switch v {
   | Num f => Printf.sprintf "%g" f
   | Str s => "\"" ^ s ^ "\""
+  };
+
+let add_variable
+    (name: string)
+    (value: valueT)
+    (s: stateT)
+    :result stateT string =>
+  switch (StringMap.find name s.variables) {
+  | _ => Ok {...s, variables: StringMap.add name value s.variables}
+  | exception Not_found => Ok {...s, variables: StringMap.add name value s.variables}
+  };
+
+let resolve v state =>
+  switch v {
+  | Var v => StringMap.get_default v state.variables (Num 0.)
+  | Val v => v
   };

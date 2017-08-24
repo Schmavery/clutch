@@ -291,6 +291,7 @@ let builtins_list =
     mul,
     div,
     move,
+    goto,
     print (fun s => stdout_text := !stdout_text ^ s)
   ];
 
@@ -305,11 +306,18 @@ let rec drop_some l n =>
 
 let parse_helper _state ::cursor=? content => {
   let s = CharStream.create content;
-  let res = Interpret.parse_program s funcs ::?cursor [];
+  let res =
+    Interpret.parse_program s funcs ::?cursor [] Common.StringMap.empty;
   switch res {
-  | ParseOk cmds => {
+  | Common.ParseOk (cmds, labels) => {
       errors: [],
-      iState: {variables: Common.StringMap.empty, content: cmds, currLine: 0}
+      iState: {
+        variables: Common.StringMap.empty,
+        content: cmds,
+        currLine: 0,
+        currCmd: 0,
+        labels
+      }
     }
   | ParseError e => {iState: Interpret.empty, errors: [e]}
   | Typing => {iState: Interpret.empty, errors: []}
@@ -375,6 +383,7 @@ let resetProgram self () => {
           iState: {
             ...self.state.iState,
             currLine: 0,
+            currCmd: 0,
             variables: Common.StringMap.empty
           },
           errors: []
