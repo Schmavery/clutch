@@ -1,8 +1,19 @@
 open Common;
 
-let arith name op (funcs: StringMap.t functionT) =>
-  StringMap.add
+let empty = {funcs: StringMap.empty, docs: []};
+
+let add_function name ::signature ::desc func ({funcs, docs}: funcsT) => {
+  funcs: StringMap.add name func funcs,
+  docs: [{name, signature, description: desc}, ...docs]
+};
+
+let arith name action op (funcs: funcsT) =>
+  add_function
     name
+    signature::"number number variable"
+    desc::(
+      action ^ " first two numbers and puts the results in the last variable."
+    )
     (
       fun
       | [_, _, Val v] =>
@@ -30,18 +41,20 @@ let arith name op (funcs: StringMap.t functionT) =>
     )
     funcs;
 
-let add funcs => arith "add" (+.) funcs;
+let add funcs => arith "add" "Adds" (+.) funcs;
 
-let sub funcs => arith "sub" (-.) funcs;
+let sub funcs => arith "sub" "Subtracts" (-.) funcs;
 
-let mul funcs => arith "mul" ( *. ) funcs;
+let mul funcs => arith "mul" "Multiplies" ( *. ) funcs;
 
-let div funcs => arith "div" (/.) funcs;
+let div funcs => arith "div" "Divides" (/.) funcs;
 
 let print (stdout: string => unit) funcs => {
   let funcs =
-    StringMap.add
-      "print"
+    add_function
+      "show"
+      signature::"anything"
+      desc::"Shows the value to the screen"
       (
         fun
         | [v] =>
@@ -57,8 +70,10 @@ let print (stdout: string => unit) funcs => {
         | _ => Error "Only expected one argument in call to print"
       )
       funcs;
-  StringMap.add
+  add_function
     "line"
+    signature::""
+    desc::"Makes the cursor move down one line"
     (
       fun
       | [] =>
@@ -77,8 +92,10 @@ let print (stdout: string => unit) funcs => {
 };
 
 let move funcs =>
-  StringMap.add
+  add_function
     "move"
+    signature::"anything variable"
+    desc::"Moves the first value into the second variable"
     (
       fun
       | [src, Var dest] =>
@@ -93,10 +110,12 @@ let move funcs =>
     )
     funcs;
 
-let goto (funcs: StringMap.t functionT) => {
+let goto (funcs: funcsT) => {
   let funcs =
-    StringMap.add
+    add_function
       "goto"
+      signature::"label"
+      desc::"Makes the next instruction be the specified label"
       (
         fun
         | [Var name] =>
@@ -129,8 +148,5 @@ let goto (funcs: StringMap.t functionT) => {
   funcs
 };
 
-let load_builtins_list
-    (lst: list (StringMap.t functionT => StringMap.t functionT))
-    (funcs: StringMap.t functionT)
-    :StringMap.t functionT =>
+let load_builtins_list (lst: list (funcsT => funcsT)) (funcs: funcsT) :funcsT =>
   List.fold_left (fun acc v => v acc) funcs lst;

@@ -1,28 +1,29 @@
 {
-  "name": "relisp-bot",
+  "name": "clutch",
   "version": "0.0.1",
-  "description": "Reason port of lisp-bot",
+  "description": "",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Schmavery/relisp-bot.git"
+    "url": "https://github.com/Schmavery/clutch.git"
   },
   "author": "schmavery",
   "license": "MIT",
-  "homepage": "https://github.com/Schmavery/relisp-bot",
+  "homepage": "https://github.com/Schmavery/clutch",
   "keywords": [
     "reason",
     "lisp"
   ],
   "scripts": {
-    "server": "SimpleHTTPServer 8000 assets",
+    "build": "bsb -clean-world -make-world -backend js",
+    "server": "python -m SimpleHTTPServer 8000 assets",
     "watchify": "watchify lib/js/frontends/web/simpleRoot.js -o assets/lang.js",
     "cli": "node lib/js/frontends/cli/index.js",
     "deploy": "bsb -make-world && npm run test && browserify lib/js/frontends/web/simpleRoot.js > assets/lang.js && node scripts/deploy-ghpages.js",
     "test": "exit 0"
   },
   "devDependencies": {
+    "bsb-native": "4.0.6",
     "browserify": "^13.1.1",
-    "bs-platform": "https://github.com/bloomberg/bucklescript.git",
     "gh-pages": "^0.12.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",

@@ -2,9 +2,9 @@ open Common;
 
 let error program err => Error {err, line: CharStream.line program};
 
-let parseError prevCh (program: CharStream.t) (cursor: option int) err =>
+let parseError prevCh (program: CharStream.t) (cursor: option int) ident err =>
   switch cursor {
-  | Some ch when CharStream.ch program + 1 > ch && prevCh < ch => Typing
+  | Some ch when CharStream.ch program + 1 > ch && prevCh - 1 < ch => Typing ident
   | _ => ParseError {err, line: CharStream.line program}
   };
 
@@ -40,25 +40,25 @@ let parse_arg stream =>
   | None => Error "No arg"
   };
 
-let rec parse_args stream acc cursor :parseResult (list argT) errT => {
+let rec parse_args stream acc ident cursor :parseResult (list argT) errT => {
   let currCh = CharStream.ch stream;
   switch (CharStream.peek stream) {
   | Some ' ' =>
     CharStream.eat_spaces stream;
-    parse_args stream acc cursor
+    parse_args stream acc ident cursor
   | None
   | Some '\n' => ParseOk (List.rev acc)
   | Some _ =>
     switch (parse_arg stream) {
-    | Ok a => parse_args stream [a, ...acc] cursor
-    | Error e => parseError currCh stream cursor e
+    | Ok a => parse_args stream [a, ...acc] ident cursor
+    | Error e => parseError currCh stream cursor ident e
     }
   }
 };
 
 let rec parse_program
         (program: CharStream.t)
-        (funcs: StringMap.t functionT)
+        (funcs: funcsT)
         ::cursor=?
         (cmds: list cmdT)
         (labels: StringMap.t (int, int))
@@ -67,29 +67,36 @@ let rec parse_program
   switch (CharStream.peek program) {
   | Some 'a'..'z'
   | Some 'A'..'Z' =>
-    switch (Parse.parse_ident program "", parse_args program [] cursor) {
-    | (Ok "label", ParseOk args) =>
-      handleLabel program args prevCh funcs cursor cmds labels
-    | (Ok fname, ParseOk args) =>
-      switch (StringMap.get fname funcs) {
-      | Some func =>
-        switch (func args) {
-        | Ok innerFunc =>
-          let cmd = {
-            name: fname,
-            func: innerFunc,
-            line: CharStream.line program
-          };
-          parse_program program funcs ::?cursor [cmd, ...cmds] labels
-        | Error err => parseError prevCh program cursor err
+    switch (Parse.parse_ident program "") {
+    | Ok ident =>
+      switch (ident, parse_args program [] ident cursor) {
+      | ("label", ParseOk args) =>
+        handleLabel program args prevCh funcs ident cursor cmds labels
+      | (fname, ParseOk args) =>
+        switch (StringMap.get fname funcs.funcs) {
+        | Some func =>
+          switch (func args) {
+          | Ok innerFunc =>
+            let cmd = {
+              name: fname,
+              func: innerFunc,
+              line: CharStream.line program
+            };
+            parse_program program funcs ::?cursor [cmd, ...cmds] labels
+          | Error err => parseError prevCh program cursor ident err
+          }
+        | None =>
+          parseError
+            prevCh
+            program
+            cursor
+            ident
+            ("Couldn't find command named '" ^ fname ^ "'")
         }
-      | None =>
-        parseError
-          prevCh program cursor ("Couldn't find command named '" ^ fname ^ "'")
+      | (_, ParseError e) => ParseError e
+      | (_, Typing _ as t) => t
       }
-    | (Ok _, ParseError e) => ParseError e
-    | (Ok _, Typing) => Typing
-    | (Error e, _) => parseError prevCh program cursor e
+    | Error e => parseError prevCh program cursor "" e
     }
   | Some '\n' =>
     CharStream.junk program;
@@ -99,11 +106,11 @@ let rec parse_program
     parse_program program funcs ::?cursor cmds labels
   | Some c =>
     parseError
-      prevCh program cursor (Parse.append_char "Unexpected character " c)
+      prevCh program cursor "" (Parse.append_char "Unexpected character " c)
   | None => ParseOk (Array.of_list (List.rev cmds), labels)
   }
 }
-and handleLabel program args prevCh funcs cursor cmds labels =>
+and handleLabel program args prevCh funcs ident cursor cmds labels =>
   switch args {
   | [Var name] =>
     switch (StringMap.find name labels) {
@@ -112,6 +119,7 @@ and handleLabel program args prevCh funcs cursor cmds labels =>
         prevCh
         program
         cursor
+        ident
         (
           Printf.sprintf
             "There is already a label with the name '%s' at line %i." name line
@@ -129,12 +137,15 @@ and handleLabel program args prevCh funcs cursor cmds labels =>
       prevCh
       program
       cursor
+      ident
       (
         Printf.sprintf
           "Input to label must be a variable, you gave a %s instead"
           (to_type v)
       )
-  | _ => parseError prevCh program cursor "label expects one variable as input"
+  | _ =>
+    parseError
+      prevCh program cursor ident "label expects one variable as input"
   };
 
 let cmd
@@ -180,3 +191,5 @@ let rec run_until_error
       )
   | exception (Invalid_argument "index out of bounds") => cb state err::None
   };
+
+let search_docs _funcs searchStr => ">>>" ^ searchStr;

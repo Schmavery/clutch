@@ -1,6 +1,7 @@
 type pageStateT = {
   iState: Common.stateT,
-  errors: list Common.errT
+  errors: list Common.errT,
+  searchStr: string
 };
 
 let default_program = "add 1 2 c\nprint c";
@@ -284,6 +285,54 @@ module ErrorList = {
   };
 };
 
+module SearchList = {
+  let component = ReasonReact.statelessComponent "ErrorList";
+  let make ::searchStr _children => {
+    ...component,
+    render: fun _ =>
+      <div
+        style=(
+          ReactDOMRe.Style.make
+            padding::"5px"
+            margin::"5px"
+            flex::"1 1 0"
+            display::"flex"
+            flexDirection::"column"
+            justifyContent::"flex-end"
+            overflow::"scroll"
+            ()
+        )>
+        <div style=(ReactDOMRe.Style.make overflow::"scroll" ())>
+          (
+            ReasonReact.arrayToElement (
+              Array.mapi
+                (
+                  fun id res =>
+                    <div
+                      key=(string_of_int id)
+                      style=(
+                        ReactDOMRe.Style.make
+                          backgroundColor::"#f4f4f4"
+                          border::"1px solid grey"
+                          padding::"5px"
+                          /* color::"white" */
+                          display::"flex"
+                          /* justifyContent::"space-between" */
+                          ()
+                      )>
+                      (ReasonReact.stringToElement res)
+                    </div>
+                )
+                (
+                  Array.of_list (String.length searchStr > 0 ? [searchStr] : [])
+                )
+            )
+          )
+        </div>
+      </div>
+  };
+};
+
 let builtins_list =
   Builtins.[
     add,
@@ -295,7 +344,7 @@ let builtins_list =
     print (fun s => stdout_text := !stdout_text ^ s)
   ];
 
-let funcs = Builtins.load_builtins_list builtins_list Common.StringMap.empty;
+let funcs = Builtins.load_builtins_list builtins_list Builtins.empty;
 
 let rec drop_some l n =>
   switch (l, n) {
@@ -317,10 +366,11 @@ let parse_helper _state ::cursor=? content => {
         currLine: 0,
         currCmd: 0,
         labels
-      }
+      },
+      searchStr: ""
     }
-  | ParseError e => {iState: Interpret.empty, errors: [e]}
-  | Typing => {iState: Interpret.empty, errors: []}
+  | ParseError e => {iState: Interpret.empty, errors: [e], searchStr: ""}
+  | Typing ident => {iState: Interpret.empty, errors: [], searchStr: ident}
   }
 };
 
@@ -346,7 +396,7 @@ let runCompleteProgram self () => {
               ReasonReact.Update (
                 switch err {
                 | None => {...self.state, iState: state}
-                | Some e => {iState: state, errors: [e]}
+                | Some e => {iState: state, errors: [e], searchStr: ""}
                 }
               )
           )
@@ -366,7 +416,7 @@ let stepProgram self () =>
             fun () self =>
               ReasonReact.Update (
                 switch err {
-                | None => {iState, errors: []}
+                | None => {iState, errors: [], searchStr: ""}
                 | Some e => {...self.state, errors: [e]}
                 }
               )
@@ -386,7 +436,8 @@ let resetProgram self () => {
             currCmd: 0,
             variables: Common.StringMap.empty
           },
-          errors: []
+          errors: [],
+          searchStr: ""
         }
     )
     ()
@@ -397,7 +448,8 @@ module Page = {
   let make _children => {
     ...component,
     initialState: fun () =>
-      parse_helper {iState: Interpret.empty, errors: []} default_program,
+      parse_helper
+        {iState: Interpret.empty, errors: [], searchStr: ""} default_program,
     render: fun ({state: {iState, errors}} as self) =>
       <div
         style=(
@@ -428,6 +480,7 @@ module Page = {
             errors
             programLength=(Array.length self.state.iState.content)
             line=self.state.iState.currLine
+            /* searchStr=self.state.searchStr */
             parse=(parseProgram self)
             step=(stepProgram self)
             run=(runCompleteProgram self)
@@ -439,6 +492,7 @@ module Page = {
                 display::"flex" flex::"2 1 0" flexDirection::"column" ()
             )>
             <Console />
+            <SearchList searchStr=self.state.searchStr />
             <ErrorList errors />
           </div>
         </div>

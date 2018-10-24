@@ -57,7 +57,13 @@ type result 'a 'b =
 type parseResult 'a 'b =
   | ParseOk 'a
   | ParseError 'b
-  | Typing;
+  | Typing string;
+
+type docT = {
+  name: string,
+  signature: string,
+  description: string
+};
 
 type valueT =
   | Num float
@@ -87,6 +93,11 @@ and stateT = {
 and innerFuncT = stateT => cb::(result stateT string => unit) => unit
 and functionT = list argT => result innerFuncT string;
 
+type funcsT = {
+  funcs: StringMap.t functionT,
+  docs: list docT
+};
+
 let to_string v =>
   switch v {
   | Num f => Printf.sprintf "%g" f
@@ -112,7 +123,8 @@ let add_variable
     :result stateT string =>
   switch (StringMap.find name s.variables) {
   | _ => Ok {...s, variables: StringMap.add name value s.variables}
-  | exception Not_found => Ok {...s, variables: StringMap.add name value s.variables}
+  | exception Not_found =>
+    Ok {...s, variables: StringMap.add name value s.variables}
   };
 
 let resolve v state =>
