@@ -1,1 +1,1 @@
-ReactDOMRe.renderToElementWithId <Components.Page /> "index";
+ReactDOMRe.renderToElementWithId(<Components.Page />, "index");

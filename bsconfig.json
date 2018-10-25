@@ -1,11 +1,16 @@
-
 {
-    "name" : "easymbly",
+    "name" : "clutch",
     "reason" : {"react-jsx" : 2},
     "sources": [
-      { "dir": "src" },
-      { "dir": "frontends/web", "type": "dev"},
+      { "dir": "src", "kind": "js"},
+      { "dir": "frontends/web", "type": "dev", "kind": "js"},
+      { "dir": "native", "type": "dev", "kind": ["native", "bytecode"]},
 //      { "dir": "frontends/cli", "type": "dev"}
     ],
-    "bs-dependencies": ["reason-react"]
+    "bs-dependencies": ["reason-react"],
+//    "entries": [
+//      {"main": "Native", "kind": "bytecode"},
+//      {"main": "Native", "kind": "native"}
+//    ],
+    "refmt": 3
 }

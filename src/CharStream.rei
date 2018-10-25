@@ -1,8 +1,8 @@
 type t;
 
-let peek: t => option char;
+let peek: t => option(char);
 
-let second: t => option char;
+let second: t => option(char);
 
 let junk: t => unit;
 
