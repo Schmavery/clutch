@@ -38,7 +38,6 @@ module Editor = {
   type actions =
     | SubmitContentForParse(int, string)
     | NoAction;
-  /* Note: Before this was the only one that actually updated the content state. */
   let getTextChangeContent = event => {
     let target = ReactEvent.Form.target(event);
     let content: string = target##value;
@@ -186,8 +185,8 @@ module Console = {
             ~color="#e5e5e5",
             ~padding="5px",
             ~margin="5px",
-            ~flex="1 1 0",
-            ~overflow="hidden",
+            ~height="30vh",
+            ~overflow="scroll",
             (),
           )
         }>
@@ -284,47 +283,116 @@ module ErrorList = {
       </div>,
   };
 };
+
+module DocItem = {
+  type action =
+    | Toggle;
+  let component = ReasonReact.reducerComponent("DocItem");
+  let make = (~startExpanded, ~doc, _children) => {
+    ...component,
+    initialState: () => startExpanded,
+    reducer: (_action: action, state) => ReasonReact.Update(!state),
+    render: self =>
+      <div
+        style={
+          self.state ?
+            ReactDOMRe.Style.make(
+              ~backgroundColor="#f4f4f4",
+              ~padding="5px",
+              ~display="flex",
+              (),
+            ) :
+            ReactDOMRe.Style.make(
+              ~borderBottom="1px solid grey",
+              ~padding="5px",
+              ~display="flex",
+              ~userSelect="none",
+              (),
+            )
+        }
+        onClick={self.state ? _ => () : (_ => self.send(Toggle))}>
+        {
+          startExpanded ?
+            <div>
+              <div
+                style={
+                  ReactDOMRe.Style.make(
+                    ~marginBottom="-10px",
+                    ~padding="5px",
+                    ~display="flex",
+                    ~userSelect="none",
+                    (),
+                  )
+                }
+                onClick={_ => self.send(Toggle)}>
+                <div
+                  style={
+                    ReactDOMRe.Style.make(
+                      ~fontWeight="bold",
+                      ~paddingRight="0.5em",
+                      ()
+                      )
+                  }
+                >
+                {ReasonReact.string(doc.Common.Doc.name)}
+                </div>
+                {ReasonReact.string(doc.signature)}
+              </div>
+              <hr />
+              {ReasonReact.string(doc.description)}
+            </div> :
+            ReasonReact.string(doc.name)
+        }
+      </div>,
+  };
+};
+
 module SearchList = {
-  let component = ReasonReact.statelessComponent("ErrorList");
-  let make = (~searchStr, _children) => {
+  let component = ReasonReact.statelessComponent("SearchList");
+  let make = (~searchStr, ~docs: list(Common.Doc.t), _children) => {
     ...component,
     render: _ =>
       <div
         style={
           ReactDOMRe.Style.make(
-            ~padding="5px",
             ~margin="5px",
-            ~flex="1 1 0",
+            ~backgroundColor="#f4f4f4",
+            ~flex="1 0 0",
+            ~border="2px solid grey",
             ~display="flex",
             ~flexDirection="column",
-            ~justifyContent="flex-end",
             ~overflow="scroll",
             (),
           )
         }>
         <div style={ReactDOMRe.Style.make(~overflow="scroll", ())}>
           {
-            ReasonReact.array(
-              Array.mapi(
-                (id, res) =>
-                  <div
-                    key={string_of_int(id)}
-                    style={
-                      ReactDOMRe.Style.make(
-                        ~backgroundColor="#f4f4f4",
-                        ~border="1px solid grey",
-                        ~padding="5px",
-                        ~display="flex",
-                        (),
-                      )
-                    }>
-                    {ReasonReact.string(res)}
-                  </div>,
-                Array.of_list(
-                  String.length(searchStr) > 0 ? [searchStr] : [],
+            let docsList =
+              List.filter(
+                d => {
+                  let name = d.Common.Doc.name;
+                  String.length(name) >= String.length(searchStr)
+                  && String.sub(name, 0, String.length(searchStr))
+                  == searchStr;
+                },
+                docs,
+              );
+            switch (docsList) {
+            | [] => ReasonReact.string("")
+            | [doc] => <DocItem startExpanded=true doc />
+            | _ =>
+              ReasonReact.array(
+                Array.map(
+                  doc =>
+                    <DocItem
+                      key={"doc- " ++ doc.Common.Doc.name}
+                      startExpanded=false
+                      doc
+                    />,
+                  Array.of_list(docsList),
                 ),
-              ),
-            )
+              )
+            };
           }
         </div>
       </div>,
@@ -341,6 +409,7 @@ let builtins_list =
     print(s => stdout_text := stdout_text^ ++ s),
   ];
 let funcs = Builtins.load_builtins_list(builtins_list, Builtins.empty);
+
 module Page = {
   type action =
     | ISuccess(Interpret.t)
@@ -469,7 +538,7 @@ module Page = {
               )
             }>
             <Console />
-            <SearchList searchStr={self.state.searchStr} />
+            <SearchList searchStr={self.state.searchStr} docs={funcs.docs} />
             <ErrorList errors />
           </div>
         </div>

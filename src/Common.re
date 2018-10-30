@@ -60,11 +60,13 @@ type parseResult('a, 'b) =
   | ParseError('b)
   | Typing(string);
 
-type docT = {
-  name: string,
-  signature: string,
-  description: string,
-};
+module Doc = {
+  type t = {
+    name: string,
+    signature: string,
+    description: string,
+  };
+}
 
 type valueT =
   | Num(float)
@@ -96,7 +98,7 @@ and functionT = list(argT) => result(innerFuncT, string);
 
 type funcsT = {
   funcs: StringMap.t(functionT),
-  docs: list(docT),
+  docs: list(Doc.t),
 };
 
 let to_string = v =>
