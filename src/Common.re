@@ -64,6 +64,7 @@ module Doc = {
   type t = {
     name: string,
     signature: string,
+    aliases: list(string),
     description: string,
   };
 }
@@ -86,6 +87,8 @@ type cmdT = {
   func: innerFuncT,
   line: int,
 }
+
+/* Note: currCmd and currLine are 1-indexed */
 and stateT = {
   variables: StringMap.t(valueT),
   labels: StringMap.t((int, int)),

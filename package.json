@@ -15,6 +15,7 @@
   ],
   "scripts": {
     "buildjs": "bsb -make-world",
+    "buildjsw": "bsb -make-world -w",
     "cleanjs": "bsb -clean-world",
     "build": "bsb -make-world -backend js",
     "clean": "bsb -clean-world -backend js",

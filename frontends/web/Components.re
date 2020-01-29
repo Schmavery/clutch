@@ -1,8 +1,3 @@
-type pageStateT = {
-  iState: Common.stateT,
-  errors: list(Common.errT),
-  searchStr: string,
-};
 let default_program = "add 1 2 c\nshow c";
 type charsT;
 [@bs.get_index] external getField: (charsT, string) => string = "";
@@ -12,6 +7,11 @@ let getUnicode = name => getField(chars, name);
 external array_filteri: (array('a), ('a, int) => bool) => array('a) =
   "filter";
 let stdout_text = ref("");
+let getDefault = (x, d) =>
+  switch (x) {
+  | Some(x) => x
+  | _ => d
+  };
 module EditorButton = {
   let component = ReasonReact.statelessComponent("EditorButton");
   let make = (~func, ~name, ~color, _children) => {
@@ -330,11 +330,10 @@ module DocItem = {
                     ReactDOMRe.Style.make(
                       ~fontWeight="bold",
                       ~paddingRight="0.5em",
-                      ()
-                      )
-                  }
-                >
-                {ReasonReact.string(doc.Common.Doc.name)}
+                      (),
+                    )
+                  }>
+                  {ReasonReact.string(doc.Common.Doc.name)}
                 </div>
                 {ReasonReact.string(doc.signature)}
               </div>
@@ -348,8 +347,11 @@ module DocItem = {
 };
 
 module SearchList = {
+  type search =
+    | Exact(string)
+    | Prefix(string);
   let component = ReasonReact.statelessComponent("SearchList");
-  let make = (~searchStr, ~docs: list(Common.Doc.t), _children) => {
+  let make = (~search, ~docs: list(Common.Doc.t), _children) => {
     ...component,
     render: _ =>
       <div
@@ -367,16 +369,26 @@ module SearchList = {
         }>
         <div style={ReactDOMRe.Style.make(~overflow="scroll", ())}>
           {
+            let isPrefix = (name, searchStr) =>
+              String.length(name) >= String.length(searchStr)
+              && String.sub(name, 0, String.length(searchStr)) == searchStr;
             let docsList =
-              List.filter(
-                d => {
-                  let name = d.Common.Doc.name;
-                  String.length(name) >= String.length(searchStr)
-                  && String.sub(name, 0, String.length(searchStr))
-                  == searchStr;
-                },
-                docs,
-              );
+              switch (search) {
+              | Exact(s) =>
+                switch (List.find(d => d.Common.Doc.name == s, docs)) {
+                | exception Not_found => []
+                | d => [d]
+                }
+              | Prefix(s) =>
+                List.filter(
+                  d => {
+                    ();
+                    isPrefix(d.Common.Doc.name, s)
+                    || List.exists(a => isPrefix(a, s), d.aliases);
+                  },
+                  docs,
+                )
+              };
             switch (docsList) {
             | [] => ReasonReact.string("")
             | [doc] => <DocItem startExpanded=true doc />
@@ -411,11 +423,29 @@ let builtins_list =
 let funcs = Builtins.load_builtins_list(builtins_list, Builtins.empty);
 
 module Page = {
+  /* Note: cursor is 1-indexed like currCmd/Line */
+  type t = {
+    iState: Common.stateT,
+    errors: list(Common.errT),
+    searchStr: string,
+    cursor: int,
+  };
   type action =
-    | ISuccess(Interpret.t)
+    | ISuccess(Interpret.t, int)
     | IErrors(Common.errT, Interpret.t)
     | UpdateSearch(string)
     | Reset;
+  let charIndexToLineNum = (i, s) => {
+    let count = ref(0);
+    String.iter(
+      c =>
+        if (c == '\n') {
+          count := count^ + 1;
+        },
+      String.sub(s, 0, i),
+    );
+    count^;
+  };
   let parse_helper = (cursor, content) => {
     let s = CharStream.create(content);
     let res =
@@ -428,9 +458,11 @@ module Page = {
         currLine: 0,
         currCmd: 0,
         labels,
-      })
+      }, charIndexToLineNum(getDefault(cursor + 1, 0), content))
     | ParseError(e) => IErrors(e, Interpret.empty)
-    | Typing(ident) => UpdateSearch(ident)
+    | Typing(ident) =>
+      print_endline(ident);
+      UpdateSearch(ident);
     };
   };
   let runProgram = (self, step) => {
@@ -441,13 +473,13 @@ module Page = {
       ~stop=_stopProgram,
       ~cb=(state, ~err) =>
       switch (err) {
-      | None => self.send(ISuccess(state))
+      | None => self.send(ISuccess(state, state.currCmd))
       | Some(errors) => self.send(IErrors(errors, state))
       }
     );
   };
   let component = ReasonReact.reducerComponent("Page");
-  let empty = {iState: Interpret.empty, errors: [], searchStr: ""};
+  let empty = {iState: Interpret.empty, errors: [], searchStr: "", cursor: 0};
   let make = _children => {
     ...component,
     initialState: () => {
@@ -469,10 +501,18 @@ module Page = {
       };
     },
     reducer: (action, state) =>
+      /* TODO: Don't allow stepping with a program that doesn't parse */
       switch (action) {
-      | ISuccess(iState) => ReasonReact.Update({...empty, iState})
+      | ISuccess(iState, cursor) =>
+        Printf.printf(
+          "currCmd: %d, currLine: %d, cursor: %d\n%!",
+          iState.currCmd,
+          iState.currLine,
+          state.cursor,
+        );
+        ReasonReact.Update({...empty, iState, cursor});
       | IErrors(e, iState) =>
-        ReasonReact.Update({errors: [e], iState, searchStr: ""})
+        ReasonReact.Update({...state, errors: [e], iState, searchStr: ""})
       | UpdateSearch(ident) =>
         ReasonReact.Update({...state, errors: [], searchStr: ident})
       | Reset =>
@@ -538,7 +578,18 @@ module Page = {
               )
             }>
             <Console />
-            <SearchList searchStr={self.state.searchStr} docs={funcs.docs} />
+            <SearchList
+              search={
+                       let s = self.state.iState;
+                       if (s.currCmd > 0) {
+                         let cmd = s.content[s.currCmd - 1];
+                         SearchList.Exact(cmd.Common.name);
+                       } else {
+                         SearchList.Prefix(self.state.searchStr);
+                       };
+                     }
+              docs={funcs.docs}
+            />
             <ErrorList errors />
           </div>
         </div>

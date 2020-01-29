@@ -1,10 +1,21 @@
 open Common;
 
-let empty = {funcs: StringMap.empty, docs: []};
+let empty = {
+  funcs: StringMap.empty,
+  docs: [
+    {
+      name: "label",
+      aliases: [],
+      signature: "name",
+      description: "You can jump to this line by using 'goto' and the name after the 'label'.",
+    },
+  ],
+};
 
-let add_function = (name, ~signature, ~desc, func, {funcs, docs}: funcsT) => {
+let add_function =
+    (name, ~signature, ~aliases=[], ~desc, func, {funcs, docs}: funcsT) => {
   funcs: StringMap.add(name, func, funcs),
-  docs: [{name, signature, description: desc}, ...docs],
+  docs: [{name, aliases, signature, description: desc}, ...docs],
 };
 
 let arith = (name, action, op, funcs: funcsT) =>
@@ -127,6 +138,7 @@ let goto = (funcs: funcsT) => {
     add_function(
       "goto",
       ~signature="label",
+      ~aliases=["jump"],
       ~desc="Makes the next instruction be the specified label",
       fun
       | [Var(name)] =>
